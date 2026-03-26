@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   brandBar: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: 'rgba(17, 10, 32, 0.78)',
     borderColor: 'rgba(242, 201, 76, 0.24)',
     borderRadius: radii.lg,
@@ -394,19 +394,20 @@ const styles = StyleSheet.create({
     paddingRight: spacing.sm,
   },
   brandIdentityRow: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexDirection: 'row',
     gap: spacing.sm,
   },
   brandTextBlock: {
     flex: 1,
-    gap: 2,
-    paddingTop: 3,
+    gap: 3,
+    paddingTop: 11,
   },
   brandIcon: {
     borderRadius: radii.pill,
-    height: 44,
-    width: 44,
+    height: 58,
+    marginTop: 1,
+    width: 58,
   },
   brandTitle: {
     color: palette.logoOrange,
@@ -422,6 +423,7 @@ const styles = StyleSheet.create({
   brandStats: {
     flexDirection: 'row',
     gap: spacing.xs,
+    paddingTop: spacing.xs,
   },
   badgePill: {
     alignItems: 'center',
