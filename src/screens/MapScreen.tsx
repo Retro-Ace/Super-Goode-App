@@ -248,72 +248,105 @@ export default function MapScreen() {
                 </View>
               </View>
 
-              <View style={styles.utilityRail}>
-                <Pressable
-                  onPress={fitToRestaurants}
-                  style={({ pressed }) => [styles.mapButton, pressed ? styles.pressed : undefined]}>
-                  <Ionicons color={palette.white} name="scan" size={18} />
-                </Pressable>
-                <Pressable
-                  onPress={centerOnUser}
-                  style={({ pressed }) => [styles.mapButton, styles.mapButtonAccent, pressed ? styles.pressed : undefined]}>
-                  <Ionicons color={palette.white} name="locate" size={18} />
-                </Pressable>
-              </View>
-
               <View style={[styles.bottomStack, { paddingBottom: bottomOverlayOffset }]}>
                 {selectedRestaurant ? (
-                  <View style={[styles.selectedCard, elevation.floating]}>
-                    <View style={styles.selectedHeader}>
-                      <View style={styles.selectedCopy}>
-                        <Text numberOfLines={2} style={styles.selectedTitle}>
-                          {selectedRestaurant.name}
+                  <>
+                    <View style={styles.bottomUtilityRow}>
+                      <Pressable
+                        onPress={fitToRestaurants}
+                        style={({ pressed }) => [styles.mapButton, pressed ? styles.pressed : undefined]}>
+                        <Ionicons color={palette.white} name="scan" size={18} />
+                      </Pressable>
+                      <Pressable
+                        onPress={centerOnUser}
+                        style={({ pressed }) => [
+                          styles.mapButton,
+                          styles.mapButtonAccent,
+                          pressed ? styles.pressed : undefined,
+                        ]}>
+                        <Ionicons color={palette.white} name="locate" size={18} />
+                      </Pressable>
+                    </View>
+                    <View style={[styles.selectedCard, elevation.floating]}>
+                      <View style={styles.selectedHeader}>
+                        <View style={styles.selectedCopy}>
+                          <Text numberOfLines={2} style={styles.selectedTitle}>
+                            {selectedRestaurant.name}
+                          </Text>
+                          <Text numberOfLines={1} style={styles.selectedSubtitle}>
+                            {selectedRestaurant.subtitle}
+                          </Text>
+                        </View>
+                        <ScorePill score={selectedRestaurant.score} />
+                      </View>
+                      <View style={styles.selectedInfoBlock}>
+                        <Text numberOfLines={2} style={styles.selectedAddress}>
+                          {selectedRestaurant.fullAddress}
                         </Text>
-                        <Text numberOfLines={1} style={styles.selectedSubtitle}>
-                          {selectedRestaurant.subtitle}
+                        <Text numberOfLines={1} style={styles.selectedMeta}>
+                          {getSelectedMeta(selectedRestaurant)}
                         </Text>
                       </View>
-                      <ScorePill score={selectedRestaurant.score} />
+                      <View style={styles.selectedActions}>
+                        <ActionButton
+                          compact
+                          label="Review Video"
+                          onPress={() => openReviewViewer(selectedRestaurant)}
+                          variant="primary"
+                        />
+                        <ActionButton
+                          compact
+                          label="Directions"
+                          onPress={() => openExternalUrl(selectedRestaurant.directionsUrl)}
+                          variant="secondary"
+                        />
+                      </View>
+                      <Pressable
+                        onPress={() => openRestaurantDetails(selectedRestaurant)}
+                        style={({ pressed }) => [
+                          styles.selectedDetailsLink,
+                          pressed ? styles.pressed : undefined,
+                        ]}>
+                        <Text style={styles.selectedDetailsText}>Open full restaurant details</Text>
+                        <Ionicons color={palette.highlightSoft} name="chevron-forward" size={14} />
+                      </Pressable>
                     </View>
-                    <View style={styles.selectedInfoBlock}>
-                      <Text numberOfLines={2} style={styles.selectedAddress}>
-                        {selectedRestaurant.fullAddress}
-                      </Text>
-                      <Text numberOfLines={1} style={styles.selectedMeta}>
-                        {getSelectedMeta(selectedRestaurant)}
-                      </Text>
-                    </View>
-                    <View style={styles.selectedActions}>
-                      <ActionButton
-                        compact
-                        label="Review Video"
-                        onPress={() => openReviewViewer(selectedRestaurant)}
-                        variant="primary"
-                      />
-                      <ActionButton
-                        compact
-                        label="Directions"
-                        onPress={() => openExternalUrl(selectedRestaurant.directionsUrl)}
-                        variant="secondary"
-                      />
-                    </View>
-                    <Pressable
-                      onPress={() => openRestaurantDetails(selectedRestaurant)}
-                      style={({ pressed }) => [
-                        styles.selectedDetailsLink,
-                        pressed ? styles.pressed : undefined,
-                      ]}>
-                      <Text style={styles.selectedDetailsText}>Open full restaurant details</Text>
-                      <Ionicons color={palette.highlightSoft} name="chevron-forward" size={14} />
-                    </Pressable>
-                  </View>
+                  </>
                 ) : (
-                  <View style={[styles.hintCard, elevation.card]}>
-                    <Text style={styles.hintCopy}>
-                      {showZeroResultsHint
-                        ? 'No current matches. Edit or clear the search text to repopulate the map.'
-                        : 'Tap any colored pin to open the restaurant popup. Gold is 9.0+, purple is 8.0s, blue-gray is 7.0s.'}
-                    </Text>
+                  <View style={styles.bottomAccessoryRow}>
+                    <View style={[styles.legendCard, elevation.card]}>
+                      <Text style={styles.legendTitle}>Score tiers</Text>
+                      <View style={styles.legendList}>
+                        <View style={styles.legendRow}>
+                          <View style={[styles.legendDot, styles.legendDotGold]} />
+                          <Text style={styles.legendLabel}>9.0 and up</Text>
+                        </View>
+                        <View style={styles.legendRow}>
+                          <View style={[styles.legendDot, styles.legendDotPurple]} />
+                          <Text style={styles.legendLabel}>8.0 to 8.9</Text>
+                        </View>
+                        <View style={styles.legendRow}>
+                          <View style={[styles.legendDot, styles.legendDotBlueGray]} />
+                          <Text style={styles.legendLabel}>7.0 to 7.9</Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.bottomUtilityRow}>
+                      <Pressable
+                        onPress={fitToRestaurants}
+                        style={({ pressed }) => [styles.mapButton, pressed ? styles.pressed : undefined]}>
+                        <Ionicons color={palette.white} name="scan" size={18} />
+                      </Pressable>
+                      <Pressable
+                        onPress={centerOnUser}
+                        style={({ pressed }) => [
+                          styles.mapButton,
+                          styles.mapButtonAccent,
+                          pressed ? styles.pressed : undefined,
+                        ]}>
+                        <Ionicons color={palette.white} name="locate" size={18} />
+                      </Pressable>
+                    </View>
                   </View>
                 )}
               </View>
@@ -412,20 +445,15 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 15,
   },
-  utilityRail: {
-    alignItems: 'flex-end',
-    gap: spacing.xs,
-    marginTop: 112,
-  },
   mapButton: {
     alignItems: 'center',
     backgroundColor: 'rgba(17, 10, 32, 0.82)',
     borderColor: palette.border,
     borderRadius: radii.pill,
     borderWidth: 1,
-    height: 40,
+    height: 46,
     justifyContent: 'center',
-    width: 40,
+    width: 46,
   },
   mapButtonAccent: {
     backgroundColor: 'rgba(160, 109, 255, 0.92)',
@@ -433,6 +461,17 @@ const styles = StyleSheet.create({
   },
   bottomStack: {
     gap: spacing.xs,
+  },
+  bottomAccessoryRow: {
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  bottomUtilityRow: {
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    gap: spacing.sm,
   },
   selectedCard: {
     backgroundColor: 'rgba(12, 18, 41, 0.94)',
@@ -491,18 +530,49 @@ const styles = StyleSheet.create({
     fontSize: 12,
     textTransform: 'uppercase',
   },
-  hintCard: {
-    backgroundColor: 'rgba(12, 18, 41, 0.82)',
-    borderColor: 'rgba(132, 154, 206, 0.22)',
-    borderRadius: radii.lg,
+  legendCard: {
+    backgroundColor: 'rgba(23, 16, 47, 0.95)',
+    borderColor: 'rgba(132, 154, 206, 0.28)',
+    borderRadius: 24,
     borderWidth: 1,
+    gap: spacing.sm,
+    minWidth: 176,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.md,
   },
-  hintCopy: {
+  legendTitle: {
+    color: palette.white,
+    fontSize: 15,
+    fontWeight: '800',
+    lineHeight: 18,
+  },
+  legendList: {
+    gap: spacing.xs,
+  },
+  legendRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  legendDot: {
+    borderRadius: radii.pill,
+    height: 18,
+    width: 18,
+  },
+  legendDotGold: {
+    backgroundColor: palette.highlight,
+  },
+  legendDotPurple: {
+    backgroundColor: palette.accent,
+  },
+  legendDotBlueGray: {
+    backgroundColor: '#A9B4C8',
+  },
+  legendLabel: {
     color: palette.textMuted,
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: 15,
+    fontWeight: '600',
+    lineHeight: 20,
   },
   stateWrap: {
     flex: 1,
