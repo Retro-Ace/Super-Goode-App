@@ -79,6 +79,49 @@ Behavioral notes for the app:
 - Long names and subtitles do not truncate in a broken way.
 - Map/list toggles, if present in the scaffold, do not desync the selected restaurant.
 
+## Map Tab QA
+
+Current pushed real-map build under review:
+- Branch: `main`
+- Commit: `29bf152a70d9826d8d0c4754f5a0b67ea8d9e39c`
+
+What is currently solid in the code path:
+- The map consumes the existing shared restaurant record shape through the same repository layer as the rest of the app.
+- Coordinates are validated before pin rendering. Invalid or missing `lat` / `lng` values are skipped rather than forcing a broken marker.
+- The map has a stable Chicago fallback region if the filtered result set has no usable coordinates.
+- Single-result searches animate to a tighter region instead of relying on a multi-point fit.
+- Selected-pin state is cleared when filters remove the selected restaurant from the active map result set.
+- Device location is requested through foreground permission only and does not run on web.
+
+Map-specific smoke checklist:
+- Fresh install: confirm the first-launch foreground location prompt appears from the Map tab.
+- Allow permission: confirm the user-location dot appears and `locate` recenters the map to the current position.
+- Deny permission: confirm the map still loads restaurant pins and the screen shows a readable non-blocking error message.
+- Deny with “don’t ask again”: confirm the UI shifts to the “off/settings” style state and does not loop permission prompts.
+- Search while map is visible: confirm pins update and the selected footer clears if the selected spot falls out of the filtered set.
+- Score filtering: confirm pin count changes and map fit still works after changing the score floor.
+- Dense Chicago area taps: confirm tapping one pin does not leave the wrong restaurant in the footer after another pin is selected.
+- Long restaurant names: confirm the selected footer truncates gracefully and does not overlap the score pill or action buttons.
+- Keyboard open/close: confirm the top overlay remains usable and does not permanently cover the map after dismissing the keyboard.
+- Utility buttons: confirm `scan` and `locate` remain reachable one-handed and do not sit under device safe areas.
+
+Blind spots still worth hardening before larger map features:
+- Simulator location can differ from real-device GPS stability, especially immediately after granting permission.
+- `getCurrentPositionAsync` may be slow or fail indoors; the current UX reports an error but does not add retry backoff or last-known-location fallback.
+- Marker density is still unclustered. The full dataset is acceptable for this pass, but dense neighborhoods will need observation on lower-end devices.
+- Search/filter changes currently refit the map only on the first load or when the user explicitly taps the fit control. That is coherent, but should be validated as the intended behavior.
+- The selected footer currently shows distance when user location exists, otherwise `cityState`; subtitle content is not shown in the footer anymore, so detail discovery depends on tapping through.
+- Web remains a fallback shell for the map tab; real-map QA must be done on iPhone/Android.
+
+Recommended release-prep checks before the next feature pass:
+- Run an on-device pass once on iPhone and once on Android with fresh permissions.
+- Verify at least one long-name restaurant and one dense downtown cluster manually.
+- Re-run data validation against the web source file before release candidates:
+
+```bash
+npm run check:data -- src/data/seed/locations.json "/Users/anthonylarosa/CODEX/Super Goode/data/locations.json"
+```
+
 ## Current Risks
 
 - The app is still scaffold-only, so the first real risk is model drift when the UI layer starts reading the dataset.
