@@ -1,71 +1,95 @@
-import React from 'react';
-import { SymbolView } from 'expo-symbols';
-import { Link, Tabs } from 'expo-router';
-import { Platform, Pressable } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import { Platform, StyleSheet, View } from 'react-native';
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        headerShown: false,
+        sceneStyle: styles.scene,
+        tabBarHideOnKeyboard: true,
+        tabBarActiveTintColor: palette.highlight,
+        tabBarInactiveTintColor: palette.textDim,
+        tabBarLabelStyle: styles.tabBarLabel,
+        tabBarIconStyle: styles.tabBarIcon,
+        tabBarItemStyle: styles.tabBarItem,
+        tabBarStyle: styles.tabBar,
+        tabBarBackground: () => <View style={styles.tabBarBackground} />,
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => (
-            <SymbolView
-              name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
-              }}
-              tintColor={color}
-              size={28}
-            />
-          ),
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable style={{ marginRight: 15 }}>
-                {({ pressed }) => (
-                  <SymbolView
-                    name={{ ios: 'info.circle', android: 'info', web: 'info' }}
-                    size={25}
-                    tintColor={Colors[colorScheme].text}
-                    style={{ opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: 'Map',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons color={color} name={focused ? 'map' : 'map-outline'} size={size} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="reviews"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => (
-            <SymbolView
-              name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
-              }}
-              tintColor={color}
-              size={28}
-            />
+          title: 'Reviews',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons color={color} name={focused ? 'newspaper' : 'newspaper-outline'} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="favorites"
+        options={{
+          title: 'Favorites',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons color={color} name={focused ? 'heart' : 'heart-outline'} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons color={color} name={focused ? 'person' : 'person-outline'} size={size} />
           ),
         }}
       />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  scene: {
+    backgroundColor: palette.background,
+  },
+  tabBar: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    bottom: Platform.select({ ios: 18, default: 14 }),
+    elevation: 0,
+    height: 84,
+    left: spacing.md,
+    position: 'absolute',
+    right: spacing.md,
+  },
+  tabBarBackground: {
+    ...StyleSheet.absoluteFillObject,
+    ...elevation.floating,
+    backgroundColor: palette.backgroundElevated,
+    borderColor: palette.border,
+    borderRadius: radii.xl,
+    borderWidth: 1,
+  },
+  tabBarItem: {
+    paddingTop: spacing.xs,
+  },
+  tabBarIcon: {
+    marginTop: spacing.xs,
+  },
+  tabBarLabel: {
+    fontFamily: typography.brand,
+    fontSize: 11,
+    textTransform: 'uppercase',
+  },
+});
