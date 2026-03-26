@@ -54,7 +54,7 @@ export default function MapScreen() {
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
   const hasMapData = fallbackRestaurants.length > 0;
   const showZeroResultsHint = filtersDirty && filteredRestaurants.length === 0;
-  const bottomOverlayOffset = tabBarHeight + spacing.sm;
+  const bottomOverlayOffset = Math.max(tabBarHeight - spacing.xs, spacing.lg);
   const locationReadyLabel =
     permissionStatus === 'granted'
       ? 'On'
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'flex-end',
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   selectedCard: {
     backgroundColor: 'rgba(12, 18, 41, 0.94)',
@@ -535,29 +535,29 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(132, 154, 206, 0.28)',
     borderRadius: 24,
     borderWidth: 1,
-    gap: spacing.sm,
-    minWidth: 176,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
+    gap: spacing.xs,
+    minWidth: 162,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
   },
   legendTitle: {
     color: palette.white,
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '800',
-    lineHeight: 18,
+    lineHeight: 16,
   },
   legendList: {
-    gap: spacing.xs,
+    gap: spacing.xxs,
   },
   legendRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   legendDot: {
     borderRadius: radii.pill,
-    height: 18,
-    width: 18,
+    height: 14,
+    width: 14,
   },
   legendDotGold: {
     backgroundColor: palette.highlight,
@@ -570,9 +570,9 @@ const styles = StyleSheet.create({
   },
   legendLabel: {
     color: palette.textMuted,
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: '600',
-    lineHeight: 20,
+    lineHeight: 16,
   },
   stateWrap: {
     flex: 1,
