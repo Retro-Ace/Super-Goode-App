@@ -220,9 +220,11 @@ export default function MapScreen() {
                   <View style={styles.brandCopy}>
                     <View style={styles.brandIdentityRow}>
                       <Image source={superGoodeIcon} style={styles.brandIcon} />
-                      <Text style={styles.brandTitle}>SUPER GOODE MAP</Text>
+                      <View style={styles.brandTextBlock}>
+                        <Text style={styles.brandTitle}>SUPER GOODE MAP</Text>
+                        <Text style={styles.brandSubtitle}>Live map of the current restaurant feed.</Text>
+                      </View>
                     </View>
-                    <Text style={styles.brandSubtitle}>Live map of the current restaurant feed.</Text>
                   </View>
                   <View style={styles.brandStats}>
                     <View style={styles.badgePill}>
@@ -389,7 +391,6 @@ const styles = StyleSheet.create({
   },
   brandCopy: {
     flex: 1,
-    gap: 3,
     paddingRight: spacing.sm,
   },
   brandIdentityRow: {
@@ -397,21 +398,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
   },
+  brandTextBlock: {
+    flex: 1,
+    gap: 2,
+  },
   brandIcon: {
     borderRadius: radii.pill,
-    height: 34,
-    width: 34,
+    height: 44,
+    width: 44,
   },
   brandTitle: {
     color: palette.logoOrange,
     fontFamily: typography.brand,
-    fontSize: 17,
-    lineHeight: 20,
+    fontSize: 22,
+    lineHeight: 24,
   },
   brandSubtitle: {
     color: palette.textDim,
-    fontSize: 11,
-    lineHeight: 14,
+    fontSize: 12,
+    lineHeight: 15,
   },
   brandStats: {
     flexDirection: 'row',
