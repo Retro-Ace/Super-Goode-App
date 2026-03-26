@@ -112,7 +112,7 @@ export default function MapScreen() {
     const baseRegion = currentRegionRef.current ?? fallbackRegion;
     const latitudeDelta = baseRegion.latitudeDelta || fallbackRegion.latitudeDelta;
     const longitudeDelta = baseRegion.longitudeDelta || fallbackRegion.longitudeDelta;
-    const latitudeOffset = Math.max(latitudeDelta * 0.2, 0.0045);
+    const latitudeOffset = Math.max(latitudeDelta * 0.16, 0.0038);
 
     mapRef.current.animateToRegion(
       {
