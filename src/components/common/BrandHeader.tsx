@@ -4,22 +4,23 @@ import { StyleSheet, Text, View } from 'react-native';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
 
 type BrandHeaderProps = {
+  compact?: boolean;
   subtitle: string;
   notificationCount?: number;
 };
 
-export function BrandHeader({ subtitle, notificationCount = 0 }: BrandHeaderProps) {
+export function BrandHeader({ compact = false, subtitle, notificationCount = 0 }: BrandHeaderProps) {
   return (
-    <View style={[styles.shell, elevation.floating]}>
+    <View style={[styles.shell, compact ? styles.shellCompact : undefined, elevation.floating]}>
       <View style={styles.glow} />
       <View style={styles.topRow}>
         <View style={styles.brandRow}>
-          <View style={styles.avatarWrap}>
-            <Ionicons color={palette.logoOrange} name="fast-food" size={22} />
+          <View style={[styles.avatarWrap, compact ? styles.avatarWrapCompact : undefined]}>
+            <Ionicons color={palette.logoOrange} name="fast-food" size={compact ? 18 : 22} />
           </View>
           <View>
-            <Text style={styles.superTitle}>SUPER GOODE</Text>
-            <Text style={styles.mapTitle}>MAP</Text>
+            <Text style={[styles.superTitle, compact ? styles.superTitleCompact : undefined]}>SUPER GOODE</Text>
+            <Text style={[styles.mapTitle, compact ? styles.mapTitleCompact : undefined]}>MAP</Text>
           </View>
         </View>
 
@@ -32,7 +33,7 @@ export function BrandHeader({ subtitle, notificationCount = 0 }: BrandHeaderProp
           ) : null}
         </View>
       </View>
-      <Text style={styles.subtitle}>{subtitle}</Text>
+      <Text style={[styles.subtitle, compact ? styles.subtitleCompact : undefined]}>{subtitle}</Text>
     </View>
   );
 }
@@ -46,6 +47,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: spacing.lg,
     position: 'relative',
+  },
+  shellCompact: {
+    padding: spacing.md,
   },
   glow: {
     backgroundColor: 'rgba(160, 109, 255, 0.2)',
@@ -76,6 +80,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 46,
   },
+  avatarWrapCompact: {
+    height: 38,
+    width: 38,
+  },
   superTitle: {
     color: palette.logoOrange,
     fontFamily: typography.brand,
@@ -86,6 +94,10 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
   },
+  superTitleCompact: {
+    fontSize: 20,
+    lineHeight: 24,
+  },
   mapTitle: {
     color: palette.logoTeal,
     fontFamily: typography.brand,
@@ -95,6 +107,10 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.35)',
     textShadowOffset: { width: 0, height: 3 },
     textShadowRadius: 6,
+  },
+  mapTitleCompact: {
+    fontSize: 22,
+    lineHeight: 24,
   },
   bellWrap: {
     alignItems: 'center',
@@ -128,5 +144,10 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 18,
     marginTop: spacing.sm,
+  },
+  subtitleCompact: {
+    fontSize: 12,
+    lineHeight: 16,
+    marginTop: spacing.xs,
   },
 });
