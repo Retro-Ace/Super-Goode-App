@@ -40,7 +40,7 @@ export default function MapScreen() {
   const { canAskAgain, isLocating, locationError, permissionStatus, requestUserLocation, userLocation } =
     useForegroundLocation();
   const [query, setQuery] = useState('');
-  const [minimumScore, setMinimumScore] = useState<number | null>(8);
+  const [minimumScore, setMinimumScore] = useState<number | null>(null);
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<string | null>(null);
 
   const filteredRestaurants = filterRestaurants(restaurants, { query, minimumScore });
@@ -51,7 +51,7 @@ export default function MapScreen() {
   );
   const selectedRestaurant =
     mappedRestaurants.find((restaurant) => restaurant.id === selectedRestaurantId) ?? null;
-  const filtersDirty = query.trim().length > 0 || minimumScore !== 8;
+  const filtersDirty = query.trim().length > 0 || minimumScore !== null;
   const bottomOverlayOffset = tabBarHeight + TAB_BAR_OFFSET + spacing.sm;
   const locationReadyLabel =
     permissionStatus === 'granted'
@@ -201,7 +201,7 @@ export default function MapScreen() {
                 filtersDirty
                   ? () => {
                       setQuery('');
-                      setMinimumScore(8);
+                      setMinimumScore(null);
                     }
                   : undefined
               }
