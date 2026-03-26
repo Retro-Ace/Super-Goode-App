@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { Platform, StyleSheet, View } from 'react-native';
 
-import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import { elevation, palette, spacing, typography } from '@/src/constants/theme';
 
 export default function TabLayout() {
   return (
@@ -68,9 +68,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     bottom: 0,
     elevation: 0,
-    height: Platform.select({ ios: 80, default: 72 }),
+    height: Platform.select({ ios: 78, default: 70 }),
     left: 0,
-    paddingHorizontal: spacing.sm,
+    paddingHorizontal: 0,
     position: 'absolute',
     right: 0,
   },
@@ -80,15 +80,15 @@ const styles = StyleSheet.create({
     borderColor: palette.border,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    borderTopLeftRadius: radii.md,
-    borderTopRightRadius: radii.md,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
     borderWidth: 1,
     borderBottomWidth: 0,
     shadowColor: elevation.card.shadowColor,
-    shadowOffset: { width: 0, height: -8 },
-    shadowOpacity: 0.18,
-    shadowRadius: 18,
-    elevation: 10,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    elevation: 8,
   },
   tabBarItem: {
     paddingTop: spacing.xxs,
