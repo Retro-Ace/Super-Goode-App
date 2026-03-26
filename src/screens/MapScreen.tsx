@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import type MapView from 'react-native-maps';
 import type { Region } from 'react-native-maps';
 
@@ -28,6 +28,8 @@ import {
   hasRestaurantCoordinate,
 } from '@/src/utils/map';
 import { filterRestaurants } from '@/src/utils/restaurants';
+
+const superGoodeIcon = require('../../assets/images/super-goode-icon.png');
 
 export default function MapScreen() {
   const router = useRouter();
@@ -216,7 +218,10 @@ export default function MapScreen() {
               <View style={styles.topStack}>
                 <View style={[styles.brandBar, elevation.card]}>
                   <View style={styles.brandCopy}>
-                    <Text style={styles.brandTitle}>SUPER GOODE MAP</Text>
+                    <View style={styles.brandIdentityRow}>
+                      <Image source={superGoodeIcon} style={styles.brandIcon} />
+                      <Text style={styles.brandTitle}>SUPER GOODE MAP</Text>
+                    </View>
                     <Text style={styles.brandSubtitle}>Live map of the current restaurant feed.</Text>
                   </View>
                   <View style={styles.brandStats}>
@@ -384,8 +389,18 @@ const styles = StyleSheet.create({
   },
   brandCopy: {
     flex: 1,
-    gap: 1,
+    gap: 3,
     paddingRight: spacing.sm,
+  },
+  brandIdentityRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  brandIcon: {
+    borderRadius: radii.pill,
+    height: 34,
+    width: 34,
   },
   brandTitle: {
     color: palette.logoOrange,
