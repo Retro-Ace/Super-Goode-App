@@ -13,6 +13,7 @@ import {
 type RestaurantMapProps = {
   restaurants: Restaurant[];
   initialRegion: MapRegion;
+  onRegionChangeComplete?: (region: MapRegion) => void;
   selectedRestaurantId: string | null;
   userLocation: MapCoordinate | null;
   onDeselectRestaurant: () => void;
@@ -32,7 +33,15 @@ function getMarkerColor(score: number) {
 }
 
 export const RestaurantMap = forwardRef<MapView, RestaurantMapProps>(function RestaurantMap(
-  { restaurants, initialRegion, selectedRestaurantId, userLocation, onDeselectRestaurant, onSelectRestaurant },
+  {
+    restaurants,
+    initialRegion,
+    onRegionChangeComplete,
+    selectedRestaurantId,
+    userLocation,
+    onDeselectRestaurant,
+    onSelectRestaurant,
+  },
   ref
 ) {
   const markerPressInFlight = useRef(false);
@@ -77,6 +86,7 @@ export const RestaurantMap = forwardRef<MapView, RestaurantMapProps>(function Re
         mapPadding={{ bottom: 24, left: 0, right: 0, top: 0 }}
         moveOnMarkerPress={false}
         onPress={handleMapPress}
+        onRegionChangeComplete={onRegionChangeComplete}
         ref={ref}
         showsCompass={false}
         showsMyLocationButton={false}

@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import type MapView from 'react-native-maps';
+import type { Region } from 'react-native-maps';
 
 import { ActionButton } from '@/src/components/common/ActionButton';
 import { EmptyState } from '@/src/components/common/EmptyState';
@@ -26,9 +28,13 @@ import {
 } from '@/src/utils/map';
 import { filterRestaurants } from '@/src/utils/restaurants';
 
+const TAB_BAR_OFFSET = Platform.select({ ios: 18, default: 14 }) ?? 14;
+
 export default function MapScreen() {
   const router = useRouter();
+  const tabBarHeight = useBottomTabBarHeight();
   const mapRef = useRef<MapView | null>(null);
+  const currentRegionRef = useRef<Region | null>(null);
   const hasFittedInitialRegion = useRef(false);
   const { restaurants, isLoading, error } = useRestaurants();
   const { canAskAgain, isLocating, locationError, permissionStatus, requestUserLocation, userLocation } =
@@ -46,6 +52,7 @@ export default function MapScreen() {
   const selectedRestaurant =
     mappedRestaurants.find((restaurant) => restaurant.id === selectedRestaurantId) ?? null;
   const filtersDirty = query.trim().length > 0 || minimumScore !== 8;
+  const bottomOverlayOffset = tabBarHeight + TAB_BAR_OFFSET + spacing.sm;
   const locationReadyLabel =
     permissionStatus === 'granted'
       ? 'On'
@@ -89,6 +96,34 @@ export default function MapScreen() {
       },
     });
   }, [mappedRestaurants]);
+
+  useEffect(() => {
+    if (!selectedRestaurantId || !mapRef.current) {
+      return;
+    }
+
+    const coordinate = selectedRestaurant ? getRestaurantCoordinate(selectedRestaurant) : null;
+
+    if (!coordinate) {
+      return;
+    }
+
+    const fallbackRegion = buildRegionFromCoordinate(coordinate, 0.08, 0.08);
+    const baseRegion = currentRegionRef.current ?? fallbackRegion;
+    const latitudeDelta = baseRegion.latitudeDelta || fallbackRegion.latitudeDelta;
+    const longitudeDelta = baseRegion.longitudeDelta || fallbackRegion.longitudeDelta;
+    const latitudeOffset = Math.max(latitudeDelta * 0.2, 0.0045);
+
+    mapRef.current.animateToRegion(
+      {
+        latitude: coordinate.latitude - latitudeOffset,
+        longitude: coordinate.longitude,
+        latitudeDelta,
+        longitudeDelta,
+      },
+      280
+    );
+  }, [selectedRestaurant, selectedRestaurantId]);
 
   function openRestaurantDetails(restaurant: Restaurant) {
     router.push({
@@ -178,6 +213,9 @@ export default function MapScreen() {
             <RestaurantMap
               initialRegion={initialRegion}
               onDeselectRestaurant={() => setSelectedRestaurantId(null)}
+              onRegionChangeComplete={(region) => {
+                currentRegionRef.current = region;
+              }}
               onSelectRestaurant={setSelectedRestaurantId}
               ref={mapRef}
               restaurants={mappedRestaurants}
@@ -228,7 +266,7 @@ export default function MapScreen() {
                 </Pressable>
               </View>
 
-              <View style={styles.bottomStack}>
+              <View style={[styles.bottomStack, { paddingBottom: bottomOverlayOffset }]}>
                 {selectedRestaurant ? (
                   <View style={[styles.selectedCard, elevation.floating]}>
                     <View style={styles.selectedHeader}>
