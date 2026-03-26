@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "sync:seed": "node scripts/sync-locations-seed.mjs",
-    "check:data": "node scripts/validate-location-data.mjs"
+    "check:data": "node scripts/validate-location-data.mjs",
+    "check:review-urls": "node scripts/check-review-url-normalization.mjs"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",

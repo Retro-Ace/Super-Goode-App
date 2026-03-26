@@ -1,4 +1,4 @@
-export type ReviewProvider = 'instagram' | 'tiktok' | 'youtube' | 'web' | 'unknown';
+import { readFileSync } from 'node:fs';
 
 const TRACKING_PARAM_NAMES = new Set([
   'fbclid',
@@ -16,7 +16,7 @@ const TRACKING_PARAM_NAMES = new Set([
   'utm_term',
 ]);
 
-function detectReviewProvider(url: string): ReviewProvider {
+function detectReviewProvider(url) {
   const lowerUrl = url.toLowerCase();
 
   if (lowerUrl.includes('instagram.com')) {
@@ -38,7 +38,7 @@ function detectReviewProvider(url: string): ReviewProvider {
   return 'unknown';
 }
 
-function stripTrackingParams(url: URL) {
+function stripTrackingParams(url) {
   const keys = [...url.searchParams.keys()];
 
   for (const key of keys) {
@@ -48,7 +48,7 @@ function stripTrackingParams(url: URL) {
   }
 }
 
-function normalizePathname(pathname: string) {
+function normalizePathname(pathname) {
   if (!pathname) {
     return '/';
   }
@@ -56,8 +56,8 @@ function normalizePathname(pathname: string) {
   return pathname.replace(/\/{2,}/g, '/');
 }
 
-export function normalizeReviewUrl(url?: string | null) {
-  const trimmed = url?.trim();
+function normalizeReviewUrl(url) {
+  const trimmed = typeof url === 'string' ? url.trim() : '';
 
   if (!trimmed) {
     return null;
@@ -100,40 +100,28 @@ export function normalizeReviewUrl(url?: string | null) {
   }
 }
 
-export function getReviewProvider(url?: string | null): ReviewProvider {
-  const normalizedUrl = normalizeReviewUrl(url);
+const datasetPath = process.argv[2] ?? 'src/data/seed/locations.json';
+const raw = readFileSync(datasetPath, 'utf8');
+const locations = JSON.parse(raw);
 
-  if (!normalizedUrl) {
-    return 'unknown';
-  }
+const changed = locations
+  .map((location) => {
+    const normalized = normalizeReviewUrl(location.reviewUrl);
+    return normalized && normalized !== location.reviewUrl
+      ? { name: location.name, before: location.reviewUrl, after: normalized }
+      : null;
+  })
+  .filter(Boolean);
 
-  return detectReviewProvider(normalizedUrl);
-}
-
-export function getReviewProviderLabel(provider: ReviewProvider) {
-  switch (provider) {
-    case 'instagram':
-      return 'Instagram review';
-    case 'tiktok':
-      return 'TikTok review';
-    case 'youtube':
-      return 'YouTube review';
-    case 'web':
-      return 'Web review';
-    default:
-      return 'Review link';
-  }
-}
-
-export function getReviewExternalActionLabel(provider: ReviewProvider) {
-  switch (provider) {
-    case 'instagram':
-      return 'Open in Instagram';
-    case 'tiktok':
-      return 'Open in TikTok';
-    case 'youtube':
-      return 'Open in YouTube';
-    default:
-      return 'Open in Browser';
-  }
-}
+console.log(
+  JSON.stringify(
+    {
+      datasetPath,
+      total: locations.length,
+      changedCount: changed.length,
+      samples: changed.slice(0, 10),
+    },
+    null,
+    2
+  )
+);

@@ -1,4 +1,5 @@
 import type { Restaurant, RestaurantFilters, RestaurantRecord } from '@/src/types/restaurant';
+import { normalizeReviewUrl } from '@/src/utils/reviews';
 
 export const scoreFilterOptions: Array<{ label: string; minimumScore: number | null }> = [
   { label: 'All', minimumScore: null },
@@ -26,12 +27,14 @@ export function formatScore(score: number) {
 export function normalizeRestaurant(record: RestaurantRecord): Restaurant {
   const cityState = `${record.city}, ${record.state}`;
   const fullAddress = `${record.address}, ${cityState}`;
+  const reviewUrl = normalizeReviewUrl(record.reviewUrl) ?? record.reviewUrl.trim();
 
   return {
     ...record,
     id: createRestaurantId(record),
     cityState,
     fullAddress,
+    reviewUrl,
     searchableText: [
       record.name,
       record.subtitle,
