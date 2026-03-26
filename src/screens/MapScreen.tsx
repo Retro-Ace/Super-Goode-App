@@ -472,6 +472,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     gap: spacing.xs,
+    marginBottom: -spacing.sm,
   },
   selectedCard: {
     backgroundColor: 'rgba(12, 18, 41, 0.94)',
