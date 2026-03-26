@@ -36,15 +36,22 @@ export default function RestaurantDetailScreen() {
         <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           <View style={[styles.hero, elevation.floating]}>
             <View style={styles.heroRail} />
+            <View style={styles.mediaStub}>
+              <View style={styles.mediaGlowLarge} />
+              <View style={styles.mediaGlowSmall} />
+              <View style={styles.mediaScore}>
+                <ScorePill score={restaurant.score} />
+              </View>
+              <Text style={styles.mediaLabel}>{restaurant.cityState}</Text>
+            </View>
             <View style={styles.heroHeader}>
-              <ScorePill score={restaurant.score} />
               <ActionButton
                 label={isFavorite(restaurant.id) ? 'Favorited' : 'Save Favorite'}
                 onPress={() => toggleFavorite(restaurant.id)}
                 variant={isFavorite(restaurant.id) ? 'primary' : 'secondary'}
               />
             </View>
-            <Text style={styles.kicker}>{restaurant.cityState}</Text>
+            <Text style={styles.kicker}>Featured spot</Text>
             <Text style={styles.title}>{restaurant.name}</Text>
             <Text style={styles.subtitle}>{restaurant.subtitle}</Text>
 
@@ -127,7 +134,50 @@ const styles = StyleSheet.create({
   heroHeader: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
+  },
+  mediaStub: {
+    backgroundColor: palette.backgroundMuted,
+    borderColor: palette.border,
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    height: 180,
+    overflow: 'hidden',
+    padding: spacing.md,
+    position: 'relative',
+  },
+  mediaGlowLarge: {
+    backgroundColor: 'rgba(160, 109, 255, 0.22)',
+    borderRadius: 220,
+    height: 220,
+    left: -50,
+    position: 'absolute',
+    top: -90,
+    width: 220,
+  },
+  mediaGlowSmall: {
+    backgroundColor: 'rgba(242, 201, 76, 0.14)',
+    borderRadius: 140,
+    height: 140,
+    position: 'absolute',
+    right: -20,
+    top: 30,
+    width: 140,
+  },
+  mediaScore: {
+    position: 'absolute',
+    right: spacing.md,
+    top: spacing.md,
+  },
+  mediaLabel: {
+    bottom: spacing.md,
+    color: palette.highlightSoft,
+    fontFamily: typography.brand,
+    fontSize: 12,
+    left: spacing.md,
+    letterSpacing: 1.1,
+    position: 'absolute',
+    textTransform: 'uppercase',
   },
   kicker: {
     color: palette.highlightSoft,

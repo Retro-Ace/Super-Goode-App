@@ -2,6 +2,7 @@ import { useDeferredValue, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+import { BrandHeader } from '@/src/components/common/BrandHeader';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { Screen } from '@/src/components/common/Screen';
@@ -10,7 +11,7 @@ import { MapPreview } from '@/src/components/restaurant/MapPreview';
 import { RestaurantCard } from '@/src/components/restaurant/RestaurantCard';
 import { ScoreFilter } from '@/src/components/restaurant/ScoreFilter';
 import { SearchBar } from '@/src/components/restaurant/SearchBar';
-import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import { palette, radii, spacing, typography } from '@/src/constants/theme';
 import { useRestaurants } from '@/src/hooks/useRestaurants';
 import { filterRestaurants } from '@/src/utils/restaurants';
 
@@ -58,33 +59,25 @@ export default function MapScreen() {
         }
         ListHeaderComponent={
           <View style={styles.header}>
-            <View style={[styles.hero, elevation.floating]}>
-              <View style={styles.heroGlow} />
-              <Text style={styles.heroEyebrow}>Super Goode</Text>
-              <Text style={styles.heroTitle}>Find the next elite bite.</Text>
-              <Text style={styles.heroCopy}>
-                Dark-purple, score-first discovery shaped around the current shared restaurant feed and ready for a
-                future live JSON endpoint.
-              </Text>
-              <View style={styles.heroStats}>
-                <View style={[styles.statCard, styles.statCardHighlight]}>
-                  <Text style={[styles.statValue, styles.statValueHighlight]}>{topScore}</Text>
-                  <Text style={[styles.statLabel, styles.statLabelHighlight]}>Top score</Text>
+            <BrandHeader subtitle="Search restaurants, scan the map, and drop into the hot list." />
+
+            <View style={styles.controlsCard}>
+              <SearchBar onChangeText={setQuery} placeholder="Search restaurants..." value={query} />
+              <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
+              <View style={styles.utilityRow}>
+                <View style={styles.utilityChip}>
+                  <Text style={styles.utilityLabel}>Visible</Text>
+                  <Text style={styles.utilityValue}>{filteredRestaurants.length}</Text>
                 </View>
-                <View style={styles.statCard}>
-                  <Text style={styles.statValue}>{restaurants.length || '...'}</Text>
-                  <Text style={styles.statLabel}>Restaurants</Text>
+                <View style={styles.utilityChip}>
+                  <Text style={styles.utilityLabel}>Cities</Text>
+                  <Text style={styles.utilityValue}>{cityCount}</Text>
                 </View>
-                <View style={styles.statCard}>
-                  <Text style={styles.statValue}>{cityCount || '...'}</Text>
-                  <Text style={styles.statLabel}>Cities</Text>
+                <View style={[styles.utilityChip, styles.utilityChipHighlight]}>
+                  <Text style={[styles.utilityLabel, styles.utilityLabelHighlight]}>Top</Text>
+                  <Text style={[styles.utilityValue, styles.utilityValueHighlight]}>{topScore}</Text>
                 </View>
               </View>
-            </View>
-
-            <View style={styles.controls}>
-              <SearchBar onChangeText={setQuery} value={query} />
-              <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
             </View>
 
             {filteredRestaurants.length > 0 ? (
@@ -98,8 +91,8 @@ export default function MapScreen() {
 
             <SectionHeader
               actionLabel={filtersDirty ? 'Reset' : undefined}
-              copy="Highest-rated results in the current filter, tuned for fast thumb scanning."
-              eyebrow="Live board"
+              copy="Tighter cards and gold score chips, aligned closer to the concept list rhythm."
+              eyebrow="Hot list"
               onActionPress={
                 filtersDirty
                   ? () => {
@@ -135,79 +128,50 @@ const styles = StyleSheet.create({
   header: {
     gap: spacing.md,
   },
-  hero: {
+  controlsCard: {
     backgroundColor: palette.backgroundCard,
-    borderColor: palette.borderStrong,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    gap: spacing.md,
-    overflow: 'hidden',
-    padding: spacing.lg,
-    position: 'relative',
-  },
-  heroGlow: {
-    backgroundColor: 'rgba(160, 109, 255, 0.18)',
-    borderRadius: 220,
-    height: 220,
-    position: 'absolute',
-    right: -70,
-    top: -90,
-    width: 220,
-  },
-  heroEyebrow: {
-    color: palette.highlightSoft,
-    fontFamily: typography.brand,
-    fontSize: 13,
-    letterSpacing: 1.4,
-    textTransform: 'uppercase',
-  },
-  heroTitle: {
-    color: palette.text,
-    fontSize: 32,
-    fontWeight: '800',
-    letterSpacing: -0.9,
-    lineHeight: 36,
-  },
-  heroCopy: {
-    color: palette.textMuted,
-    fontSize: 15,
-    lineHeight: 22,
-  },
-  heroStats: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-  },
-  statCard: {
-    backgroundColor: palette.backgroundSoft,
     borderColor: palette.border,
     borderRadius: radii.md,
     borderWidth: 1,
-    flex: 1,
+    gap: spacing.md,
     padding: spacing.md,
   },
-  statCardHighlight: {
+  utilityRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  utilityChip: {
+    alignItems: 'center',
+    backgroundColor: palette.backgroundSoft,
+    borderColor: palette.border,
+    borderRadius: radii.pill,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  utilityChipHighlight: {
     backgroundColor: palette.highlight,
     borderColor: palette.highlight,
   },
-  statValue: {
-    color: palette.text,
+  utilityLabel: {
+    color: palette.textMuted,
     fontFamily: typography.brand,
-    fontSize: 24,
-  },
-  statValueHighlight: {
-    color: palette.background,
-  },
-  statLabel: {
-    color: palette.textDim,
-    fontSize: 12,
-    marginTop: 4,
+    fontSize: 11,
     textTransform: 'uppercase',
   },
-  statLabelHighlight: {
+  utilityLabelHighlight: {
     color: palette.background,
   },
-  controls: {
-    gap: spacing.md,
+  utilityValue: {
+    color: palette.text,
+    fontFamily: typography.brand,
+    fontSize: 16,
+  },
+  utilityValueHighlight: {
+    color: palette.background,
   },
   errorCard: {
     backgroundColor: palette.accentSoft,

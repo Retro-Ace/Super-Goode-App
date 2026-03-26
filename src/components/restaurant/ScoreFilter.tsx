@@ -39,16 +39,16 @@ const styles = StyleSheet.create({
     paddingRight: spacing.lg,
   },
   chip: {
-    backgroundColor: palette.backgroundElevated,
+    backgroundColor: palette.backgroundSoft,
     borderColor: palette.border,
     borderRadius: radii.pill,
     borderWidth: 1,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   selectedChip: {
-    backgroundColor: palette.highlight,
-    borderColor: palette.highlight,
+    backgroundColor: palette.accent,
+    borderColor: palette.accentStrong,
   },
   pressed: {
     opacity: 0.8,
@@ -62,6 +62,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   selectedLabel: {
-    color: palette.background,
+    color: palette.white,
   },
 });

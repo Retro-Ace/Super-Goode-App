@@ -72,15 +72,12 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
         ) : null}
       </Pressable>
 
-      <View style={styles.primaryAction}>
-        <ActionButton label="Details" onPress={openDetails} variant="primary" />
-      </View>
       <View style={styles.footer}>
-        <View style={styles.footerSlot}>
-          <ActionButton label="Directions" onPress={() => openExternalUrl(restaurant.directionsUrl)} />
-        </View>
-        <View style={styles.footerSlot}>
+        <ActionButton compact label="Details" onPress={openDetails} variant="primary" />
+        <ActionButton compact label="Directions" onPress={() => openExternalUrl(restaurant.directionsUrl)} />
+        <View style={styles.reviewAction}>
           <ActionButton
+            compact
             label="Watch Review"
             onPress={() => openExternalUrl(restaurant.reviewUrl)}
             variant="ghost"
@@ -177,7 +174,7 @@ const styles = StyleSheet.create({
   },
   address: {
     color: palette.text,
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
   },
   noteWrap: {
@@ -192,15 +189,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
   },
-  primaryAction: {
-    marginTop: spacing.xs,
-  },
   footer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.sm,
   },
-  footerSlot: {
+  reviewAction: {
     flex: 1,
+    minWidth: 120,
   },
   pressed: {
     opacity: 0.84,

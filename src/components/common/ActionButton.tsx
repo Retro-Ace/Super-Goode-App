@@ -6,18 +6,21 @@ type ActionButtonProps = {
   label: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'ghost';
+  compact?: boolean;
 };
 
 export function ActionButton({
   label,
   onPress,
   variant = 'secondary',
+  compact = false,
 }: ActionButtonProps) {
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
+        compact ? styles.compactButton : undefined,
         variant === 'primary' ? styles.primaryButton : undefined,
         variant === 'secondary' ? styles.secondaryButton : undefined,
         variant === 'ghost' ? styles.ghostButton : undefined,
@@ -45,6 +48,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 44,
     paddingHorizontal: spacing.md,
+  },
+  compactButton: {
+    minHeight: 34,
+    paddingHorizontal: spacing.sm,
   },
   primaryButton: {
     backgroundColor: palette.accent,

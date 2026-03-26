@@ -16,6 +16,8 @@ export const palette = {
   accentSoft: 'rgba(160, 109, 255, 0.16)',
   highlight: '#F2C94C',
   highlightSoft: '#F7DB7A',
+  logoOrange: '#FFB52E',
+  logoTeal: '#67E8D5',
   warning: '#FFB36B',
   success: '#7DD6A1',
   shadow: '#03020A',

@@ -27,15 +27,16 @@ export function MapPreview({ restaurants, onSelectRestaurant }: MapPreviewProps)
           <Text style={styles.eyebrow}>Map pulse</Text>
           <Text style={styles.title}>Chicago-area hits</Text>
         </View>
-        <View style={styles.countPill}>
-          <Text style={styles.count}>{restaurants.length} spots</Text>
-        </View>
       </View>
       <View style={styles.mapFrame}>
         <View style={styles.gridVertical} />
         <View style={styles.gridHorizontal} />
         <View style={[styles.glow, styles.glowLarge]} />
         <View style={[styles.glow, styles.glowSmall]} />
+        <View style={styles.mapBadge}>
+          <Text style={styles.mapBadgeValue}>{restaurants.length}</Text>
+          <Text style={styles.mapBadgeLabel}>Spots in view</Text>
+        </View>
         {plottedRestaurants.map((restaurant) => {
           const top = maxLat === minLat ? 50 : 14 + ((maxLat - restaurant.lat) / (maxLat - minLat)) * 72;
           const left = maxLng === minLng ? 50 : 8 + ((restaurant.lng - minLng) / (maxLng - minLng)) * 84;
@@ -107,32 +108,42 @@ const styles = StyleSheet.create({
   },
   title: {
     color: palette.text,
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: '800',
     letterSpacing: -0.5,
-  },
-  countPill: {
-    backgroundColor: palette.backgroundSoft,
-    borderColor: palette.border,
-    borderRadius: radii.pill,
-    borderWidth: 1,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  count: {
-    color: palette.highlightSoft,
-    fontFamily: typography.brand,
-    fontSize: 12,
-    textTransform: 'uppercase',
   },
   mapFrame: {
     backgroundColor: '#120B24',
     borderRadius: radii.md,
     borderWidth: 1,
     borderColor: palette.border,
-    height: 270,
+    height: 220,
     overflow: 'hidden',
     position: 'relative',
+  },
+  mapBadge: {
+    backgroundColor: 'rgba(17, 10, 32, 0.9)',
+    borderColor: palette.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    position: 'absolute',
+    right: spacing.md,
+    top: spacing.md,
+    zIndex: 2,
+  },
+  mapBadgeValue: {
+    color: palette.highlight,
+    fontFamily: typography.brand,
+    fontSize: 22,
+    lineHeight: 22,
+  },
+  mapBadgeLabel: {
+    color: palette.textMuted,
+    fontSize: 11,
+    marginTop: spacing.xxs,
+    textTransform: 'uppercase',
   },
   gridVertical: {
     backgroundColor: 'rgba(255,255,255,0.04)',

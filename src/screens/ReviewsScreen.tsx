@@ -1,6 +1,7 @@
 import { useDeferredValue, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+import { BrandHeader } from '@/src/components/common/BrandHeader';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { Screen } from '@/src/components/common/Screen';
@@ -8,7 +9,7 @@ import { SectionHeader } from '@/src/components/common/SectionHeader';
 import { RestaurantCard } from '@/src/components/restaurant/RestaurantCard';
 import { ScoreFilter } from '@/src/components/restaurant/ScoreFilter';
 import { SearchBar } from '@/src/components/restaurant/SearchBar';
-import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import { palette, radii, spacing, typography } from '@/src/constants/theme';
 import { useRestaurants } from '@/src/hooks/useRestaurants';
 import { filterRestaurants } from '@/src/utils/restaurants';
 
@@ -50,34 +51,31 @@ export default function ReviewsScreen() {
         }
         ListHeaderComponent={
           <View style={styles.header}>
-            <View style={[styles.hero, elevation.card]}>
-              <Text style={styles.title}>Reviews</Text>
-              <Text style={styles.copy}>Full ranked feed from the current Super Goode dataset, optimized for quick scan and tap.</Text>
-              <View style={styles.summaryRow}>
-                <View style={styles.summaryCard}>
-                  <Text style={styles.summaryValue}>{filteredRestaurants.length}</Text>
-                  <Text style={styles.summaryLabel}>Results</Text>
+            <BrandHeader subtitle="Search reviews and work down the ranked feed." />
+            <View style={styles.controlsCard}>
+              <SearchBar onChangeText={setQuery} placeholder="Search reviews..." value={query} />
+              <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
+              <View style={styles.utilityRow}>
+                <View style={styles.utilityChip}>
+                  <Text style={styles.utilityLabel}>Results</Text>
+                  <Text style={styles.utilityValue}>{filteredRestaurants.length}</Text>
                 </View>
-                <View style={styles.summaryCard}>
-                  <Text style={styles.summaryValue}>{restaurants.length}</Text>
-                  <Text style={styles.summaryLabel}>Total</Text>
+                <View style={styles.utilityChip}>
+                  <Text style={styles.utilityLabel}>Total</Text>
+                  <Text style={styles.utilityValue}>{restaurants.length}</Text>
                 </View>
-                <View style={[styles.summaryCard, styles.summaryCardHighlight]}>
-                  <Text style={[styles.summaryValue, styles.summaryValueHighlight]}>
+                <View style={[styles.utilityChip, styles.utilityChipHighlight]}>
+                  <Text style={[styles.utilityLabel, styles.utilityLabelHighlight]}>Best</Text>
+                  <Text style={[styles.utilityValue, styles.utilityValueHighlight]}>
                     {topResult ? topResult.score.toFixed(1) : '--'}
                   </Text>
-                  <Text style={[styles.summaryLabel, styles.summaryLabelHighlight]}>Best in view</Text>
                 </View>
               </View>
             </View>
-            <View style={styles.controls}>
-              <SearchBar onChangeText={setQuery} value={query} />
-              <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
-            </View>
             <SectionHeader
               actionLabel={filtersDirty ? 'Reset' : undefined}
-              copy="The same reusable search, filter, score, and card system applied to the full feed."
-              eyebrow="Ranked feed"
+              copy="Same real feed, denser spacing and a card stack closer to the concept mockup."
+              eyebrow="Review feed"
               onActionPress={
                 filtersDirty
                   ? () => {
@@ -88,7 +86,7 @@ export default function ReviewsScreen() {
               }
               title="Browse every reviewed spot"
             />
-            <View style={styles.summaryRow}>
+            <View style={styles.summaryMetaRow}>
               <Text style={styles.summaryText}>{filteredRestaurants.length} results</Text>
               <Text style={styles.summaryText}>{restaurants.length} total entries</Text>
             </View>
@@ -116,60 +114,54 @@ const styles = StyleSheet.create({
   header: {
     gap: spacing.md,
   },
-  hero: {
+  controlsCard: {
     backgroundColor: palette.backgroundCard,
-    borderColor: palette.border,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    gap: spacing.md,
-    padding: spacing.lg,
-  },
-  title: {
-    color: palette.text,
-    fontFamily: typography.brand,
-    fontSize: 28,
-  },
-  copy: {
-    color: palette.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  controls: {
-    gap: spacing.md,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    justifyContent: 'space-between',
-  },
-  summaryCard: {
-    backgroundColor: palette.backgroundSoft,
     borderColor: palette.border,
     borderRadius: radii.md,
     borderWidth: 1,
-    flex: 1,
+    gap: spacing.md,
     padding: spacing.md,
   },
-  summaryCardHighlight: {
+  utilityRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  utilityChip: {
+    alignItems: 'center',
+    backgroundColor: palette.backgroundSoft,
+    borderColor: palette.border,
+    borderRadius: radii.pill,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  utilityChipHighlight: {
     backgroundColor: palette.highlight,
     borderColor: palette.highlight,
   },
-  summaryValue: {
-    color: palette.text,
+  utilityLabel: {
+    color: palette.textMuted,
     fontFamily: typography.brand,
-    fontSize: 22,
-  },
-  summaryValueHighlight: {
-    color: palette.background,
-  },
-  summaryLabel: {
-    color: palette.textDim,
-    fontSize: 12,
-    marginTop: spacing.xxs,
+    fontSize: 11,
     textTransform: 'uppercase',
   },
-  summaryLabelHighlight: {
+  utilityLabelHighlight: {
     color: palette.background,
+  },
+  utilityValue: {
+    color: palette.text,
+    fontFamily: typography.brand,
+    fontSize: 16,
+  },
+  utilityValueHighlight: {
+    color: palette.background,
+  },
+  summaryMetaRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   summaryText: {
     color: palette.textDim,

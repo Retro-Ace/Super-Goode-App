@@ -16,7 +16,6 @@ export function SearchBar({
 }: SearchBarProps) {
   return (
     <View style={[styles.container, elevation.card]}>
-      <Ionicons color={palette.textMuted} name="search" size={18} />
       <TextInput
         autoCapitalize="none"
         autoCorrect={false}
@@ -27,14 +26,12 @@ export function SearchBar({
         style={styles.input}
         value={value}
       />
-      {value ? (
-        <Pressable
-          accessibilityLabel="Clear search"
-          onPress={() => onChangeText('')}
-          style={({ pressed }) => [styles.clearButton, pressed && styles.pressed]}>
-          <Ionicons color={palette.textDim} name="close-circle" size={18} />
-        </Pressable>
-      ) : null}
+      <Pressable
+        accessibilityLabel={value ? 'Clear search' : 'Search'}
+        onPress={value ? () => onChangeText('') : undefined}
+        style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
+        <Ionicons color={palette.white} name={value ? 'close' : 'search'} size={18} />
+      </Pressable>
     </View>
   );
 }
@@ -44,11 +41,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: palette.backgroundElevated,
     borderColor: palette.border,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
     borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.sm,
-    minHeight: 56,
+    minHeight: 54,
     paddingHorizontal: spacing.md,
   },
   input: {
@@ -57,11 +54,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: spacing.sm,
   },
-  clearButton: {
+  iconButton: {
     alignItems: 'center',
+    backgroundColor: palette.accent,
+    borderRadius: radii.pill,
+    height: 34,
     justifyContent: 'center',
+    width: 34,
   },
   pressed: {
-    opacity: 0.7,
+    opacity: 0.82,
   },
 });
