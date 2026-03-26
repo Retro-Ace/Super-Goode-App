@@ -1,5 +1,5 @@
 import type MapView from 'react-native-maps';
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
@@ -19,10 +19,24 @@ type RestaurantMapProps = {
   onSelectRestaurant: (id: string) => void;
 };
 
+function getMarkerColor(score: number) {
+  if (score >= 9) {
+    return palette.highlight;
+  }
+
+  if (score >= 8) {
+    return palette.accent;
+  }
+
+  return '#A9B4C8';
+}
+
 export const RestaurantMap = forwardRef<MapView, RestaurantMapProps>(function RestaurantMap(
   { restaurants, initialRegion, selectedRestaurantId, userLocation, onDeselectRestaurant, onSelectRestaurant },
   ref
 ) {
+  const markerPressInFlight = useRef(false);
+
   if (Platform.OS === 'web') {
     return (
       <View style={[styles.webFallback, elevation.card]}>
@@ -37,6 +51,24 @@ export const RestaurantMap = forwardRef<MapView, RestaurantMapProps>(function Re
   const NativeMapView = NativeMaps.default;
   const Marker = NativeMaps.Marker;
 
+  function handleMapPress() {
+    if (markerPressInFlight.current) {
+      markerPressInFlight.current = false;
+      return;
+    }
+
+    onDeselectRestaurant();
+  }
+
+  function handleMarkerSelect(id: string) {
+    markerPressInFlight.current = true;
+    onSelectRestaurant(id);
+
+    setTimeout(() => {
+      markerPressInFlight.current = false;
+    }, 160);
+  }
+
   return (
     <View style={styles.shell}>
       <NativeMapView
@@ -44,7 +76,7 @@ export const RestaurantMap = forwardRef<MapView, RestaurantMapProps>(function Re
         loadingEnabled
         mapPadding={{ bottom: 24, left: 0, right: 0, top: 0 }}
         moveOnMarkerPress={false}
-        onPress={onDeselectRestaurant}
+        onPress={handleMapPress}
         ref={ref}
         showsCompass={false}
         showsMyLocationButton={false}
@@ -64,9 +96,19 @@ export const RestaurantMap = forwardRef<MapView, RestaurantMapProps>(function Re
             <Marker
               coordinate={coordinate}
               key={restaurant.id}
-              onPress={() => onSelectRestaurant(restaurant.id)}
+              anchor={{ x: 0.5, y: 0.5 }}
+              onPress={() => handleMarkerSelect(restaurant.id)}
+              onSelect={() => handleMarkerSelect(restaurant.id)}
               tracksViewChanges={false}>
-              <View style={[styles.markerDot, selected ? styles.markerDotSelected : undefined]} />
+              <View style={styles.markerTouchTarget}>
+                <View
+                  style={[
+                    styles.markerDot,
+                    { backgroundColor: getMarkerColor(restaurant.score) },
+                    selected ? styles.markerDotSelected : undefined,
+                  ]}
+                />
+              </View>
             </Marker>
           );
         })}
@@ -82,19 +124,23 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
+  markerTouchTarget: {
+    alignItems: 'center',
+    height: 28,
+    justifyContent: 'center',
+    width: 28,
+  },
   markerDot: {
-    backgroundColor: palette.accent,
-    borderColor: palette.white,
+    borderColor: 'rgba(15, 10, 28, 0.82)',
     borderRadius: radii.pill,
-    borderWidth: 2,
-    height: 12,
-    width: 12,
+    borderWidth: 2.5,
+    height: 14,
+    width: 14,
   },
   markerDotSelected: {
-    backgroundColor: palette.highlight,
-    borderColor: palette.background,
-    height: 18,
-    width: 18,
+    borderColor: palette.white,
+    height: 20,
+    width: 20,
   },
   webFallback: {
     alignItems: 'center',

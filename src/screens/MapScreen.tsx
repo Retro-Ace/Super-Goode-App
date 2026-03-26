@@ -231,34 +231,55 @@ export default function MapScreen() {
               <View style={styles.bottomStack}>
                 {selectedRestaurant ? (
                   <View style={[styles.selectedCard, elevation.floating]}>
-                    <View style={styles.selectedMainRow}>
+                    <View style={styles.selectedHeader}>
                       <View style={styles.selectedCopy}>
-                        <Text numberOfLines={1} style={styles.selectedTitle}>
+                        <Text numberOfLines={2} style={styles.selectedTitle}>
                           {selectedRestaurant.name}
                         </Text>
-                        <Text numberOfLines={1} style={styles.selectedMeta}>
-                          {getSelectedMeta(selectedRestaurant)}
+                        <Text numberOfLines={1} style={styles.selectedSubtitle}>
+                          {selectedRestaurant.subtitle}
                         </Text>
                       </View>
                       <ScorePill score={selectedRestaurant.score} />
                     </View>
+                    <View style={styles.selectedInfoBlock}>
+                      <Text numberOfLines={2} style={styles.selectedAddress}>
+                        {selectedRestaurant.fullAddress}
+                      </Text>
+                      <Text numberOfLines={1} style={styles.selectedMeta}>
+                        {getSelectedMeta(selectedRestaurant)}
+                      </Text>
+                    </View>
                     <View style={styles.selectedActions}>
                       <ActionButton
                         compact
-                        label="Details"
-                        onPress={() => openRestaurantDetails(selectedRestaurant)}
+                        label="Review Video"
+                        onPress={() => openExternalUrl(selectedRestaurant.reviewUrl)}
                         variant="primary"
                       />
                       <ActionButton
                         compact
                         label="Directions"
                         onPress={() => openExternalUrl(selectedRestaurant.directionsUrl)}
+                        variant="secondary"
                       />
                     </View>
+                    <Pressable
+                      onPress={() => openRestaurantDetails(selectedRestaurant)}
+                      style={({ pressed }) => [
+                        styles.selectedDetailsLink,
+                        pressed ? styles.pressed : undefined,
+                      ]}>
+                      <Text style={styles.selectedDetailsText}>Open full restaurant details</Text>
+                      <Ionicons color={palette.highlightSoft} name="chevron-forward" size={14} />
+                    </Pressable>
                   </View>
                 ) : (
                   <View style={[styles.hintCard, elevation.card]}>
-                    <Text style={styles.hintCopy}>Tap a pin to open a spot. Use locate to jump to your position.</Text>
+                    <Text style={styles.hintCopy}>
+                      Tap any colored pin to open the restaurant popup. Gold is 9.0+, purple is 8.0s, blue-gray is
+                      7.0s.
+                    </Text>
                   </View>
                 )}
               </View>
@@ -368,38 +389,65 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   selectedCard: {
-    backgroundColor: 'rgba(17, 10, 32, 0.86)',
-    borderColor: 'rgba(242, 201, 76, 0.24)',
+    backgroundColor: 'rgba(12, 18, 41, 0.94)',
+    borderColor: 'rgba(132, 154, 206, 0.28)',
     borderRadius: radii.lg,
     borderWidth: 1,
     gap: spacing.sm,
     padding: spacing.md,
   },
-  selectedMainRow: {
-    alignItems: 'center',
+  selectedHeader: {
+    alignItems: 'flex-start',
     flexDirection: 'row',
     gap: spacing.md,
   },
   selectedCopy: {
     flex: 1,
-    gap: 3,
+    gap: 4,
   },
   selectedTitle: {
     color: palette.text,
     fontSize: 18,
     fontWeight: '800',
+    lineHeight: 22,
   },
-  selectedMeta: {
+  selectedSubtitle: {
     color: palette.textMuted,
     fontSize: 13,
+    lineHeight: 18,
+  },
+  selectedInfoBlock: {
+    gap: 4,
+  },
+  selectedAddress: {
+    color: '#D7E0F3',
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  selectedMeta: {
+    color: '#99A8C6',
+    fontSize: 12,
   },
   selectedActions: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.sm,
   },
+  selectedDetailsLink: {
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    gap: 4,
+  },
+  selectedDetailsText: {
+    color: palette.highlightSoft,
+    fontFamily: typography.brand,
+    fontSize: 12,
+    textTransform: 'uppercase',
+  },
   hintCard: {
-    backgroundColor: 'rgba(17, 10, 32, 0.72)',
-    borderColor: palette.border,
+    backgroundColor: 'rgba(12, 18, 41, 0.82)',
+    borderColor: 'rgba(132, 154, 206, 0.22)',
     borderRadius: radii.lg,
     borderWidth: 1,
     paddingHorizontal: spacing.md,
