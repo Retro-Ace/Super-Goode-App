@@ -54,6 +54,8 @@ export default function MapScreen() {
   const selectedRestaurant =
     mappedRestaurants.find((restaurant) => restaurant.id === selectedRestaurantId) ?? null;
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
+  const hasMapData = fallbackRestaurants.length > 0;
+  const showZeroResultsHint = filtersDirty && filteredRestaurants.length === 0;
   const bottomOverlayOffset = tabBarHeight + TAB_BAR_OFFSET + spacing.sm;
   const locationReadyLabel =
     permissionStatus === 'granted'
@@ -190,23 +192,10 @@ export default function MapScreen() {
               title="Loading the map..."
             />
           </View>
-        ) : mappedRestaurants.length === 0 ? (
+        ) : !hasMapData ? (
           <View style={styles.stateWrap}>
             <EmptyState
-              actionLabel={filtersDirty ? 'Reset filters' : undefined}
-              copy={
-                filtersDirty
-                  ? 'Try a broader search or lower the score floor to repopulate the map.'
-                  : 'No restaurants in the current feed have usable map coordinates.'
-              }
-              onActionPress={
-                filtersDirty
-                  ? () => {
-                      setQuery('');
-                      setMinimumScore(null);
-                    }
-                  : undefined
-              }
+              copy="No restaurants in the current feed have usable map coordinates."
               title="No map pins to show"
             />
           </View>
@@ -249,6 +238,12 @@ export default function MapScreen() {
                 <View style={[styles.controlsBar, elevation.card]}>
                   <SearchBar onChangeText={setQuery} placeholder="Search restaurants..." value={query} />
                   <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
+                  {showZeroResultsHint ? (
+                    <View style={styles.zeroResultsRow}>
+                      <Ionicons color={palette.textDim} name="search" size={14} />
+                      <Text style={styles.zeroResultsText}>0 results. Keep typing or clear the search to see pins again.</Text>
+                    </View>
+                  ) : null}
                   {(error || locationError) ? (
                     <Text style={styles.inlineError}>{error ? `Feed issue: ${error}` : locationError}</Text>
                   ) : null}
@@ -317,8 +312,9 @@ export default function MapScreen() {
                 ) : (
                   <View style={[styles.hintCard, elevation.card]}>
                     <Text style={styles.hintCopy}>
-                      Tap any colored pin to open the restaurant popup. Gold is 9.0+, purple is 8.0s, blue-gray is
-                      7.0s.
+                      {showZeroResultsHint
+                        ? 'No current matches. Edit or clear the search text to repopulate the map.'
+                        : 'Tap any colored pin to open the restaurant popup. Gold is 9.0+, purple is 8.0s, blue-gray is 7.0s.'}
                     </Text>
                   </View>
                 )}
@@ -405,6 +401,18 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 15,
     paddingHorizontal: spacing.xs,
+  },
+  zeroResultsRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.xs,
+    paddingHorizontal: spacing.xs,
+  },
+  zeroResultsText: {
+    color: palette.textDim,
+    flex: 1,
+    fontSize: 11,
+    lineHeight: 15,
   },
   utilityRail: {
     alignItems: 'flex-end',
