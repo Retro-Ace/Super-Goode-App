@@ -54,7 +54,7 @@ export default function MapScreen() {
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
   const hasMapData = fallbackRestaurants.length > 0;
   const showZeroResultsHint = filtersDirty && filteredRestaurants.length === 0;
-  const bottomOverlayOffset = Math.max(tabBarHeight - spacing.xs, spacing.lg);
+  const bottomOverlayOffset = Math.max(tabBarHeight - spacing.sm, spacing.md);
   const locationReadyLabel =
     permissionStatus === 'granted'
       ? 'On'
@@ -533,31 +533,31 @@ const styles = StyleSheet.create({
   legendCard: {
     backgroundColor: 'rgba(23, 16, 47, 0.95)',
     borderColor: 'rgba(132, 154, 206, 0.28)',
-    borderRadius: 24,
+    borderRadius: 22,
     borderWidth: 1,
-    gap: spacing.xs,
-    minWidth: 162,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
+    gap: spacing.xxs,
+    minWidth: 154,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xs,
   },
   legendTitle: {
     color: palette.white,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '800',
-    lineHeight: 16,
+    lineHeight: 15,
   },
   legendList: {
-    gap: spacing.xxs,
+    gap: 2,
   },
   legendRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.xs,
+    gap: 6,
   },
   legendDot: {
     borderRadius: radii.pill,
-    height: 14,
-    width: 14,
+    height: 12,
+    width: 12,
   },
   legendDotGold: {
     backgroundColor: palette.highlight,
@@ -570,9 +570,9 @@ const styles = StyleSheet.create({
   },
   legendLabel: {
     color: palette.textMuted,
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
-    lineHeight: 16,
+    lineHeight: 15,
   },
   stateWrap: {
     flex: 1,
