@@ -401,6 +401,7 @@ const styles = StyleSheet.create({
   brandTextBlock: {
     flex: 1,
     gap: 2,
+    paddingTop: 3,
   },
   brandIcon: {
     borderRadius: radii.pill,
