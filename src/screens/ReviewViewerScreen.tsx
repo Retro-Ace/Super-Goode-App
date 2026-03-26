@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingTop: spacing.sm,
   },
   headerButton: {
     alignItems: 'center',
