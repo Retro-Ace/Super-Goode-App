@@ -100,26 +100,6 @@ export function normalizeReviewUrl(url?: string | null) {
   }
 }
 
-export function getRuntimeReviewUrl(url?: string | null) {
-  const normalizedUrl = normalizeReviewUrl(url);
-
-  if (!normalizedUrl) {
-    return null;
-  }
-
-  if (getReviewProvider(normalizedUrl) !== 'instagram') {
-    return normalizedUrl;
-  }
-
-  try {
-    const runtimeUrl = new URL(normalizedUrl);
-    runtimeUrl.searchParams.set('l', '1');
-    return runtimeUrl.toString();
-  } catch {
-    return normalizedUrl;
-  }
-}
-
 export function getReviewProvider(url?: string | null): ReviewProvider {
   const normalizedUrl = normalizeReviewUrl(url);
 

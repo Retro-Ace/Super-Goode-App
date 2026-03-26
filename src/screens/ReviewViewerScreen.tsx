@@ -22,7 +22,6 @@ import {
   getReviewExternalActionLabel,
   getReviewProvider,
   getReviewProviderLabel,
-  getRuntimeReviewUrl,
   normalizeReviewUrl,
 } from '@/src/utils/reviews';
 
@@ -38,9 +37,8 @@ export default function ReviewViewerScreen() {
     [params.id, restaurants]
   );
 
-  const normalizedReviewUrl = normalizeReviewUrl(restaurant?.reviewUrl);
-  const reviewUrl = getRuntimeReviewUrl(normalizedReviewUrl);
-  const provider = getReviewProvider(normalizedReviewUrl);
+  const reviewUrl = normalizeReviewUrl(restaurant?.reviewUrl);
+  const provider = getReviewProvider(reviewUrl);
   const providerLabel = getReviewProviderLabel(provider);
   const externalActionLabel = getReviewExternalActionLabel(provider);
   const canLoadInApp = Boolean(reviewUrl) && Platform.OS !== 'web';
