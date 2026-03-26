@@ -7,14 +7,17 @@ import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { ScorePill } from '@/src/components/common/ScorePill';
 import { Screen } from '@/src/components/common/Screen';
+import { ReviewPreviewCard } from '@/src/components/review/ReviewPreviewCard';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
-import { useFavorites } from '@/src/providers/FavoritesProvider';
+import { useOpenReviewViewer } from '@/src/hooks/useOpenReviewViewer';
 import { useRestaurants } from '@/src/hooks/useRestaurants';
+import { useFavorites } from '@/src/providers/FavoritesProvider';
 import { openExternalUrl } from '@/src/utils/links';
 
 export default function RestaurantDetailScreen() {
   const params = useLocalSearchParams<{ id?: string }>();
   const { restaurants, isLoading } = useRestaurants();
+  const openReviewViewer = useOpenReviewViewer();
   const { isFavorite, toggleFavorite } = useFavorites();
   const restaurant = restaurants.find((item) => item.id === params.id);
 
@@ -83,15 +86,13 @@ export default function RestaurantDetailScreen() {
             </View>
           ) : null}
 
+          <ReviewPreviewCard restaurant={restaurant} onPress={() => openReviewViewer(restaurant)} />
+
           <View style={styles.actions}>
             <ActionButton
               label="Get Directions"
               onPress={() => openExternalUrl(restaurant.directionsUrl)}
               variant="primary"
-            />
-            <ActionButton
-              label="Watch Review"
-              onPress={() => openExternalUrl(restaurant.reviewUrl)}
             />
           </View>
         </ScrollView>

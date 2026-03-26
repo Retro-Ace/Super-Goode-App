@@ -5,12 +5,14 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ActionButton } from '@/src/components/common/ActionButton';
 import { ScorePill } from '@/src/components/common/ScorePill';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import { useOpenReviewViewer } from '@/src/hooks/useOpenReviewViewer';
 import { useFavorites } from '@/src/providers/FavoritesProvider';
 import type { Restaurant } from '@/src/types/restaurant';
 import { openExternalUrl } from '@/src/utils/links';
 
 export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   const router = useRouter();
+  const openReviewViewer = useOpenReviewViewer();
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorite = isFavorite(restaurant.id);
 
@@ -63,7 +65,7 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
           <ActionButton
             compact
             label="Watch Review"
-            onPress={() => openExternalUrl(restaurant.reviewUrl)}
+            onPress={() => openReviewViewer(restaurant)}
             variant="ghost"
           />
         </View>

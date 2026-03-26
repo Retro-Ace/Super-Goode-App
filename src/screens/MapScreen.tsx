@@ -16,6 +16,7 @@ import { ScoreFilter } from '@/src/components/restaurant/ScoreFilter';
 import { SearchBar } from '@/src/components/restaurant/SearchBar';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
 import { useForegroundLocation } from '@/src/hooks/useForegroundLocation';
+import { useOpenReviewViewer } from '@/src/hooks/useOpenReviewViewer';
 import { useRestaurants } from '@/src/hooks/useRestaurants';
 import type { Restaurant } from '@/src/types/restaurant';
 import { openExternalUrl } from '@/src/utils/links';
@@ -36,6 +37,7 @@ export default function MapScreen() {
   const mapRef = useRef<MapView | null>(null);
   const currentRegionRef = useRef<Region | null>(null);
   const hasFittedInitialRegion = useRef(false);
+  const openReviewViewer = useOpenReviewViewer();
   const { restaurants, isLoading, error } = useRestaurants();
   const { canAskAgain, isLocating, locationError, permissionStatus, requestUserLocation, userLocation } =
     useForegroundLocation();
@@ -292,7 +294,7 @@ export default function MapScreen() {
                       <ActionButton
                         compact
                         label="Review Video"
-                        onPress={() => openExternalUrl(selectedRestaurant.reviewUrl)}
+                        onPress={() => openReviewViewer(selectedRestaurant)}
                         variant="primary"
                       />
                       <ActionButton
