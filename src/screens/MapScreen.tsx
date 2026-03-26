@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type MapView from 'react-native-maps';
 import type { Region } from 'react-native-maps';
 
@@ -29,8 +29,6 @@ import {
 } from '@/src/utils/map';
 import { filterRestaurants } from '@/src/utils/restaurants';
 
-const TAB_BAR_OFFSET = Platform.select({ ios: 18, default: 14 }) ?? 14;
-
 export default function MapScreen() {
   const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
@@ -56,7 +54,7 @@ export default function MapScreen() {
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
   const hasMapData = fallbackRestaurants.length > 0;
   const showZeroResultsHint = filtersDirty && filteredRestaurants.length === 0;
-  const bottomOverlayOffset = tabBarHeight + TAB_BAR_OFFSET + spacing.sm;
+  const bottomOverlayOffset = tabBarHeight + spacing.sm;
   const locationReadyLabel =
     permissionStatus === 'granted'
       ? 'On'
