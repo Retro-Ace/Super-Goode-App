@@ -32,7 +32,7 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
           <Text numberOfLines={2} style={styles.title}>
             {restaurant.name}
           </Text>
-          <Text numberOfLines={2} style={styles.subtitle}>
+          <Text numberOfLines={1} style={styles.subtitle}>
             {restaurant.subtitle}
           </Text>
         </View>
@@ -52,28 +52,12 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
       </View>
 
       <Pressable onPress={openDetails} style={({ pressed }) => [styles.body, pressed ? styles.pressed : undefined]}>
-        <View style={styles.metaRow}>
-          <View style={styles.metaChip}>
-            <Text style={styles.metaTag}>{restaurant.confidence}</Text>
-          </View>
-          <View style={styles.metaChip}>
-            <Text style={styles.metaTag}>{restaurant.sourceType}</Text>
-          </View>
-        </View>
         <Text numberOfLines={1} style={styles.address}>
-          {restaurant.address}
+          {restaurant.fullAddress}
         </Text>
-        {restaurant.notes ? (
-          <View style={styles.noteWrap}>
-            <Text numberOfLines={2} style={styles.notes}>
-              {restaurant.notes}
-            </Text>
-          </View>
-        ) : null}
       </Pressable>
 
       <View style={styles.footer}>
-        <ActionButton compact label="Details" onPress={openDetails} variant="primary" />
         <ActionButton compact label="Directions" onPress={() => openExternalUrl(restaurant.directionsUrl)} />
         <View style={styles.reviewAction}>
           <ActionButton
@@ -94,14 +78,14 @@ const styles = StyleSheet.create({
     borderColor: palette.border,
     borderRadius: radii.lg,
     borderWidth: 1,
-    gap: spacing.md,
+    gap: spacing.sm,
     overflow: 'hidden',
-    padding: spacing.md,
+    padding: spacing.sm,
     position: 'relative',
   },
   topRail: {
     backgroundColor: palette.highlight,
-    height: 4,
+    height: 3,
     left: 0,
     position: 'absolute',
     right: 0,
@@ -110,34 +94,34 @@ const styles = StyleSheet.create({
   headerRow: {
     alignItems: 'flex-start',
     flexDirection: 'row',
-    gap: spacing.md,
+    gap: spacing.sm,
   },
   headerCopy: {
     flex: 1,
-    gap: spacing.xs,
+    gap: 4,
   },
   headerActions: {
     alignItems: 'flex-end',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   kicker: {
     color: palette.highlightSoft,
     fontFamily: typography.brand,
-    fontSize: 12,
+    fontSize: 11,
     letterSpacing: 1.1,
     textTransform: 'uppercase',
   },
   title: {
     color: palette.text,
-    fontSize: 22,
+    fontSize: 19,
     fontWeight: '800',
-    letterSpacing: -0.6,
-    lineHeight: 26,
+    letterSpacing: -0.3,
+    lineHeight: 22,
   },
   subtitle: {
     color: palette.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 13,
+    lineHeight: 17,
   },
   favoriteButton: {
     alignItems: 'center',
@@ -145,54 +129,22 @@ const styles = StyleSheet.create({
     borderColor: palette.border,
     borderRadius: radii.pill,
     borderWidth: 1,
-    height: 42,
+    height: 36,
     justifyContent: 'center',
-    width: 42,
+    width: 36,
   },
   body: {
-    gap: spacing.sm,
-  },
-  metaRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  metaChip: {
-    backgroundColor: palette.backgroundSoft,
-    borderColor: palette.border,
-    borderRadius: radii.pill,
-    borderWidth: 1,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-  },
-  metaTag: {
-    color: palette.textDim,
-    fontSize: 12,
-    fontFamily: typography.brand,
-    letterSpacing: 0.4,
-    textTransform: 'uppercase',
+    gap: spacing.xs,
   },
   address: {
     color: palette.text,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
-  },
-  noteWrap: {
-    backgroundColor: palette.accentSoft,
-    borderColor: palette.border,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    padding: spacing.sm,
-  },
-  notes: {
-    color: palette.warning,
-    fontSize: 12,
-    lineHeight: 18,
   },
   footer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   reviewAction: {
     flex: 1,
