@@ -6,11 +6,15 @@ import { scoreFilterOptions } from '@/src/utils/restaurants';
 type ScoreFilterProps = {
   selectedScore: number | null;
   onChange: (value: number | null) => void;
+  compact?: boolean;
 };
 
-export function ScoreFilter({ selectedScore, onChange }: ScoreFilterProps) {
+export function ScoreFilter({ selectedScore, onChange, compact = false }: ScoreFilterProps) {
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.content}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={[styles.content, compact ? styles.contentCompact : undefined]}>
       {scoreFilterOptions.map((option) => {
         const isSelected = option.minimumScore === selectedScore;
 
@@ -20,10 +24,11 @@ export function ScoreFilter({ selectedScore, onChange }: ScoreFilterProps) {
             onPress={() => onChange(option.minimumScore)}
             style={({ pressed }) => [
               styles.chip,
+              compact ? styles.chipCompact : undefined,
               isSelected ? styles.selectedChip : undefined,
               pressed ? styles.pressed : undefined,
             ]}>
-            <Text style={[styles.label, isSelected ? styles.selectedLabel : undefined]}>
+            <Text style={[styles.label, compact ? styles.labelCompact : undefined, isSelected ? styles.selectedLabel : undefined]}>
               {option.label}
             </Text>
           </Pressable>
@@ -38,6 +43,10 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     paddingRight: spacing.lg,
   },
+  contentCompact: {
+    gap: spacing.xs,
+    paddingRight: spacing.sm,
+  },
   chip: {
     backgroundColor: palette.backgroundSoft,
     borderColor: palette.border,
@@ -45,6 +54,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
+  },
+  chipCompact: {
+    paddingHorizontal: 12,
+    paddingVertical: spacing.xxs,
   },
   selectedChip: {
     backgroundColor: palette.accent,
@@ -60,6 +73,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.2,
     textTransform: 'uppercase',
+  },
+  labelCompact: {
+    fontSize: 12,
   },
   selectedLabel: {
     color: palette.white,

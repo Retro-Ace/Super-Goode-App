@@ -7,15 +7,17 @@ type SearchBarProps = {
   value: string;
   onChangeText: (value: string) => void;
   placeholder?: string;
+  compact?: boolean;
 };
 
 export function SearchBar({
   value,
   onChangeText,
   placeholder = 'Search by name, city, or dish',
+  compact = false,
 }: SearchBarProps) {
   return (
-    <View style={[styles.container, elevation.card]}>
+    <View style={[styles.container, compact ? styles.containerCompact : undefined, elevation.card]}>
       <TextInput
         autoCapitalize="none"
         autoCorrect={false}
@@ -23,14 +25,18 @@ export function SearchBar({
         placeholder={placeholder}
         placeholderTextColor={palette.textDim}
         selectionColor={palette.highlight}
-        style={styles.input}
+        style={[styles.input, compact ? styles.inputCompact : undefined]}
         value={value}
       />
       <Pressable
         accessibilityLabel={value ? 'Clear search' : 'Search'}
         onPress={value ? () => onChangeText('') : undefined}
-        style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
-        <Ionicons color={palette.white} name={value ? 'close' : 'search'} size={18} />
+        style={({ pressed }) => [
+          styles.iconButton,
+          compact ? styles.iconButtonCompact : undefined,
+          pressed && styles.pressed,
+        ]}>
+        <Ionicons color={palette.white} name={value ? 'close' : 'search'} size={compact ? 16 : 18} />
       </Pressable>
     </View>
   );
@@ -48,11 +54,20 @@ const styles = StyleSheet.create({
     minHeight: 54,
     paddingHorizontal: spacing.md,
   },
+  containerCompact: {
+    gap: spacing.xs,
+    minHeight: 46,
+    paddingHorizontal: spacing.sm,
+  },
   input: {
     color: palette.text,
     flex: 1,
     fontSize: 16,
     paddingVertical: spacing.sm,
+  },
+  inputCompact: {
+    fontSize: 15,
+    paddingVertical: spacing.xs,
   },
   iconButton: {
     alignItems: 'center',
@@ -61,6 +76,10 @@ const styles = StyleSheet.create({
     height: 34,
     justifyContent: 'center',
     width: 34,
+  },
+  iconButtonCompact: {
+    height: 30,
+    width: 30,
   },
   pressed: {
     opacity: 0.82,

@@ -34,16 +34,17 @@ export default function ReviewsScreen() {
         <View style={styles.fixedHeader}>
           <BrandHeader
             artAlign="center"
-            artHeight={124}
+            compact
+            artHeight={104}
             artImageStyle={styles.brandHeaderArtImage}
-            artWidth={344}
+            artWidth={320}
             shellStyle={styles.brandHeader}
             variant="long"
           />
 
           <View style={styles.controlsCard}>
-            <SearchBar onChangeText={setQuery} value={query} />
-            <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
+            <SearchBar compact onChangeText={setQuery} value={query} />
+            <ScoreFilter compact onChange={setMinimumScore} selectedScore={minimumScore} />
             <View style={styles.utilityRow}>
               <View style={styles.utilityChip}>
                 <Text style={styles.utilityLabel}>Results</Text>
@@ -65,6 +66,7 @@ export default function ReviewsScreen() {
           <View style={styles.feedHeader}>
             <SectionHeader
               actionLabel={filtersDirty ? 'Reset' : undefined}
+              compact
               eyebrow="Review feed"
               onActionPress={
                 filtersDirty
@@ -136,19 +138,19 @@ export default function ReviewsScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    gap: spacing.sm,
+    gap: spacing.xs,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
+    paddingTop: spacing.xs,
   },
   fixedHeader: {
-    gap: spacing.xs,
+    gap: spacing.xxs,
   },
   brandHeader: {
-    paddingHorizontal: spacing.xs,
+    paddingHorizontal: spacing.xxs,
     paddingVertical: 0,
   },
   brandHeaderArtImage: {
-    marginBottom: -spacing.sm,
+    marginBottom: -spacing.md,
     marginTop: -spacing.xxs,
   },
   controlsCard: {
@@ -156,13 +158,13 @@ const styles = StyleSheet.create({
     borderColor: palette.border,
     borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
+    gap: spacing.xs,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xs,
   },
   utilityRow: {
     flexDirection: 'row',
-    gap: spacing.xs,
+    gap: spacing.xxs,
   },
   utilityChip: {
     alignItems: 'center',
@@ -173,8 +175,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
   },
   utilityChipHighlight: {
     backgroundColor: palette.highlight,
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
   utilityLabel: {
     color: palette.textMuted,
     fontFamily: typography.brand,
-    fontSize: 11,
+    fontSize: 10,
     textTransform: 'uppercase',
   },
   utilityLabelHighlight: {
@@ -192,13 +194,13 @@ const styles = StyleSheet.create({
   utilityValue: {
     color: palette.text,
     fontFamily: typography.brand,
-    fontSize: 15,
+    fontSize: 14,
   },
   utilityValueHighlight: {
     color: palette.background,
   },
   feedHeader: {
-    gap: spacing.xs,
+    gap: spacing.xxs,
   },
   summaryMetaRow: {
     flexDirection: 'row',
@@ -206,15 +208,15 @@ const styles = StyleSheet.create({
   },
   summaryText: {
     color: palette.textDim,
-    fontSize: 13,
+    fontSize: 12,
   },
   errorCard: {
     backgroundColor: palette.accentSoft,
     borderColor: palette.border,
     borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.xs,
-    padding: spacing.sm,
+    gap: spacing.xxs,
+    padding: spacing.xs,
   },
   errorEyebrow: {
     color: palette.highlightSoft,
@@ -235,7 +237,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     gap: spacing.sm,
-    paddingTop: spacing.xs,
+    paddingTop: spacing.xxs,
   },
   listContentEmpty: {
     flexGrow: 1,

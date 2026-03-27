@@ -54,7 +54,7 @@ export default function FavoritesScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             <View style={[styles.hero, elevation.card]}>
-              <BrandArt align="center" height={148} variant="full" width={232} />
+              <BrandArt align="center" height={122} variant="full" width={204} />
               <View style={styles.summaryRow}>
                 <View style={styles.summaryCard}>
                   <Text style={styles.summaryValue}>{favoriteIds.length}</Text>
@@ -67,11 +67,12 @@ export default function FavoritesScreen() {
               </View>
             </View>
             <View style={styles.controls}>
-              <SearchBar onChangeText={setQuery} value={query} />
-              <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
+              <SearchBar compact onChangeText={setQuery} value={query} />
+              <ScoreFilter compact onChange={setMinimumScore} selectedScore={minimumScore} />
             </View>
             <SectionHeader
               actionLabel={favoriteIds.length > 0 && filtersDirty ? 'Reset' : undefined}
+              compact
               eyebrow="Saved board"
               onActionPress={
                 favoriteIds.length > 0 && filtersDirty
@@ -94,27 +95,28 @@ export default function FavoritesScreen() {
 
 const styles = StyleSheet.create({
   content: {
-    gap: spacing.md,
-    padding: spacing.md,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
     paddingBottom: spacing.xxl,
   },
   header: {
-    gap: spacing.md,
+    gap: spacing.xs,
   },
   hero: {
     backgroundColor: palette.backgroundCard,
     borderColor: palette.border,
     borderRadius: radii.lg,
     borderWidth: 1,
-    gap: spacing.md,
-    padding: spacing.lg,
+    gap: spacing.xs,
+    padding: spacing.sm,
   },
   controls: {
-    gap: spacing.md,
+    gap: spacing.xs,
   },
   summaryRow: {
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   summaryCard: {
     backgroundColor: palette.backgroundSoft,
@@ -122,12 +124,12 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 1,
     flex: 1,
-    padding: spacing.md,
+    padding: spacing.sm,
   },
   summaryValue: {
     color: palette.text,
     fontFamily: typography.brand,
-    fontSize: 22,
+    fontSize: 20,
   },
   summaryLabel: {
     color: palette.textDim,
