@@ -141,11 +141,12 @@ const styles = StyleSheet.create({
   },
   brandBanner: {
     alignItems: 'center',
+    marginBottom: spacing.sm,
     marginHorizontal: -spacing.xs,
     paddingVertical: 0,
   },
   brandBannerImage: {
-    marginBottom: -spacing.xl,
+    marginBottom: -spacing.md,
     marginTop: -spacing.xs,
   },
   controlsCard: {
