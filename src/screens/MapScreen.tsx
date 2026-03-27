@@ -57,7 +57,7 @@ export default function MapScreen() {
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
   const hasMapData = fallbackRestaurants.length > 0;
   const showZeroResultsHint = filtersDirty && filteredRestaurants.length === 0;
-  const bottomOverlayOffset = Math.max(tabBarHeight - insets.bottom, 0) + spacing.xxs;
+  const bottomOverlayOffset = Math.max(tabBarHeight - insets.bottom, 0) + spacing.xs;
   const locationReadyLabel =
     permissionStatus === 'granted'
       ? 'On'
@@ -219,7 +219,13 @@ export default function MapScreen() {
               <View style={styles.topStack}>
                 <View style={[styles.brandBar, elevation.card]}>
                   <View style={styles.brandCopy}>
-                    <BrandArt height={78} style={styles.brandArtOffset} variant="long" width={238} />
+                    <BrandArt
+                      height={78}
+                      imageStyle={styles.brandArtImage}
+                      style={styles.brandArtOffset}
+                      variant="long"
+                      width={238}
+                    />
                   </View>
                   <View style={styles.brandStats}>
                     <View style={styles.badgePill}>
@@ -383,14 +389,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingLeft: spacing.xs,
     paddingRight: spacing.sm,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   brandCopy: {
     flex: 1,
-    paddingRight: spacing.sm,
+    paddingRight: spacing.xs,
   },
   brandArtOffset: {
-    marginLeft: -spacing.md,
+    marginLeft: -spacing.sm,
+  },
+  brandArtImage: {
+    marginBottom: -spacing.sm,
+    marginTop: -spacing.xxs,
   },
   brandStats: {
     alignSelf: 'center',

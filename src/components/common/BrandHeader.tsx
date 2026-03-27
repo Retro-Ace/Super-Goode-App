@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import type { StyleProp, ViewStyle } from 'react-native';
+import type { ImageStyle, StyleProp, ViewStyle } from 'react-native';
 
 import { elevation, palette, radii, spacing } from '@/src/constants/theme';
 import { BrandArt } from '@/src/components/common/BrandArt';
@@ -12,6 +12,7 @@ type BrandHeaderProps = {
   artHeight?: number;
   artWidth?: number;
   artStyle?: StyleProp<ViewStyle>;
+  artImageStyle?: StyleProp<ImageStyle>;
   shellStyle?: StyleProp<ViewStyle>;
 };
 
@@ -23,6 +24,7 @@ export function BrandHeader({
   artHeight,
   artWidth,
   artStyle,
+  artImageStyle,
   shellStyle,
 }: BrandHeaderProps) {
   const resolvedAlign = artAlign ?? (variant === 'full' ? 'center' : 'left');
@@ -34,6 +36,7 @@ export function BrandHeader({
       <BrandArt
         align={resolvedAlign}
         height={resolvedHeight}
+        imageStyle={artImageStyle}
         style={[variant === 'long' && resolvedAlign === 'left' ? styles.longArt : undefined, artStyle]}
         variant={variant}
         width={resolvedWidth}

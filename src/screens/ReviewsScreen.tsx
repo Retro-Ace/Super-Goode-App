@@ -35,6 +35,7 @@ export default function ReviewsScreen() {
           <BrandHeader
             artAlign="center"
             artHeight={124}
+            artImageStyle={styles.brandHeaderArtImage}
             artWidth={344}
             shellStyle={styles.brandHeader}
             variant="long"
@@ -143,8 +144,12 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   brandHeader: {
-    paddingHorizontal: 0,
-    paddingVertical: spacing.xxs,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 0,
+  },
+  brandHeaderArtImage: {
+    marginBottom: -spacing.sm,
+    marginTop: -spacing.xxs,
   },
   controlsCard: {
     backgroundColor: palette.backgroundCard,
