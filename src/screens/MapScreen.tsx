@@ -217,7 +217,7 @@ export default function MapScreen() {
               <View style={styles.topStack}>
                 <View style={[styles.brandBar, elevation.card]}>
                   <View style={styles.brandCopy}>
-                    <BrandArt height={82} style={styles.brandArtOffset} variant="long" width={248} />
+                    <BrandArt height={78} style={styles.brandArtOffset} variant="long" width={238} />
                   </View>
                   <View style={styles.brandStats}>
                     <View style={styles.badgePill}>
@@ -379,16 +379,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingLeft: spacing.xxs,
+    paddingLeft: spacing.xs,
     paddingRight: spacing.sm,
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.sm,
   },
   brandCopy: {
     flex: 1,
-    paddingRight: spacing.xs,
+    paddingRight: spacing.sm,
   },
   brandArtOffset: {
-    marginLeft: -spacing.xl,
+    marginLeft: -spacing.md,
   },
   brandStats: {
     alignSelf: 'center',

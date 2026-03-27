@@ -28,59 +28,38 @@ export default function ReviewsScreen() {
 
   return (
     <Screen includeBottomInset>
-      <FlatList
-        contentContainerStyle={[styles.content, { paddingBottom: bottomListInset }]}
-        data={filteredRestaurants}
-        keyExtractor={(item) => item.id}
-        keyboardShouldPersistTaps="handled"
-        ListEmptyComponent={
-          isLoading ? (
-            <LoadingState copy="Building the ranked review feed from the current dataset." title="Loading reviews..." />
-          ) : (
-            <EmptyState
-              actionLabel={filtersDirty ? 'Reset filters' : undefined}
-              copy="Adjust the text query or score floor to broaden the list."
-              onActionPress={
-                filtersDirty
-                  ? () => {
-                      setQuery('');
-                      setMinimumScore(null);
-                    }
-                  : undefined
-              }
-              title="Nothing matches that search."
-            />
-          )
-        }
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <BrandHeader
-              artAlign="center"
-              artHeight={118}
-              artWidth={336}
-              shellStyle={styles.brandHeader}
-              variant="long"
-            />
-            <View style={styles.controlsCard}>
-              <SearchBar onChangeText={setQuery} value={query} />
-              <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
-              <View style={styles.utilityRow}>
-                <View style={styles.utilityChip}>
-                  <Text style={styles.utilityLabel}>Results</Text>
-                  <Text style={styles.utilityValue}>{filteredRestaurants.length}</Text>
-                </View>
-                <View style={styles.utilityChip}>
-                  <Text style={styles.utilityLabel}>Total</Text>
-                  <Text style={styles.utilityValue}>{restaurants.length}</Text>
-                </View>
-                <View style={[styles.utilityChip, styles.utilityChipHighlight]}>
-                  <Text style={[styles.utilityLabel, styles.utilityLabelHighlight]}>Best</Text>
-                  <Text style={[styles.utilityValue, styles.utilityValueHighlight]}>
-                    {topResult ? topResult.score.toFixed(1) : '--'}
-                  </Text>
-                </View>
+      <View style={styles.screen}>
+        <View style={styles.fixedHeader}>
+          <BrandHeader
+            artAlign="center"
+            artHeight={124}
+            artWidth={344}
+            shellStyle={styles.brandHeader}
+            variant="long"
+          />
+
+          <View style={styles.controlsCard}>
+            <SearchBar onChangeText={setQuery} value={query} />
+            <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
+            <View style={styles.utilityRow}>
+              <View style={styles.utilityChip}>
+                <Text style={styles.utilityLabel}>Results</Text>
+                <Text style={styles.utilityValue}>{filteredRestaurants.length}</Text>
+              </View>
+              <View style={styles.utilityChip}>
+                <Text style={styles.utilityLabel}>Total</Text>
+                <Text style={styles.utilityValue}>{restaurants.length}</Text>
+              </View>
+              <View style={[styles.utilityChip, styles.utilityChipHighlight]}>
+                <Text style={[styles.utilityLabel, styles.utilityLabelHighlight]}>Best</Text>
+                <Text style={[styles.utilityValue, styles.utilityValueHighlight]}>
+                  {topResult ? topResult.score.toFixed(1) : '--'}
+                </Text>
               </View>
             </View>
+          </View>
+
+          <View style={styles.feedHeader}>
             <SectionHeader
               actionLabel={filtersDirty ? 'Reset' : undefined}
               eyebrow="Review feed"
@@ -105,38 +84,78 @@ export default function ReviewsScreen() {
               </View>
             ) : null}
           </View>
-        }
-        renderItem={({ item }) => <RestaurantCard restaurant={item} />}
-        scrollIndicatorInsets={{ bottom: bottomListInset }}
-        showsVerticalScrollIndicator={false}
-      />
+        </View>
+
+        <View style={styles.listArea}>
+          {isLoading ? (
+            <View style={[styles.listStateWrap, { paddingBottom: bottomListInset }]}>
+              <LoadingState copy="Building the ranked review feed from the current dataset." title="Loading reviews..." />
+            </View>
+          ) : (
+            <FlatList
+              contentContainerStyle={[
+                styles.listContent,
+                { paddingBottom: bottomListInset },
+                filteredRestaurants.length === 0 ? styles.listContentEmpty : undefined,
+              ]}
+              data={filteredRestaurants}
+              keyExtractor={(item) => item.id}
+              keyboardShouldPersistTaps="handled"
+              ListEmptyComponent={
+                <View style={[styles.listStateWrap, { paddingBottom: bottomListInset }]}>
+                  <EmptyState
+                    actionLabel={filtersDirty ? 'Reset filters' : undefined}
+                    copy="Adjust the text query or score floor to broaden the list."
+                    onActionPress={
+                      filtersDirty
+                        ? () => {
+                            setQuery('');
+                            setMinimumScore(null);
+                          }
+                        : undefined
+                    }
+                    title="Nothing matches that search."
+                  />
+                </View>
+              }
+              renderItem={({ item }) => <RestaurantCard restaurant={item} />}
+              scrollIndicatorInsets={{ bottom: bottomListInset }}
+              showsVerticalScrollIndicator={false}
+              style={styles.list}
+            />
+          )}
+        </View>
+      </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    gap: spacing.md,
-    padding: spacing.md,
-  },
-  header: {
+  screen: {
+    flex: 1,
     gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+  },
+  fixedHeader: {
+    gap: spacing.xs,
   },
   brandHeader: {
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xs,
+    paddingHorizontal: 0,
+    paddingVertical: spacing.xxs,
   },
   controlsCard: {
     backgroundColor: palette.backgroundCard,
     borderColor: palette.border,
     borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.md,
-    padding: spacing.md,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
   },
   utilityRow: {
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   utilityChip: {
     alignItems: 'center',
@@ -147,8 +166,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   utilityChipHighlight: {
     backgroundColor: palette.highlight,
@@ -166,10 +185,13 @@ const styles = StyleSheet.create({
   utilityValue: {
     color: palette.text,
     fontFamily: typography.brand,
-    fontSize: 16,
+    fontSize: 15,
   },
   utilityValueHighlight: {
     color: palette.background,
+  },
+  feedHeader: {
+    gap: spacing.xs,
   },
   summaryMetaRow: {
     flexDirection: 'row',
@@ -185,7 +207,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 1,
     gap: spacing.xs,
-    padding: spacing.md,
+    padding: spacing.sm,
   },
   errorEyebrow: {
     color: palette.highlightSoft,
@@ -196,5 +218,23 @@ const styles = StyleSheet.create({
   errorText: {
     color: palette.text,
     lineHeight: 20,
+  },
+  listArea: {
+    flex: 1,
+    minHeight: 0,
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    gap: spacing.sm,
+    paddingTop: spacing.xs,
+  },
+  listContentEmpty: {
+    flexGrow: 1,
+  },
+  listStateWrap: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
