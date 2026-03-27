@@ -23,15 +23,30 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 - Directions links and external review fallback actions
 - Shared restaurant data model aligned with the Super Goode web source of truth
 
-## Visuals
+## Screenshots
 
-The repo currently includes branded assets for the app identity and GitHub presentation.
+Current app screenshots captured from the simulator.
+
+<table>
+  <tr>
+    <td><img src="assets/screenshots/map-screen.png" alt="Map tab" width="240" /></td>
+    <td><img src="assets/screenshots/reviews-screen.png" alt="Reviews tab" width="240" /></td>
+    <td><img src="assets/screenshots/favorites-screen.png" alt="Favorites tab" width="240" /></td>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/profile-screen.png" alt="Profile tab" width="240" /></td>
+    <td><img src="assets/screenshots/review-viewer.png" alt="In-app review viewer" width="240" /></td>
+    <td><img src="assets/screenshots/map-popup-screen.png" alt="Map popup" width="240" /></td>
+  </tr>
+</table>
+
+<img src="assets/screenshots/map-selected-screen.png" alt="Selected map state" width="360" />
+
+The branding art remains in the repo for presentation and app identity:
 
 ![Super Goode logo mark](assets/images/branding/super-goode-full.png)
 
 ![Super Goode app icon](assets/images/super-goode-icon.png)
-
-These are branding assets, not device screenshots. Dedicated screenshot assets can be added later if the app needs a fuller visual gallery on GitHub.
 
 ## Setup
 
