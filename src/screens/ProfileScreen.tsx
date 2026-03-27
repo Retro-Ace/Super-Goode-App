@@ -36,8 +36,8 @@ export default function ProfileScreen() {
   return (
     <Screen includeBottomInset>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <View style={[styles.hero, elevation.floating]}>
-          <BrandArt align="center" height={122} variant="full" width={204} />
+        <View style={styles.hero}>
+          <BrandArt align="center" height={104} variant="full" width={176} />
           <View style={styles.heroStats}>
             <View style={styles.statCard}>
               <Text style={styles.statValue}>{restaurants.length}</Text>
@@ -93,23 +93,24 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   content: {
-    gap: spacing.sm,
+    gap: spacing.xs,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
+    paddingTop: spacing.xxs,
     paddingBottom: spacing.xxl,
   },
   hero: {
     backgroundColor: palette.backgroundCard,
-    borderColor: palette.borderStrong,
-    borderRadius: radii.lg,
+    borderColor: palette.border,
+    borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.xs,
-    padding: spacing.sm,
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   heroStats: {
     flexDirection: 'row',
-    gap: spacing.xs,
-    marginTop: spacing.xxs,
+    gap: spacing.xxs,
+    marginTop: 2,
   },
   statCard: {
     backgroundColor: palette.backgroundSoft,
@@ -117,7 +118,8 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 1,
     flex: 1,
-    padding: spacing.sm,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xxs,
   },
   statCardHighlight: {
     backgroundColor: palette.highlight,
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
   statValue: {
     color: palette.text,
     fontFamily: typography.brand,
-    fontSize: 20,
+    fontSize: 18,
   },
   statValueHighlight: {
     color: palette.background,

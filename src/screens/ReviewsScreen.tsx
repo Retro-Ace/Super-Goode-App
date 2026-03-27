@@ -3,7 +3,7 @@ import { useDeferredValue, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BrandHeader } from '@/src/components/common/BrandHeader';
+import { BrandArt } from '@/src/components/common/BrandArt';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { Screen } from '@/src/components/common/Screen';
@@ -32,15 +32,9 @@ export default function ReviewsScreen() {
     <Screen includeBottomInset>
       <View style={styles.screen}>
         <View style={styles.fixedHeader}>
-          <BrandHeader
-            artAlign="center"
-            compact
-            artHeight={104}
-            artImageStyle={styles.brandHeaderArtImage}
-            artWidth={320}
-            shellStyle={styles.brandHeader}
-            variant="long"
-          />
+          <View style={styles.brandBanner}>
+            <BrandArt align="center" height={116} imageStyle={styles.brandBannerImage} variant="long" width={350} />
+          </View>
 
           <View style={styles.controlsCard}>
             <SearchBar compact onChangeText={setQuery} value={query} />
@@ -138,29 +132,30 @@ export default function ReviewsScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    gap: spacing.xs,
+    gap: spacing.xxs,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.xs,
+    paddingTop: spacing.xxs,
   },
   fixedHeader: {
     gap: spacing.xxs,
   },
-  brandHeader: {
-    paddingHorizontal: spacing.xxs,
+  brandBanner: {
+    alignItems: 'center',
+    marginHorizontal: -spacing.xs,
     paddingVertical: 0,
   },
-  brandHeaderArtImage: {
-    marginBottom: -spacing.md,
-    marginTop: -spacing.xxs,
+  brandBannerImage: {
+    marginBottom: -spacing.xl,
+    marginTop: -spacing.xs,
   },
   controlsCard: {
     backgroundColor: palette.backgroundCard,
     borderColor: palette.border,
     borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.xs,
+    gap: spacing.xxs,
     paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.xxs,
   },
   utilityRow: {
     flexDirection: 'row',
@@ -237,7 +232,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     gap: spacing.sm,
-    paddingTop: spacing.xxs,
+    paddingTop: 2,
   },
   listContentEmpty: {
     flexGrow: 1,
