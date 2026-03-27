@@ -14,7 +14,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.retroace.supergoode",
-      "buildNumber": "1",
+      "buildNumber": "2",
       "config": {
         "usesNonExemptEncryption": false
       },
