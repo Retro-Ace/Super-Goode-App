@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 16.16.0",
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_LOCATIONS_FEED_URL": "https://raw.githubusercontent.com/Retro-Ace/Super-Goode-Map/main/locations.json"
+      }
+    },
+    "production": {
+      "distribution": "store",
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_LOCATIONS_FEED_URL": "https://raw.githubusercontent.com/Retro-Ace/Super-Goode-Map/main/locations.json"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
