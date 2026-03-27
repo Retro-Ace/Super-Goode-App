@@ -5,7 +5,7 @@ import { BrandArt } from '@/src/components/common/BrandArt';
 
 type BrandHeaderProps = {
   compact?: boolean;
-  subtitle: string;
+  subtitle?: string;
   variant?: 'long' | 'full';
 };
 
@@ -15,10 +15,11 @@ export function BrandHeader({ compact = false, subtitle, variant = 'long' }: Bra
       <BrandArt
         align={variant === 'full' ? 'center' : 'left'}
         height={compact ? (variant === 'full' ? 132 : 82) : variant === 'full' ? 156 : 96}
+        style={variant === 'long' ? styles.longArt : undefined}
         variant={variant}
         width={compact ? (variant === 'full' ? 210 : 250) : variant === 'full' ? 240 : 292}
       />
-      <Text style={[styles.subtitle, compact ? styles.subtitleCompact : undefined]}>{subtitle}</Text>
+      {subtitle ? <Text style={[styles.subtitle, compact ? styles.subtitleCompact : undefined]}>{subtitle}</Text> : null}
     </View>
   );
 }
@@ -35,6 +36,9 @@ const styles = StyleSheet.create({
   },
   shellCompact: {
     padding: spacing.md,
+  },
+  longArt: {
+    marginLeft: -spacing.sm,
   },
   subtitle: {
     color: palette.textMuted,

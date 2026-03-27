@@ -217,8 +217,7 @@ export default function MapScreen() {
               <View style={styles.topStack}>
                 <View style={[styles.brandBar, elevation.card]}>
                   <View style={styles.brandCopy}>
-                    <BrandArt height={74} variant="long" width={226} />
-                    <Text style={styles.brandSubtitle}>Live map of the current restaurant feed.</Text>
+                    <BrandArt height={74} style={styles.brandArtOffset} variant="long" width={226} />
                   </View>
                   <View style={styles.brandStats}>
                     <View style={styles.badgePill}>
@@ -235,7 +234,7 @@ export default function MapScreen() {
                 </View>
 
                 <View style={[styles.controlsBar, elevation.card]}>
-                  <SearchBar onChangeText={setQuery} placeholder="Search restaurants..." value={query} />
+                  <SearchBar onChangeText={setQuery} value={query} />
                   <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
                   {showZeroResultsHint ? (
                     <View style={styles.zeroResultsRow}>
@@ -385,13 +384,10 @@ const styles = StyleSheet.create({
   },
   brandCopy: {
     flex: 1,
-    gap: spacing.xxs,
     paddingRight: spacing.sm,
   },
-  brandSubtitle: {
-    color: palette.textDim,
-    fontSize: 11,
-    lineHeight: 14,
+  brandArtOffset: {
+    marginLeft: -spacing.sm,
   },
   brandStats: {
     alignSelf: 'center',

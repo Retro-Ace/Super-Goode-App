@@ -54,9 +54,9 @@ export default function ReviewsScreen() {
         }
         ListHeaderComponent={
           <View style={styles.header}>
-            <BrandHeader subtitle="Search reviews and work down the ranked feed." variant="long" />
+            <BrandHeader variant="long" />
             <View style={styles.controlsCard}>
-              <SearchBar onChangeText={setQuery} placeholder="Search reviews..." value={query} />
+              <SearchBar onChangeText={setQuery} value={query} />
               <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
               <View style={styles.utilityRow}>
                 <View style={styles.utilityChip}>
@@ -77,7 +77,6 @@ export default function ReviewsScreen() {
             </View>
             <SectionHeader
               actionLabel={filtersDirty ? 'Reset' : undefined}
-              copy="Same real feed, denser spacing and a card stack closer to the concept mockup."
               eyebrow="Review feed"
               onActionPress={
                 filtersDirty

@@ -38,9 +38,6 @@ export default function ProfileScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={[styles.hero, elevation.floating]}>
           <BrandArt align="center" height={148} variant="full" width={232} />
-          <Text style={styles.copy}>
-            Settings runway for feed mode, local saves, and future account preferences, wrapped in the same design system as the discovery tabs.
-          </Text>
           <View style={styles.heroStats}>
             <View style={styles.statCard}>
               <Text style={styles.statValue}>{restaurants.length}</Text>
@@ -60,7 +57,6 @@ export default function ProfileScreen() {
         <SectionHeader
           eyebrow="Settings runway"
           title="Data and account status"
-          copy="Small, reusable cards so future auth and preferences can slot in without rethinking the visual language."
         />
 
         <ProfileCard
@@ -107,11 +103,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: spacing.sm,
     padding: spacing.lg,
-  },
-  copy: {
-    color: palette.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
   },
   heroStats: {
     flexDirection: 'row',

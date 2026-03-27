@@ -55,7 +55,6 @@ export default function FavoritesScreen() {
           <View style={styles.header}>
             <View style={[styles.hero, elevation.card]}>
               <BrandArt align="center" height={148} variant="full" width={232} />
-              <Text style={styles.copy}>Persisted locally with AsyncStorage and styled like a saved hit list, not a placeholder.</Text>
               <View style={styles.summaryRow}>
                 <View style={styles.summaryCard}>
                   <Text style={styles.summaryValue}>{favoriteIds.length}</Text>
@@ -73,7 +72,6 @@ export default function FavoritesScreen() {
             </View>
             <SectionHeader
               actionLabel={favoriteIds.length > 0 && filtersDirty ? 'Reset' : undefined}
-              copy="Saved places stay device-local for now, but the UI is ready for future account sync."
               eyebrow="Saved board"
               onActionPress={
                 favoriteIds.length > 0 && filtersDirty
@@ -110,11 +108,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: spacing.md,
     padding: spacing.lg,
-  },
-  copy: {
-    color: palette.textMuted,
-    fontSize: 14,
-    lineHeight: 20,
   },
   controls: {
     gap: spacing.md,
