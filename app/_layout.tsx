@@ -54,7 +54,6 @@ export default function RootLayout() {
             name="review/[id]"
             options={{ headerShown: false, presentation: 'fullScreenModal', animation: 'slide_from_bottom' }}
           />
-          <Stack.Screen name="restaurant/[id]" options={{ title: 'Restaurant' }} />
           <Stack.Screen name="+not-found" options={{ title: 'Not found' }} />
         </Stack>
       </FavoritesProvider>

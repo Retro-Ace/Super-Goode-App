@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { ActionButton } from '@/src/components/common/ActionButton';
@@ -11,17 +10,9 @@ import type { Restaurant } from '@/src/types/restaurant';
 import { openExternalUrl } from '@/src/utils/links';
 
 export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
-  const router = useRouter();
   const openReviewViewer = useOpenReviewViewer();
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorite = isFavorite(restaurant.id);
-
-  function openDetails() {
-    router.push({
-      pathname: '/restaurant/[id]',
-      params: { id: restaurant.id },
-    });
-  }
 
   return (
     <View style={[styles.card, elevation.card]}>
@@ -53,11 +44,11 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
         </View>
       </View>
 
-      <Pressable onPress={openDetails} style={({ pressed }) => [styles.body, pressed ? styles.pressed : undefined]}>
+      <View style={styles.body}>
         <Text numberOfLines={1} style={styles.address}>
           {restaurant.fullAddress}
         </Text>
-      </Pressable>
+      </View>
 
       <View style={styles.footer}>
         <ActionButton compact label="Directions" onPress={() => openExternalUrl(restaurant.directionsUrl)} />

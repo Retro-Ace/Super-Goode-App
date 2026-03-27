@@ -1,6 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type MapView from 'react-native-maps';
@@ -32,7 +31,6 @@ import {
 import { filterRestaurants } from '@/src/utils/restaurants';
 
 export default function MapScreen() {
-  const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
   const insets = useSafeAreaInsets();
   const mapRef = useRef<MapView | null>(null);
@@ -129,13 +127,6 @@ export default function MapScreen() {
       280
     );
   }, [selectedRestaurant, selectedRestaurantId]);
-
-  function openRestaurantDetails(restaurant: Restaurant) {
-    router.push({
-      pathname: '/restaurant/[id]',
-      params: { id: restaurant.id },
-    });
-  }
 
   function centerOnUser() {
     void requestUserLocation().then((coordinate) => {
@@ -309,15 +300,6 @@ export default function MapScreen() {
                           variant="secondary"
                         />
                       </View>
-                      <Pressable
-                        onPress={() => openRestaurantDetails(selectedRestaurant)}
-                        style={({ pressed }) => [
-                          styles.selectedDetailsLink,
-                          pressed ? styles.pressed : undefined,
-                        ]}>
-                        <Text style={styles.selectedDetailsText}>Open full restaurant details</Text>
-                        <Ionicons color={palette.highlightSoft} name="chevron-forward" size={14} />
-                      </Pressable>
                     </View>
                   </>
                 ) : (
@@ -523,18 +505,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
-  },
-  selectedDetailsLink: {
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    gap: 4,
-  },
-  selectedDetailsText: {
-    color: palette.highlightSoft,
-    fontFamily: typography.brand,
-    fontSize: 12,
-    textTransform: 'uppercase',
   },
   legendCard: {
     alignSelf: 'flex-start',
