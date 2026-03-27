@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     bottom: 0,
     elevation: 0,
-    height: Platform.select({ ios: 78, default: 70 }),
+    height: Platform.select({ ios: 66, default: 56 }),
     left: 0,
     paddingHorizontal: 0,
     position: 'absolute',
@@ -91,10 +91,10 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   tabBarItem: {
-    paddingTop: spacing.xxs,
+    paddingTop: 0,
   },
   tabBarIcon: {
-    marginTop: spacing.xs,
+    marginTop: 0,
   },
   tabBarLabel: {
     fontFamily: typography.brand,

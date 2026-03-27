@@ -26,7 +26,7 @@ export default function ReviewsScreen() {
   const filteredRestaurants = filterRestaurants(restaurants, { query: deferredQuery, minimumScore });
   const topResult = filteredRestaurants[0] ?? restaurants[0];
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
-  const bottomListInset = Math.max(tabBarHeight - insets.bottom, 0) + spacing.sm;
+  const bottomListInset = Math.max(tabBarHeight - insets.bottom, 0) + spacing.xxs;
 
   return (
     <Screen includeBottomInset>

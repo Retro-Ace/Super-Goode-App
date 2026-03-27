@@ -57,7 +57,7 @@ export default function MapScreen() {
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
   const hasMapData = fallbackRestaurants.length > 0;
   const showZeroResultsHint = filtersDirty && filteredRestaurants.length === 0;
-  const bottomOverlayOffset = Math.max(tabBarHeight - insets.bottom, 0) + spacing.xs;
+  const bottomOverlayOffset = Math.max(tabBarHeight - insets.bottom, 0) + spacing.xxs;
   const locationReadyLabel =
     permissionStatus === 'granted'
       ? 'On'
