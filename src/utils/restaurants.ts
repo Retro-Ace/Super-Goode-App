@@ -24,10 +24,36 @@ export function formatScore(score: number) {
   return score.toFixed(1);
 }
 
+export function normalizeSearchText(value: string) {
+  return value
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[’'`]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
+function compactSearchText(value: string) {
+  return normalizeSearchText(value).replace(/\s+/g, '');
+}
+
 export function normalizeRestaurant(record: RestaurantRecord): Restaurant {
   const cityState = `${record.city}, ${record.state}`;
   const fullAddress = `${record.address}, ${cityState}`;
   const reviewUrl = normalizeReviewUrl(record.reviewUrl) ?? record.reviewUrl.trim();
+  const searchableSource = [
+    record.name,
+    record.subtitle,
+    record.address,
+    record.city,
+    record.state,
+    record.notes,
+  ].join(' ');
+  const normalizedSearchableText = normalizeSearchText(searchableSource);
+  const compactedSearchableText = compactSearchText(searchableSource);
 
   return {
     ...record,
@@ -35,16 +61,7 @@ export function normalizeRestaurant(record: RestaurantRecord): Restaurant {
     cityState,
     fullAddress,
     reviewUrl,
-    searchableText: [
-      record.name,
-      record.subtitle,
-      record.address,
-      record.city,
-      record.state,
-      record.notes,
-    ]
-      .join(' ')
-      .toLowerCase(),
+    searchableText: `${normalizedSearchableText} ${compactedSearchableText}`.trim(),
   };
 }
 
@@ -179,13 +196,16 @@ export function validateRestaurantFeed(data: unknown): RestaurantFeedValidationR
 }
 
 export function filterRestaurants(restaurants: Restaurant[], filters: RestaurantFilters) {
-  const normalizedQuery = filters.query.trim().toLowerCase();
+  const normalizedQuery = normalizeSearchText(filters.query);
+  const compactQuery = compactSearchText(filters.query);
 
   return restaurants.filter((restaurant) => {
     const meetsScore =
       filters.minimumScore === null || restaurant.score >= filters.minimumScore;
     const matchesQuery =
-      normalizedQuery.length === 0 || restaurant.searchableText.includes(normalizedQuery);
+      normalizedQuery.length === 0 ||
+      restaurant.searchableText.includes(normalizedQuery) ||
+      (compactQuery.length > 0 && restaurant.searchableText.includes(compactQuery));
 
     return meetsScore && matchesQuery;
   });
