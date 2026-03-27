@@ -1,6 +1,16 @@
 # Super Goode Foundation QA
 
-Date: 2026-03-25
+Date: 2026-03-27
+
+## Current App State
+
+- Native mobile companion to Super Goode Map.
+- Main tabs are Map, Reviews, Favorites, and Profile.
+- There is no restaurant detail route or restaurant detail page.
+- Restaurant cards surface review, directions, and favorite actions directly.
+- In-app review viewing is available, with external fallback for blocked or unavailable reviews.
+- Remote feed wiring uses `EXPO_PUBLIC_LOCATIONS_FEED_URL` and falls back to the local seed when the remote feed fails or is invalid.
+- Review URLs in the stored seed are normalized.
 
 ## Data Contract
 
@@ -44,6 +54,7 @@ Behavioral notes for the app:
 - All current entries have valid coordinates and link strings.
 - There are no duplicate normalized restaurant names in the current dataset.
 - The dataset stays in the Chicago-area band, so map initial bounds can stay local without global fallbacks.
+- Map, Reviews, Favorites, Profile, and review viewer flows all consume the same shared record shape.
 
 ## Blind Spots To Watch
 
@@ -53,11 +64,12 @@ Behavioral notes for the app:
 - Search should normalize case, whitespace, apostrophes, and ampersands so names like `JJ Fish & Chicken` and `Rammy's Sub Contractors` remain findable.
 - Favorites persistence should use a stable restaurant identity, not list index order, so syncing or resorting does not break saved items.
 - A single low-confidence place exists in the source data, so QA should include a fallback check for records that need human review.
+- WebView review content can still be technically reachable but functionally blocked by a login wall or blank embed, so the fallback path needs device verification.
 
-## V1 Checklist
+## Current Beta Checklist
 
 - Load the seed dataset and verify the app starts with 219 locations.
-- Confirm the list, detail, and map views all consume the same record shape.
+- Confirm the Map, Reviews, Favorites, Profile, and review viewer flows all consume the same record shape.
 - Open a restaurant review link and a directions link from one known record.
 - Verify a restaurant with an empty `notes` field still renders cleanly.
 - Verify the low-confidence record renders without special-case failures.
@@ -72,18 +84,16 @@ Behavioral notes for the app:
 - App launches without a red screen.
 - Seed data loads on first launch.
 - Search returns expected restaurants.
-- A restaurant card opens its review URL.
+- A restaurant card opens the in-app review viewer.
+- The review viewer close action returns cleanly to the originating screen.
+- The review viewer fallback action opens externally when a review is blocked or unavailable.
 - A restaurant card opens its directions URL.
 - Favorite/unfavorite state persists after a restart.
 - Empty-state UI appears when a search has no matches.
 - Long names and subtitles do not truncate in a broken way.
-- Map/list toggles, if present in the scaffold, do not desync the selected restaurant.
+- Map marker selection, search filtering, and popup state stay in sync.
 
 ## Map Tab QA
-
-Current pushed real-map build under review:
-- Branch: `main`
-- Commit: `29bf152a70d9826d8d0c4754f5a0b67ea8d9e39c`
 
 What is currently solid in the code path:
 - The map consumes the existing shared restaurant record shape through the same repository layer as the rest of the app.
@@ -111,7 +121,7 @@ Blind spots still worth hardening before larger map features:
 - Marker density is still unclustered. The full dataset is acceptable for this pass, but dense neighborhoods will need observation on lower-end devices.
 - Search/filter changes currently refit the map only on the first load or when the user explicitly taps the fit control. That is coherent, but should be validated as the intended behavior.
 - The selected footer currently shows distance when user location exists, otherwise `cityState`; subtitle content is not shown in the footer anymore, so detail discovery depends on tapping through.
-- Web remains a fallback shell for the map tab; real-map QA must be done on iPhone/Android.
+- Real-map QA should still be done on iPhone/Android rather than relying on web-only behavior.
 
 Recommended release-prep checks before the next feature pass:
 - Run an on-device pass once on iPhone and once on Android with fresh permissions.
@@ -124,13 +134,14 @@ npm run check:data -- src/data/seed/locations.json "/Users/anthonylarosa/CODEX/S
 
 ## Current Risks
 
-- The app is still scaffold-only, so the first real risk is model drift when the UI layer starts reading the dataset.
-- The eventual remote JSON endpoint may be partial on day one and should be treated as an untrusted source.
-- The dataset is currently static and local, so release prep should assume a later migration from seed JSON to fetched JSON.
+- Remote JSON inputs remain untrusted and should continue to be validated before use.
+- Restaurant identity still depends on source fields, so future source corrections can affect favorites and deep links.
+- WebView review content can still be blocked or blank even when the URL itself is valid.
+- Small spacing regressions can still surface on the smallest phones with large text settings.
 
 ## Next QA Pass
 
-After Dan finishes the scaffold, run the validator against both files:
+Before the next feature pass, run the validator against both files:
 
 ```bash
 npm run check:data -- src/data/seed/locations.json "/Users/anthonylarosa/CODEX/Super Goode/data/locations.json"
@@ -141,4 +152,5 @@ Then add a UI smoke pass focused on:
 - external link behavior
 - favorites persistence
 - missing-link fallbacks
+- review viewer close and fallback behavior
 - coordinate rendering

@@ -4,17 +4,18 @@ Super Goode App is the native mobile companion to Super Goode Map. It is an Expo
 
 ## Status
 
-Current status: v1 foundation.
+Current status: beta foundation.
 
-The repo currently includes:
+Current app state:
+- Native mobile companion to Super Goode Map
 - Expo Router app shell with bottom tabs for Map, Reviews, Favorites, and Profile
-- restaurant detail route
-- seeded data loading from the current Super Goode web dataset shape
-- modular repository/data-source layer ready for a future remote JSON feed
-- search and score filtering
-- reusable restaurant cards and score UI
-- directions and review external-link actions
-- local favorites persistence with AsyncStorage
+- No restaurant detail route or detail page
+- Seeded data loading from the current Super Goode web dataset shape
+- Remote JSON feed support through `EXPO_PUBLIC_LOCATIONS_FEED_URL`
+- Local seed fallback when the remote feed fails or is invalid
+- In-app review viewer with external fallback
+- Search and score filtering
+- Directions actions and persistent favorites
 - QA notes and dataset validation support
 
 ## Stack
@@ -39,8 +40,10 @@ The web repo remains the source of truth for restaurant data.
 
 Current behavior:
 - The app loads a local parity snapshot of the web dataset.
-- If `EXPO_PUBLIC_LOCATIONS_FEED_URL` is set later, the repository can switch to a remote JSON feed without changing screen-level code.
+- If `EXPO_PUBLIC_LOCATIONS_FEED_URL` is set, the repository can read a remote JSON feed without changing screen-level code.
+- If the remote feed fails validation or times out, the app falls back to the local seeded JSON.
 - The app continues to use the existing Super Goode fields: `name`, `score`, `subtitle`, `address`, `city`, `state`, `lat`, `lng`, `directionsUrl`, `reviewUrl`, `sourceType`, `confidence`, `notes`.
+- Review URLs in the stored seed are normalized so review links stay consistent across the app.
 
 ## Local Run Commands
 
@@ -102,17 +105,16 @@ src/utils/      helpers
 
 ## Main Features In Place
 
-- Map-first home screen with a plotted preview and ranked restaurant cards
-- Reviews feed with search and score filters
-- Restaurant detail screen with review and directions actions
+- Map tab with pins, popups, location, and filters
+- Reviews feed with search, score filters, and in-app review viewer actions
 - Favorites tab backed by persistent local storage
-- Profile placeholder with current data-mode visibility
+- Profile screen with current data-mode visibility
+- Directions and review actions with normalized stored review URLs
 - Dataset validation and QA documentation for the current foundation pass
 
 ## Next Steps
 
-- Replace the plotted map preview with a real interactive native map implementation
-- Add better empty/error handling around future partial remote JSON feeds
-- Add image/media treatment and richer detail-page content
-- Add UI smoke testing for search, links, and favorites persistence
+- Continue hardening remote feed validation and fallback behavior
+- Add UI smoke testing for search, links, favorites persistence, and map interactions
+- Add richer media and content treatments where useful
 - Wire a stable live JSON endpoint into `EXPO_PUBLIC_LOCATIONS_FEED_URL` when available
