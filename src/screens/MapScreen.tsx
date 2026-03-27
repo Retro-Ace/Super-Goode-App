@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     borderWidth: 1,
     gap: 1,
-    marginBottom: -spacing.md,
+    marginBottom: spacing.xs,
     paddingHorizontal: 11,
     paddingVertical: 5,
   },
