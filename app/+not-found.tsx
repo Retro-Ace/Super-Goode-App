@@ -1,9 +1,29 @@
-import { Link, Stack } from 'expo-router';
+import { Link, Stack, usePathname, useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { palette, spacing } from '@/src/constants/theme';
 
 export default function NotFoundScreen() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const isRemovedRestaurantRoute = pathname.startsWith('/restaurant/');
+
+  useEffect(() => {
+    if (isRemovedRestaurantRoute) {
+      router.replace('/');
+    }
+  }, [isRemovedRestaurantRoute, router]);
+
+  if (isRemovedRestaurantRoute) {
+    return (
+      <>
+        <Stack.Screen options={{ headerShown: false }} />
+        <View style={styles.container} />
+      </>
+    );
+  }
+
   return (
     <>
       <Stack.Screen options={{ title: 'Not found' }} />
