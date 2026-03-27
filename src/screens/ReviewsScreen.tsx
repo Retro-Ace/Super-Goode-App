@@ -54,7 +54,13 @@ export default function ReviewsScreen() {
         }
         ListHeaderComponent={
           <View style={styles.header}>
-            <BrandHeader variant="long" />
+            <BrandHeader
+              artAlign="center"
+              artHeight={118}
+              artWidth={336}
+              shellStyle={styles.brandHeader}
+              variant="long"
+            />
             <View style={styles.controlsCard}>
               <SearchBar onChangeText={setQuery} value={query} />
               <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />
@@ -114,7 +120,11 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
   header: {
-    gap: spacing.md,
+    gap: spacing.sm,
+  },
+  brandHeader: {
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xs,
   },
   controlsCard: {
     backgroundColor: palette.backgroundCard,

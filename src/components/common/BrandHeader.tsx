@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 
 import { elevation, palette, radii, spacing } from '@/src/constants/theme';
 import { BrandArt } from '@/src/components/common/BrandArt';
@@ -7,17 +8,35 @@ type BrandHeaderProps = {
   compact?: boolean;
   subtitle?: string;
   variant?: 'long' | 'full';
+  artAlign?: 'left' | 'center';
+  artHeight?: number;
+  artWidth?: number;
+  artStyle?: StyleProp<ViewStyle>;
+  shellStyle?: StyleProp<ViewStyle>;
 };
 
-export function BrandHeader({ compact = false, subtitle, variant = 'long' }: BrandHeaderProps) {
+export function BrandHeader({
+  compact = false,
+  subtitle,
+  variant = 'long',
+  artAlign,
+  artHeight,
+  artWidth,
+  artStyle,
+  shellStyle,
+}: BrandHeaderProps) {
+  const resolvedAlign = artAlign ?? (variant === 'full' ? 'center' : 'left');
+  const resolvedHeight = artHeight ?? (compact ? (variant === 'full' ? 132 : 82) : variant === 'full' ? 156 : 96);
+  const resolvedWidth = artWidth ?? (compact ? (variant === 'full' ? 210 : 250) : variant === 'full' ? 240 : 292);
+
   return (
-    <View style={[styles.shell, compact ? styles.shellCompact : undefined, elevation.floating]}>
+    <View style={[styles.shell, compact ? styles.shellCompact : undefined, elevation.floating, shellStyle]}>
       <BrandArt
-        align={variant === 'full' ? 'center' : 'left'}
-        height={compact ? (variant === 'full' ? 132 : 82) : variant === 'full' ? 156 : 96}
-        style={variant === 'long' ? styles.longArt : undefined}
+        align={resolvedAlign}
+        height={resolvedHeight}
+        style={[variant === 'long' && resolvedAlign === 'left' ? styles.longArt : undefined, artStyle]}
         variant={variant}
-        width={compact ? (variant === 'full' ? 210 : 250) : variant === 'full' ? 240 : 292}
+        width={resolvedWidth}
       />
       {subtitle ? <Text style={[styles.subtitle, compact ? styles.subtitleCompact : undefined]}>{subtitle}</Text> : null}
     </View>
