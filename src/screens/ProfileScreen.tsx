@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { BrandArt } from '@/src/components/common/BrandArt';
 import { Screen } from '@/src/components/common/Screen';
 import { SectionHeader } from '@/src/components/common/SectionHeader';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
@@ -36,8 +37,7 @@ export default function ProfileScreen() {
     <Screen includeBottomInset>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={[styles.hero, elevation.floating]}>
-          <Text style={styles.eyebrow}>Super Goode</Text>
-          <Text style={styles.title}>Profile</Text>
+          <BrandArt align="center" height={148} variant="full" width={232} />
           <Text style={styles.copy}>
             Settings runway for feed mode, local saves, and future account preferences, wrapped in the same design system as the discovery tabs.
           </Text>
@@ -107,18 +107,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: spacing.sm,
     padding: spacing.lg,
-  },
-  eyebrow: {
-    color: palette.highlightSoft,
-    fontFamily: typography.brand,
-    fontSize: 12,
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
-  },
-  title: {
-    color: palette.text,
-    fontSize: 32,
-    fontWeight: '800',
   },
   copy: {
     color: palette.textMuted,

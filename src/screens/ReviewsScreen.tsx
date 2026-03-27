@@ -54,7 +54,7 @@ export default function ReviewsScreen() {
         }
         ListHeaderComponent={
           <View style={styles.header}>
-            <BrandHeader subtitle="Search reviews and work down the ranked feed." />
+            <BrandHeader subtitle="Search reviews and work down the ranked feed." variant="long" />
             <View style={styles.controlsCard}>
               <SearchBar onChangeText={setQuery} placeholder="Search reviews..." value={query} />
               <ScoreFilter onChange={setMinimumScore} selectedScore={minimumScore} />

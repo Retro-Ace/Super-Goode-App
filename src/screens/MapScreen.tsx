@@ -2,11 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type MapView from 'react-native-maps';
 import type { Region } from 'react-native-maps';
 
 import { ActionButton } from '@/src/components/common/ActionButton';
+import { BrandArt } from '@/src/components/common/BrandArt';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { ScorePill } from '@/src/components/common/ScorePill';
@@ -28,8 +29,6 @@ import {
   hasRestaurantCoordinate,
 } from '@/src/utils/map';
 import { filterRestaurants } from '@/src/utils/restaurants';
-
-const superGoodeIcon = require('../../assets/images/super-goode-icon.png');
 
 export default function MapScreen() {
   const router = useRouter();
@@ -218,18 +217,8 @@ export default function MapScreen() {
               <View style={styles.topStack}>
                 <View style={[styles.brandBar, elevation.card]}>
                   <View style={styles.brandCopy}>
-                    <View style={styles.brandIdentityRow}>
-                      <View style={styles.brandIconMedallion}>
-                        <Image source={superGoodeIcon} style={styles.brandIcon} />
-                      </View>
-                      <View style={styles.brandTextBlock}>
-                        <View style={styles.brandTitleLockup}>
-                          <Text style={styles.brandTitleTop}>SUPER GOODE</Text>
-                          <Text style={styles.brandTitleBottom}>MAP</Text>
-                        </View>
-                        <Text style={styles.brandSubtitle}>Live map of the current restaurant feed.</Text>
-                      </View>
-                    </View>
+                    <BrandArt height={74} variant="long" width={226} />
+                    <Text style={styles.brandSubtitle}>Live map of the current restaurant feed.</Text>
                   </View>
                   <View style={styles.brandStats}>
                     <View style={styles.badgePill}>
@@ -396,64 +385,13 @@ const styles = StyleSheet.create({
   },
   brandCopy: {
     flex: 1,
+    gap: spacing.xxs,
     paddingRight: spacing.sm,
-  },
-  brandIdentityRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: spacing.md,
-  },
-  brandTextBlock: {
-    flex: 1,
-    gap: 2,
-  },
-  brandIconMedallion: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(46, 24, 84, 0.96)',
-    borderColor: 'rgba(242, 201, 76, 0.32)',
-    borderRadius: radii.pill,
-    borderWidth: 1.5,
-    height: 64,
-    justifyContent: 'center',
-    shadowColor: palette.logoOrange,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.18,
-    shadowRadius: 14,
-    width: 64,
-  },
-  brandIcon: {
-    borderRadius: radii.pill,
-    height: 54,
-    width: 54,
-  },
-  brandTitleLockup: {
-    gap: 0,
-  },
-  brandTitleTop: {
-    color: palette.logoOrange,
-    fontFamily: typography.brand,
-    fontSize: 20,
-    letterSpacing: 0.4,
-    lineHeight: 22,
-    textShadowColor: 'rgba(0,0,0,0.28)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  brandTitleBottom: {
-    color: palette.logoTeal,
-    fontFamily: typography.brand,
-    fontSize: 21,
-    letterSpacing: 1.1,
-    lineHeight: 21,
-    textShadowColor: 'rgba(0,0,0,0.28)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
   },
   brandSubtitle: {
     color: palette.textDim,
     fontSize: 11,
     lineHeight: 14,
-    marginTop: 3,
   },
   brandStats: {
     alignSelf: 'center',

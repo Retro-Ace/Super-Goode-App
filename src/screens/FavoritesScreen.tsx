@@ -1,6 +1,7 @@
 import { useDeferredValue, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+import { BrandArt } from '@/src/components/common/BrandArt';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { Screen } from '@/src/components/common/Screen';
@@ -53,7 +54,7 @@ export default function FavoritesScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             <View style={[styles.hero, elevation.card]}>
-              <Text style={styles.title}>Favorites</Text>
+              <BrandArt align="center" height={148} variant="full" width={232} />
               <Text style={styles.copy}>Persisted locally with AsyncStorage and styled like a saved hit list, not a placeholder.</Text>
               <View style={styles.summaryRow}>
                 <View style={styles.summaryCard}>
@@ -109,11 +110,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: spacing.md,
     padding: spacing.lg,
-  },
-  title: {
-    color: palette.text,
-    fontFamily: typography.brand,
-    fontSize: 28,
   },
   copy: {
     color: palette.textMuted,
