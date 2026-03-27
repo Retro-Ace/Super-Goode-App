@@ -219,9 +219,14 @@ export default function MapScreen() {
                 <View style={[styles.brandBar, elevation.card]}>
                   <View style={styles.brandCopy}>
                     <View style={styles.brandIdentityRow}>
-                      <Image source={superGoodeIcon} style={styles.brandIcon} />
+                      <View style={styles.brandIconMedallion}>
+                        <Image source={superGoodeIcon} style={styles.brandIcon} />
+                      </View>
                       <View style={styles.brandTextBlock}>
-                        <Text style={styles.brandTitle}>SUPER GOODE MAP</Text>
+                        <View style={styles.brandTitleLockup}>
+                          <Text style={styles.brandTitleTop}>SUPER GOODE</Text>
+                          <Text style={styles.brandTitleBottom}>MAP</Text>
+                        </View>
                         <Text style={styles.brandSubtitle}>Live map of the current restaurant feed.</Text>
                       </View>
                     </View>
@@ -379,7 +384,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   brandBar: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     backgroundColor: 'rgba(17, 10, 32, 0.78)',
     borderColor: 'rgba(242, 201, 76, 0.24)',
     borderRadius: radii.lg,
@@ -394,36 +399,66 @@ const styles = StyleSheet.create({
     paddingRight: spacing.sm,
   },
   brandIdentityRow: {
-    alignItems: 'flex-start',
+    alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.md,
   },
   brandTextBlock: {
     flex: 1,
-    gap: 3,
-    paddingTop: 11,
+    gap: 2,
+  },
+  brandIconMedallion: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(46, 24, 84, 0.96)',
+    borderColor: 'rgba(242, 201, 76, 0.32)',
+    borderRadius: radii.pill,
+    borderWidth: 1.5,
+    height: 64,
+    justifyContent: 'center',
+    shadowColor: palette.logoOrange,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.18,
+    shadowRadius: 14,
+    width: 64,
   },
   brandIcon: {
     borderRadius: radii.pill,
-    height: 58,
-    marginTop: 1,
-    width: 58,
+    height: 54,
+    width: 54,
   },
-  brandTitle: {
+  brandTitleLockup: {
+    gap: 0,
+  },
+  brandTitleTop: {
     color: palette.logoOrange,
     fontFamily: typography.brand,
-    fontSize: 22,
-    lineHeight: 24,
+    fontSize: 20,
+    letterSpacing: 0.4,
+    lineHeight: 22,
+    textShadowColor: 'rgba(0,0,0,0.28)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  brandTitleBottom: {
+    color: palette.logoTeal,
+    fontFamily: typography.brand,
+    fontSize: 21,
+    letterSpacing: 1.1,
+    lineHeight: 21,
+    textShadowColor: 'rgba(0,0,0,0.28)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   brandSubtitle: {
     color: palette.textDim,
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: 11,
+    lineHeight: 14,
+    marginTop: 3,
   },
   brandStats: {
+    alignSelf: 'center',
     flexDirection: 'row',
     gap: spacing.xs,
-    paddingTop: spacing.xs,
   },
   badgePill: {
     alignItems: 'center',
