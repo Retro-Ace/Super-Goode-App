@@ -1,51 +1,39 @@
 # Super Goode App
 
-Super Goode App is the native mobile companion to Super Goode Map. It is an Expo + React Native + TypeScript app built around the existing Super Goode restaurant dataset and designed so the live web JSON can become the production feed later with minimal rewrite.
+Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-Goode-Map). Super Goode App is an Expo + React Native + TypeScript app built around the shared Super Goode restaurant dataset, with Map, Reviews, Favorites, and Profile tabs and an in-app review viewer.
 
-## Status
+![Super Goode App branding](assets/images/branding/super-goode-long.png)
 
-Current status: beta foundation.
+## Current Status
 
-Current app state:
-- Native mobile companion to Super Goode Map
-- Expo Router app shell with bottom tabs for Map, Reviews, Favorites, and Profile
-- No restaurant detail route or detail page
-- Seeded data loading from the current Super Goode web dataset shape
-- Remote JSON feed support through `EXPO_PUBLIC_LOCATIONS_FEED_URL`
-- Local seed fallback when the remote feed fails or is invalid
-- In-app review viewer with external fallback
-- Search and score filtering
-- Directions actions and persistent favorites
-- QA notes and dataset validation support
+- Beta-ready mobile app
+- Native iPhone and Android app experience
+- No restaurant detail page or detail route
+- Local seeded dataset with remote feed support through `EXPO_PUBLIC_LOCATIONS_FEED_URL`
+- Remote feed fallback to the local seed when the feed fails or is invalid
+- Review URLs are normalized in the stored seed data
+- Favorites persist locally
 
-## Stack
+## Highlights
 
-- Expo
-- React Native
-- TypeScript
-- Expo Router
+- Map tab with pins, popups, location, and filters
+- Reviews tab with branded header, search, score filters, and in-app review viewer
+- Favorites tab backed by persistent local storage
+- Profile tab with data-mode visibility
+- Directions links and external review fallback actions
+- Shared restaurant data model aligned with the Super Goode web source of truth
 
-## Data Source Architecture
+## Visuals
 
-The web repo remains the source of truth for restaurant data.
+The repo currently includes branded assets for the app identity and GitHub presentation.
 
-- Web source of truth: `../Super Goode/data/locations.json`
-- App seed snapshot: `src/data/seed/locations.json`
-- Seed sync script: `scripts/sync-locations-seed.mjs`
-- Validator: `scripts/validate-location-data.mjs`
-- Repository layer: `src/services/restaurantRepository.ts`
-- Data sources:
-  - `src/data/sources/localLocationsSource.ts`
-  - `src/data/sources/remoteLocationsSource.ts`
+![Super Goode logo mark](assets/images/branding/super-goode-full.png)
 
-Current behavior:
-- The app loads a local parity snapshot of the web dataset.
-- If `EXPO_PUBLIC_LOCATIONS_FEED_URL` is set, the repository can read a remote JSON feed without changing screen-level code.
-- If the remote feed fails validation or times out, the app falls back to the local seeded JSON.
-- The app continues to use the existing Super Goode fields: `name`, `score`, `subtitle`, `address`, `city`, `state`, `lat`, `lng`, `directionsUrl`, `reviewUrl`, `sourceType`, `confidence`, `notes`.
-- Review URLs in the stored seed are normalized so review links stay consistent across the app.
+![Super Goode app icon](assets/images/super-goode-icon.png)
 
-## Local Run Commands
+These are branding assets, not device screenshots. Dedicated screenshot assets can be added later if the app needs a fuller visual gallery on GitHub.
+
+## Setup
 
 ```bash
 npm install
@@ -63,19 +51,30 @@ npm run web
 npm run start
 ```
 
-## Seed Sync Workflow
+## Data Source
 
-This repo does not own restaurant data long term. The web repo stays canonical.
+The web repo remains the source of truth for restaurant data.
 
-To refresh the local app seed from the current web dataset:
+- Web source of truth: `../Super Goode/data/locations.json`
+- App seed snapshot: `src/data/seed/locations.json`
+- Seed sync script: `scripts/sync-locations-seed.mjs`
+- Validator: `scripts/validate-location-data.mjs`
+- Repository layer: `src/services/restaurantRepository.ts`
+- Data sources:
+  - `src/data/sources/localLocationsSource.ts`
+  - `src/data/sources/remoteLocationsSource.ts`
+
+Current behavior:
+- The app loads a local parity snapshot of the web dataset by default.
+- If `EXPO_PUBLIC_LOCATIONS_FEED_URL` is set, the repository can read a remote JSON feed without changing screen-level code.
+- If the remote feed fails validation, times out, or returns invalid data, the app falls back to the local seeded JSON.
+- The app continues to use the existing Super Goode fields: `name`, `score`, `subtitle`, `address`, `city`, `state`, `lat`, `lng`, `directionsUrl`, `reviewUrl`, `sourceType`, `confidence`, `notes`.
+- Review URLs in the stored seed are normalized so review links stay consistent across the app.
+
+## Sync and Validation
 
 ```bash
 npm run sync:seed
-```
-
-To validate the app seed:
-
-```bash
 npm run check:data
 ```
 
@@ -89,7 +88,7 @@ npm run check:data -- src/data/seed/locations.json "/Users/anthonylarosa/CODEX/S
 
 ```text
 app/            Expo Router routes
-assets/         app icons, splash assets, fonts
+assets/         app icons, splash assets, branding images
 docs/qa/        QA notes and checklist artifacts
 scripts/        seed sync and data validation helpers
 src/components/ reusable UI
@@ -103,18 +102,8 @@ src/types/      shared TypeScript models
 src/utils/      helpers
 ```
 
-## Main Features In Place
+## Project Notes
 
-- Map tab with pins, popups, location, and filters
-- Reviews feed with search, score filters, and in-app review viewer actions
-- Favorites tab backed by persistent local storage
-- Profile screen with current data-mode visibility
-- Directions and review actions with normalized stored review URLs
-- Dataset validation and QA documentation for the current foundation pass
-
-## Next Steps
-
-- Continue hardening remote feed validation and fallback behavior
-- Add UI smoke testing for search, links, favorites persistence, and map interactions
-- Add richer media and content treatments where useful
-- Wire a stable live JSON endpoint into `EXPO_PUBLIC_LOCATIONS_FEED_URL` when available
+- The app is built for iPhone and Android.
+- The Map, Reviews, Favorites, and Profile tabs are the current public app surface.
+- The review viewer is in-app, with an external fallback if a review cannot be shown inside the app.
