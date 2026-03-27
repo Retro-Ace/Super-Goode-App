@@ -1,52 +1,140 @@
 import { locationsFeedUrl } from '@/src/data/config';
 import { LocalLocationsDataSource } from '@/src/data/sources/localLocationsSource';
 import { RemoteLocationsDataSource } from '@/src/data/sources/remoteLocationsSource';
-import type { LocationsDataSource } from '@/src/data/sources/types';
 import type { Restaurant } from '@/src/types/restaurant';
-import { normalizeRestaurant, sortRestaurants } from '@/src/utils/restaurants';
+import type { RestaurantRecord } from '@/src/types/restaurant';
+import { normalizeRestaurant, sortRestaurants, validateRestaurantFeed } from '@/src/utils/restaurants';
 
-class RestaurantRepository {
-  constructor(private readonly dataSource: LocationsDataSource) {}
+const REMOTE_TIMEOUT_MS = 6000;
+const MIN_REMOTE_VALID_RATIO = 0.8;
 
-  async getRestaurants() {
-    const locations = await this.dataSource.getLocations();
+export type RestaurantFeedStatus =
+  | {
+      mode: 'remote';
+      remoteConfigured: true;
+      url: string;
+      droppedRecordCount: number;
+      message: string;
+    }
+  | {
+      mode: 'local-seed';
+      remoteConfigured: false;
+      url: null;
+      droppedRecordCount: 0;
+      message: string;
+    }
+  | {
+      mode: 'local-fallback';
+      remoteConfigured: true;
+      url: string;
+      droppedRecordCount: number;
+      message: string;
+    };
 
-    return sortRestaurants(locations.map(normalizeRestaurant));
+export type RestaurantFeedResult = {
+  restaurants: Restaurant[];
+  status: RestaurantFeedStatus;
+};
+
+function buildRestaurants(records: RestaurantRecord[]) {
+  return sortRestaurants(records.map(normalizeRestaurant));
+}
+
+async function loadLocalSeed(status: RestaurantFeedStatus): Promise<RestaurantFeedResult> {
+  const locations = await new LocalLocationsDataSource().getLocations();
+
+  return {
+    restaurants: buildRestaurants(locations),
+    status,
+  };
+}
+
+async function loadRemoteFeed(url: string): Promise<RestaurantFeedResult> {
+  const rawLocations = await new RemoteLocationsDataSource(url, REMOTE_TIMEOUT_MS).getLocations();
+  const validation = validateRestaurantFeed(rawLocations);
+
+  if (validation.totalCount === 0) {
+    throw new Error('Locations feed did not return a usable array.');
+  }
+
+  if (validation.records.length === 0) {
+    throw new Error('Locations feed did not contain any valid restaurant records.');
+  }
+
+  const validRatio = validation.records.length / validation.totalCount;
+
+  if (validation.invalidCount > 0 && validRatio < MIN_REMOTE_VALID_RATIO) {
+    throw new Error(
+      `Locations feed validation failed. ${validation.invalidCount} of ${validation.totalCount} records were invalid.`
+    );
+  }
+
+  const droppedRecordCount = validation.invalidCount;
+
+  return {
+    restaurants: buildRestaurants(validation.records),
+    status: {
+      mode: 'remote',
+      remoteConfigured: true,
+      url,
+      droppedRecordCount,
+      message: 'Remote JSON feed active.',
+    },
+  };
+}
+
+async function loadRestaurantFeed(): Promise<RestaurantFeedResult> {
+  if (!locationsFeedUrl) {
+    return loadLocalSeed({
+      mode: 'local-seed',
+      remoteConfigured: false,
+      url: null,
+      droppedRecordCount: 0,
+      message: 'Local seeded JSON active.',
+    });
+  }
+
+  try {
+    return await loadRemoteFeed(locationsFeedUrl);
+  } catch (error) {
+    return loadLocalSeed({
+      mode: 'local-fallback',
+      remoteConfigured: true,
+      url: locationsFeedUrl,
+      droppedRecordCount: 0,
+      message: 'Local seeded JSON fallback active.',
+    });
   }
 }
 
-function buildRepository() {
-  const dataSource = locationsFeedUrl
-    ? new RemoteLocationsDataSource(locationsFeedUrl)
-    : new LocalLocationsDataSource();
+let restaurantFeedCache: RestaurantFeedResult | null = null;
+let restaurantFeedRequest: Promise<RestaurantFeedResult> | null = null;
 
-  return new RestaurantRepository(dataSource);
-}
-
-let restaurantsCache: Restaurant[] | null = null;
-let restaurantRequest: Promise<Restaurant[]> | null = null;
-
-export async function getRestaurants() {
-  if (restaurantsCache) {
-    return restaurantsCache;
+export async function getRestaurantFeed() {
+  if (restaurantFeedCache) {
+    return restaurantFeedCache;
   }
 
-  if (!restaurantRequest) {
-    restaurantRequest = buildRepository()
-      .getRestaurants()
-      .then((restaurants) => {
-        restaurantsCache = restaurants;
-        return restaurants;
+  if (!restaurantFeedRequest) {
+    restaurantFeedRequest = loadRestaurantFeed()
+      .then((result) => {
+        restaurantFeedCache = result;
+        return result;
       })
       .finally(() => {
-        restaurantRequest = null;
+        restaurantFeedRequest = null;
       });
   }
 
-  return restaurantRequest;
+  return restaurantFeedRequest;
+}
+
+export async function getRestaurants() {
+  const result = await getRestaurantFeed();
+  return result.restaurants;
 }
 
 export function clearRestaurantCache() {
-  restaurantsCache = null;
-  restaurantRequest = null;
+  restaurantFeedCache = null;
+  restaurantFeedRequest = null;
 }

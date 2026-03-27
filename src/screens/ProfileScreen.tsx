@@ -30,8 +30,16 @@ function ProfileCard({
 
 export default function ProfileScreen() {
   const { favoriteIds } = useFavorites();
-  const { restaurants } = useRestaurants();
+  const { restaurants, feedStatus } = useRestaurants();
   const cityCount = new Set(restaurants.map((restaurant) => restaurant.cityState)).size;
+  const feedModeBody = feedStatus?.message ?? (locationsFeedUrl ? 'Remote JSON feed configured.' : 'Local seeded JSON active.');
+  const feedWiringBody = !locationsFeedUrl
+    ? 'Set EXPO_PUBLIC_LOCATIONS_FEED_URL later to switch the repository from local seed to live feed.'
+    : feedStatus?.mode === 'remote'
+      ? feedStatus.droppedRecordCount > 0
+        ? `EXPO_PUBLIC_LOCATIONS_FEED_URL is active. The app skipped ${feedStatus.droppedRecordCount} invalid remote record${feedStatus.droppedRecordCount === 1 ? '' : 's'}.`
+        : 'EXPO_PUBLIC_LOCATIONS_FEED_URL is active and the app is currently reading the live feed.'
+      : 'EXPO_PUBLIC_LOCATIONS_FEED_URL is configured, but the app is currently using the local seed fallback.';
 
   return (
     <Screen includeBottomInset>
@@ -61,13 +69,13 @@ export default function ProfileScreen() {
         />
 
         <ProfileCard
-          body={locationsFeedUrl ? 'Remote JSON feed active' : 'Local seeded JSON active'}
+          body={feedModeBody}
           eyebrow="Feed mode"
           tone="highlight"
           title="Data Mode"
         />
         <ProfileCard
-          body="Set EXPO_PUBLIC_LOCATIONS_FEED_URL later to switch the repository from local seed to live feed."
+          body={feedWiringBody}
           eyebrow="Feed wiring"
           title="Remote Feed Ready"
         />

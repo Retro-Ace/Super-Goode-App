@@ -52,6 +52,132 @@ export function sortRestaurants(restaurants: Restaurant[]) {
   return [...restaurants].sort((left, right) => right.score - left.score);
 }
 
+type RestaurantFeedValidationResult = {
+  records: RestaurantRecord[];
+  totalCount: number;
+  invalidCount: number;
+};
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function getString(value: unknown) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function getRequiredString(value: unknown) {
+  const normalized = getString(value);
+  return normalized.length > 0 ? normalized : null;
+}
+
+function getFiniteNumber(value: unknown) {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string' && value.trim()) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  return null;
+}
+
+function extractFeedEntries(data: unknown) {
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  if (!isPlainObject(data)) {
+    return null;
+  }
+
+  if (Array.isArray(data.locations)) {
+    return data.locations;
+  }
+
+  if (Array.isArray(data.restaurants)) {
+    return data.restaurants;
+  }
+
+  return null;
+}
+
+function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
+  if (!isPlainObject(value)) {
+    return null;
+  }
+
+  const name = getRequiredString(value.name);
+  const subtitle = getRequiredString(value.subtitle);
+  const address = getRequiredString(value.address);
+  const city = getRequiredString(value.city);
+  const state = getRequiredString(value.state);
+  const directionsUrl = getRequiredString(value.directionsUrl);
+  const reviewUrl = getRequiredString(value.reviewUrl);
+  const score = getFiniteNumber(value.score);
+  const lat = getFiniteNumber(value.lat);
+  const lng = getFiniteNumber(value.lng);
+
+  if (
+    !name ||
+    !subtitle ||
+    !address ||
+    !city ||
+    !state ||
+    !directionsUrl ||
+    !reviewUrl ||
+    score === null ||
+    lat === null ||
+    lng === null
+  ) {
+    return null;
+  }
+
+  if (score < 0 || score > 10 || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+    return null;
+  }
+
+  return {
+    name,
+    score,
+    subtitle,
+    address,
+    city,
+    state,
+    lat,
+    lng,
+    directionsUrl,
+    reviewUrl,
+    sourceType: getRequiredString(value.sourceType) ?? 'unknown',
+    confidence: getRequiredString(value.confidence) ?? 'medium',
+    notes: getString(value.notes),
+  };
+}
+
+export function validateRestaurantFeed(data: unknown): RestaurantFeedValidationResult {
+  const entries = extractFeedEntries(data);
+
+  if (!entries) {
+    return {
+      records: [],
+      totalCount: 0,
+      invalidCount: 0,
+    };
+  }
+
+  const records = entries
+    .map(parseRestaurantRecord)
+    .filter((record): record is RestaurantRecord => record !== null);
+
+  return {
+    records,
+    totalCount: entries.length,
+    invalidCount: entries.length - records.length,
+  };
+}
+
 export function filterRestaurants(restaurants: Restaurant[], filters: RestaurantFilters) {
   const normalizedQuery = filters.query.trim().toLowerCase();
 

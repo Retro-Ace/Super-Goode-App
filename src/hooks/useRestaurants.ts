@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
 
-import { getRestaurants } from '@/src/services/restaurantRepository';
+import { getRestaurantFeed } from '@/src/services/restaurantRepository';
+import type { RestaurantFeedStatus } from '@/src/services/restaurantRepository';
 import type { Restaurant } from '@/src/types/restaurant';
 
 export function useRestaurants() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [feedStatus, setFeedStatus] = useState<RestaurantFeedStatus | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
-    getRestaurants()
-      .then((items) => {
+    getRestaurantFeed()
+      .then((result) => {
         if (!isMounted) {
           return;
         }
 
-        setRestaurants(items);
+        setRestaurants(result.restaurants);
+        setFeedStatus(result.status);
         setError(null);
       })
       .catch((requestError) => {
@@ -40,5 +43,5 @@ export function useRestaurants() {
     };
   }, []);
 
-  return { restaurants, isLoading, error };
+  return { restaurants, isLoading, error, feedStatus };
 }
