@@ -1,6 +1,7 @@
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useDeferredValue, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandHeader } from '@/src/components/common/BrandHeader';
 import { EmptyState } from '@/src/components/common/EmptyState';
@@ -16,6 +17,7 @@ import { filterRestaurants } from '@/src/utils/restaurants';
 
 export default function ReviewsScreen() {
   const tabBarHeight = useBottomTabBarHeight();
+  const insets = useSafeAreaInsets();
   const { restaurants, isLoading, error } = useRestaurants();
   const [query, setQuery] = useState('');
   const [minimumScore, setMinimumScore] = useState<number | null>(null);
@@ -24,7 +26,7 @@ export default function ReviewsScreen() {
   const filteredRestaurants = filterRestaurants(restaurants, { query: deferredQuery, minimumScore });
   const topResult = filteredRestaurants[0] ?? restaurants[0];
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
-  const bottomListInset = tabBarHeight + spacing.xxl;
+  const bottomListInset = Math.max(tabBarHeight - insets.bottom, 0) + spacing.sm;
 
   return (
     <Screen includeBottomInset>

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type MapView from 'react-native-maps';
 import type { Region } from 'react-native-maps';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ActionButton } from '@/src/components/common/ActionButton';
 import { BrandArt } from '@/src/components/common/BrandArt';
@@ -33,6 +34,7 @@ import { filterRestaurants } from '@/src/utils/restaurants';
 export default function MapScreen() {
   const router = useRouter();
   const tabBarHeight = useBottomTabBarHeight();
+  const insets = useSafeAreaInsets();
   const mapRef = useRef<MapView | null>(null);
   const currentRegionRef = useRef<Region | null>(null);
   const hasFittedInitialRegion = useRef(false);
@@ -55,7 +57,7 @@ export default function MapScreen() {
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
   const hasMapData = fallbackRestaurants.length > 0;
   const showZeroResultsHint = filtersDirty && filteredRestaurants.length === 0;
-  const bottomOverlayOffset = Math.max(tabBarHeight - spacing.sm, spacing.md);
+  const bottomOverlayOffset = Math.max(tabBarHeight - insets.bottom, 0) + spacing.xs;
   const locationReadyLabel =
     permissionStatus === 'granted'
       ? 'On'
