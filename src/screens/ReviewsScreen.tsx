@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: spacing.xxs,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.xxs,
+    paddingTop: spacing.sm + spacing.xxs,
   },
   fixedHeader: {
     gap: spacing.xxs,
