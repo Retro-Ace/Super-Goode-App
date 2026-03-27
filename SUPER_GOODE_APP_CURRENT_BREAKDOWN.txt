@@ -1,0 +1,318 @@
+SUPER GOODE APP CURRENT BREAKDOWN
+Updated: 2026-03-27
+
+SCOPE
+This breakdown is APP ONLY.
+It covers the Super Goode mobile app built with Expo, React Native, and TypeScript.
+The static Super Goode web map/site is excluded from this breakdown except where it matters as the app's data source or feed relationship.
+
+1. PROJECT OVERVIEW
+
+Super Goode App is the native mobile companion to Super Goode Map.
+It gives users a mobile-first way to browse the Super Goode restaurant list, view scores, open review videos, get directions, and save favorites.
+The app is built around the shared Super Goode restaurant dataset and the current app presentation is intentionally polished for iPhone and Android.
+
+The app solves the mobile discovery problem for the brand:
+- quick restaurant browsing on a phone
+- a focused map/list experience
+- direct access to reviews and directions
+- local favorites that persist on the device
+
+Relationship to the Super Goode brand/data:
+- the web map repo remains the canonical restaurant data source
+- the app owns the mobile UI, navigation, filtering, and review viewer experience
+- the app seed is a synchronized snapshot of the shared dataset
+
+2. SCOPE CLARIFICATION
+
+This file is APP ONLY.
+No static site or GitHub Pages website behavior is described here except where it connects to the app's restaurant data feed.
+
+Important current scope fact:
+- the old restaurant detail page flow has been removed
+- there is no full restaurant detail route/page in the current app
+- restaurant cards and the map popup now drive actions directly
+- the app still includes a review viewer route, but that is not a restaurant detail page
+
+3. CURRENT APP FUNCTIONALITY
+
+Main tabs/screens:
+- Map
+- Reviews
+- Favorites
+- Profile
+
+Map tab:
+- displays restaurant pins on a native map on iPhone and Android
+- supports text search by name, city, or dish
+- supports score filters
+- requests foreground location permission and can center on the user's position
+- shows a selected restaurant popup card when a pin is chosen
+- provides actions for Review Video and Directions
+- includes fit-to-restaurants and locate controls
+- has a score-tier legend when nothing is selected
+
+Reviews tab:
+- shows a ranked feed of restaurant cards
+- supports search and score filters
+- includes a branded header and summary counters
+- each card can open Directions or Watch Review
+- current filtering is immediate, with the query value deferred for smoother list behavior
+
+Favorites tab:
+- stores favorite restaurant IDs locally on the device
+- restores favorites on launch
+- filters saved items by search and score
+- shows saved spot counts and current filtered counts
+- uses the same restaurant cards as the reviews feed
+
+Profile tab:
+- shows current data-mode status
+- shows whether the app is reading the local seed or a configured remote feed
+- shows coverage and local save counts
+- keeps the app's settings roadmap clearly separate from current functionality
+
+Review viewer:
+- opens from restaurant cards, the Map popup, and the review route
+- loads the selected review in an in-app WebView on native devices
+- shows loading, missing review, blocked/failed, and external fallback states
+- can open the review externally if the embedded view is not usable
+
+Deep links / routes:
+- the app has a modal review route at /review/[id]
+- there is no live /restaurant/[id] or restaurant detail route
+- legacy restaurant route handling is redirected away in the not-found screen for compatibility
+
+Login / review submission limitations:
+- there is no user login system in the app
+- there is no native review submission flow
+- the app opens existing review URLs instead of collecting user-authored reviews
+- provider pages can still block embedded playback, which is why the fallback action exists
+
+4. APP ARCHITECTURE
+
+Framework / tooling:
+- Expo
+- React Native
+- TypeScript
+- Expo Router
+- react-native-maps
+- react-native-webview
+- expo-location
+- AsyncStorage for local favorites persistence
+
+Navigation structure:
+- app/_layout.tsx defines the root stack
+- app/(tabs)/_layout.tsx defines the bottom tab navigator
+- app/(tabs)/index.tsx points to the Map screen
+- app/(tabs)/reviews.tsx points to the Reviews screen
+- app/(tabs)/favorites.tsx points to the Favorites screen
+- app/(tabs)/profile.tsx points to the Profile screen
+- app/review/[id].tsx opens the in-app review viewer as a modal route
+
+Folder responsibilities:
+- app/ contains Expo Router route files and route-level presentation
+- src/screens/ contains the app screens used by those routes
+- src/components/ contains reusable UI building blocks and restaurant-specific UI
+- src/services/ contains feed loading and local persistence services
+- src/data/ contains the local seed, config, and data-source adapters
+- src/utils/ contains normalization, filtering, URL, and map helpers
+- src/providers/ contains app-level context providers
+
+Notable architecture patterns:
+- the root layout loads the Space Mono font, keeps the splash screen hidden until ready, and wraps the app in the theme provider and favorites provider
+- the app uses a shared theme palette with dark surfaces, purple accents, and gold highlights
+- screen wrappers add the dark glowing background treatment consistently
+- restaurant data is normalized once in the utility layer and then reused across tabs
+- review viewer routing is handled from a hook instead of duplicating route code in every screen
+- the app has a native map implementation plus a simple web fallback shell for Expo web builds
+
+5. DATA FLOW / SOURCE OF TRUTH
+
+Canonical source of truth:
+- the web repo file ../Super Goode/data/locations.json remains the restaurant data source of truth
+- the app never owns a separate permanent restaurant database
+
+Local app seed:
+- src/data/seed/locations.json is the app's current local parity snapshot
+- the seed is meant to stay aligned with the source-of-truth dataset
+
+Sync and validation scripts:
+- scripts/sync-locations-seed.mjs copies the web data into the app seed after confirming the source JSON parses
+- scripts/validate-location-data.mjs validates required fields, ranges, duplicates, and optional comparison against the web file
+- scripts/check-review-url-normalization.mjs checks what review URLs normalize to in the current seed
+
+Runtime feed behavior:
+- src/services/restaurantRepository.ts loads the local seed by default
+- if EXPO_PUBLIC_LOCATIONS_FEED_URL is set, the app attempts to load a remote JSON feed
+- the remote feed has a 6000 ms timeout
+- remote data is validated before acceptance
+- the remote feed can be a raw array or an object with locations or restaurants arrays
+- if the remote feed fails or is invalid, the app falls back to the local seed
+- current remote acceptance logic requires a strong enough valid-record ratio before the remote feed is used
+
+Current environment/config values that matter:
+- EXPO_PUBLIC_LOCATIONS_FEED_URL controls the live feed URL
+- app.json declares the app scheme and iOS bundle identifier
+- eas.json points preview and production builds at the remote feed URL
+
+Current dataset shape used by the app:
+- name
+- score
+- subtitle
+- address
+- city
+- state
+- lat
+- lng
+- directionsUrl
+- reviewUrl
+- sourceType
+- confidence
+- notes
+
+Current data state:
+- the current seed contains 219 restaurants
+- there are 35 entries with non-empty notes
+- there is 1 low-confidence entry
+- the current seed still matches the web source file
+- review URL normalization is already clean in the stored seed
+
+6. REPO / FILE STRUCTURE SUMMARY
+
+app/
+- Expo Router route files
+- tab navigation
+- modal review route
+- web-only HTML shell and not-found handling
+
+src/
+- core app logic, utilities, hooks, providers, services, types, and screens
+- the mobile app's real behavior lives here, not in the route files alone
+
+assets/
+- app icon and splash assets
+- branding images
+- screenshot assets for the README and repo presentation
+- font files
+
+scripts/
+- seed sync
+- data validation
+- review URL normalization check
+
+docs/
+- QA and release-prep notes
+- app-only notes live here
+
+Important subfolders:
+- src/components/common: shared UI pieces such as buttons, headers, loading and empty states, screen shell, and branding art
+- src/components/restaurant: restaurant cards, map, search, filters, and preview UI
+- src/constants: theme, palette, spacing, typography, and elevation settings
+- src/data: feed config, local seed, and local/remote data-source adapters
+- src/hooks: restaurants feed loading, location permission, and review viewer route hooks
+- src/providers: favorites context
+- src/services: feed repository and favorites storage
+- src/utils: restaurant normalization, review URL normalization, map math, and link helpers
+
+Key config files:
+- app.json: Expo metadata, app scheme, iOS bundle identifier, build number, splash/icon references, location permission text, and EAS project metadata
+- eas.json: development, preview, and production build profiles
+- package.json: scripts and app dependencies
+- tsconfig.json: strict TypeScript config and @/* path alias
+- expo-env.d.ts: env typing for EXPO_PUBLIC_LOCATIONS_FEED_URL
+
+7. UI / DESIGN SUMMARY
+
+Current visual style:
+- dark purple / black base
+- gold highlights
+- bright purple accents
+- strong card surfaces and glows
+- bold, branded score pills
+- retro-modern, high-contrast presentation
+
+Notable polish features:
+- branded header art on Map, Reviews, Favorites, and Profile
+- compact pill filters
+- gold score badges and clear action buttons
+- native map with custom overlay controls
+- scroll and safe-area tuning across tabs
+- consistent card language across the app
+
+Brand / asset direction:
+- branding art lives in assets/images/branding
+- the app icon and splash art are already present
+- screenshot assets live in assets/screenshots
+- Space Mono is the installed brand font
+
+Overall feel:
+- the app feels like a polished mobile companion product rather than a scaffold
+- the layout is intentionally dark, bold, and easy to scan
+- the presentation is designed to support both browsing and quick action
+
+8. BUILD / RELEASE / DEPLOYMENT STATUS
+
+Current build setup:
+- Expo managed app with EAS build profiles
+- iPhone and Android are the intended targets
+- web builds are available through Expo web, but the product is primarily mobile
+
+Release configuration already present:
+- app.json has iOS bundleIdentifier set to com.retroace.supergoode
+- app.json has iOS buildNumber set to 2
+- app.json includes the EAS project ID
+- eas.json uses internal development and preview builds
+- eas.json uses a store production build profile with autoIncrement enabled
+- eas.json sets the production feed URL to the raw GitHub locations.json file
+
+Current release-state notes:
+- there is no explicit Android package name declared in app.json yet
+- there is no checked-in TestFlight/App Store Connect or Play Console automation beyond the EAS configuration
+- submit.production exists in eas.json, but no extra submission workflow is documented in repo files
+- the existing scripts and checks are strong enough for local verification and parity confirmation before release candidates
+
+9. CURRENT STATE / RECENT PROGRESS
+
+The app is no longer a scaffold-only shell.
+It now functions as a real mobile product with:
+- four public tabs
+- a native map
+- an in-app review viewer
+- favorites persistence
+- remote feed wiring with local fallback
+- normalized review URLs
+- current screenshot assets for presentation
+
+Current practical summary:
+- Map is the primary discovery surface
+- Reviews is the ranked browse and review entry surface
+- Favorites is the device-local saved list
+- Profile is the data-mode and status surface
+- Review viewer is the modal experience for watching external review content in app
+
+The app currently uses the local seed by default and can switch to remote JSON later without changing screen-level code.
+The current repository state and README describe the live app rather than an early plan.
+If older TXT plan or breakdown notes existed elsewhere, they were not present in this repo at the time of writing, so the current README, docs, and source files were used as the source of truth for this breakdown.
+
+10. KNOWN CONSTRAINTS / CAVEATS
+
+- No restaurant login/auth system exists yet.
+- No native review submission flow exists yet.
+- Favorites are local-only and will not sync across devices unless a future feature adds that.
+- Review provider pages can block embedded playback or show login walls, so in-app playback is not guaranteed for every URL.
+- The app depends on the web repo for canonical restaurant data.
+- Any future source-of-truth edits that change restaurant names or addresses can affect derived restaurant IDs.
+- The app currently requests foreground location only; it does not do background location tracking.
+- Android release packaging is not fully finalized because app.json does not yet define an Android package name.
+- The web-only Expo shell exists, but the product should still be evaluated as a mobile app first.
+
+11. RECOMMENDED NEXT APP-ONLY STEPS
+
+- Add an explicit Android package name before any Play Store release work.
+- Keep the screenshot gallery in sync with the app whenever the UI changes.
+- Keep review URL normalization and data validation in the release checklist.
+- Watch for any future restaurant name/address edits that could affect favorite IDs.
+- Add only app-level auth/settings work if the product actually needs it.
+- Keep using the current validation scripts as guardrails before remote-feed or release changes.
+
