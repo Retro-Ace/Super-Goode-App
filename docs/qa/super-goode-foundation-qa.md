@@ -1,6 +1,6 @@
 # Super Goode Foundation QA
 
-Date: 2026-03-27
+Date: 2026-03-28
 
 ## Current App State
 
@@ -9,8 +9,8 @@ Date: 2026-03-27
 - There is no restaurant detail route or restaurant detail page.
 - Restaurant cards surface review, directions, and favorite actions directly.
 - In-app review viewing is available, with external fallback for blocked or unavailable reviews.
-- Remote feed wiring uses `EXPO_PUBLIC_LOCATIONS_FEED_URL` and falls back to the local seed when the remote feed fails or is invalid.
-- Review URLs in the stored seed are normalized.
+- Remote feed wiring uses `EXPO_PUBLIC_LOCATIONS_FEED_URL` and now supports a cached remote snapshot before bundled seed fallback.
+- Review URLs are normalized in-app before playback.
 
 ## Data Contract
 
@@ -19,12 +19,13 @@ Current source-of-truth files:
 - `/Users/anthonylarosa/CODEX/Super Goode App/src/data/seed/locations.json`
 
 Verified snapshot for this pass:
-- 219 locations in both files
-- The app seed matches the web dataset exactly right now
+- 220 locations in the app seed
+- The app seed is aligned with the current verified shared dataset snapshot used by the app
 - Key set is stable and currently limited to 13 fields
 - Score range is 7.2 to 9.3
 - Only one entry is marked `confidence: low`
-- 35 entries carry non-empty `notes`
+- 35 entries carry non-empty notes
+- Daruma Restaurant is present
 
 Required fields in the current dataset:
 - `name`: string
@@ -42,42 +43,53 @@ Required fields in the current dataset:
 - `notes`: string
 
 Behavioral notes for the app:
-- Keep `score` numeric and render it with one decimal place; do not coerce to an integer badge.
+- Keep `score` numeric and render it with one decimal place; do not coerce it to an integer badge.
 - Treat `lat` and `lng` as the only map coordinates; do not infer geocodes from address text.
 - Render `notes` only when non-empty.
 - Treat `sourceType` and `confidence` as provenance metadata, not user-facing content.
 - Preserve `reviewUrl` and `directionsUrl` as external links and fail closed if a future record omits them.
+- Accept blank `subtitle` values at runtime; Daruma proved the app should not reject a valid restaurant just because its subtitle is empty.
+- Normalize review URLs in the app runtime rather than assuming the stored seed is always pre-cleaned.
+
+## Runtime Feed Modes
+
+Current feed order:
+1. live remote feed
+2. cached remote snapshot
+3. bundled local seed fallback
+
+Current status strings to expect in Profile:
+- `Local seeded JSON active`
+- `Live remote feed active`
+- `Cached remote snapshot active`
+- `Configured remote unavailable, using cached snapshot`
+- `Bundled local seed fallback active`
+
+Mode notes:
+- `local-seed` means no remote URL is configured.
+- `remote` means the live feed loaded successfully and the app cached the accepted snapshot on device.
+- `cached-remote` means the live feed was unavailable or invalid, but a valid on-device snapshot exists.
+- `local-fallback` means the live feed and cached snapshot were unavailable, so the bundled seed is being used.
+- `npm run sync:seed` is a developer workflow only; it is not the same thing as the runtime cache.
+- A launch that shows `Local seeded JSON active` with no remote env configured is not a cache failure.
 
 ## What Is Solid
 
-- The app seed is currently a direct parity copy of the live web dataset.
+- The app seed is currently aligned with the verified shared dataset snapshot used by the app.
 - All current entries have valid coordinates and link strings.
 - There are no duplicate normalized restaurant names in the current dataset.
 - The dataset stays in the Chicago-area band, so map initial bounds can stay local without global fallbacks.
 - Map, Reviews, Favorites, Profile, and review viewer flows all consume the same shared record shape.
+- Cached remote snapshot behavior has been verified end to end.
 
-## Blind Spots To Watch
+## Cache and Feed Notes
 
-- Future remote JSON may omit `notes`, `sourceType`, `confidence`, `reviewUrl`, or `directionsUrl`; the UI should handle missing links without crashing.
-- Instagram review URLs are not uniform. Some use `/reel/`, some `/reels/`, and some include query parameters.
-- Some `directionsUrl` values encode suites, unit numbers, or parking-lot destinations; link handling should not rewrite or sanitize the destination portion.
-- Search should normalize case, whitespace, apostrophes, and ampersands so names like `JJ Fish & Chicken` and `Rammy's Sub Contractors` remain findable.
-- Favorites persistence should use a stable restaurant identity, not list index order, so syncing or resorting does not break saved items.
-- A single low-confidence place exists in the source data, so QA should include a fallback check for records that need human review.
-- WebView review content can still be technically reachable but functionally blocked by a login wall or blank embed, so the fallback path needs device verification.
-
-## Current Beta Checklist
-
-- Load the seed dataset and verify the app starts with 219 locations.
-- Confirm the Map, Reviews, Favorites, Profile, and review viewer flows all consume the same record shape.
-- Open a restaurant review link and a directions link from one known record.
-- Verify a restaurant with an empty `notes` field still renders cleanly.
-- Verify the low-confidence record renders without special-case failures.
-- Search for names with apostrophes, ampersands, and short substrings.
-- Check that score sorting, if present, uses numeric comparison.
-- Confirm favorites survive app relaunch and remain tied to the correct restaurant after sorting or filtering.
-- Confirm invalid or missing external links are disabled instead of throwing.
-- Confirm a location with missing or malformed coordinates is skipped or surfaced safely if introduced later.
+- The remote feed is cached on device after a successful accepted remote load.
+- The cache lives in app storage, not in the repo seed.
+- If the remote feed fails later, the app can fall back to the cached snapshot before using the bundled seed.
+- Earlier screenshots showing `Local seeded JSON active` came from a launch with no remote env configured, not from cached mode.
+- That no-env launch was the reason those screenshots looked like bundled seed mode.
+- After the later remote-enabled verification, cached remote snapshot mode worked as expected without another code fix.
 
 ## Smoke Test Checklist
 
@@ -88,10 +100,12 @@ Behavioral notes for the app:
 - The review viewer close action returns cleanly to the originating screen.
 - The review viewer fallback action opens externally when a review is blocked or unavailable.
 - A restaurant card opens its directions URL.
-- Favorite/unfavorite state persists after a restart.
+- Favorite and unfavorite state persists after a restart.
 - Empty-state UI appears when a search has no matches.
 - Long names and subtitles do not truncate in a broken way.
 - Map marker selection, search filtering, and popup state stay in sync.
+- Profile reports the correct feed mode for each launch scenario.
+- Cached remote snapshot mode is shown only when a valid snapshot exists and the live feed is unavailable.
 
 ## Map Tab QA
 
@@ -115,42 +129,16 @@ Map-specific smoke checklist:
 - Keyboard open/close: confirm the top overlay remains usable and does not permanently cover the map after dismissing the keyboard.
 - Utility buttons: confirm `scan` and `locate` remain reachable one-handed and do not sit under device safe areas.
 
-Blind spots still worth hardening before larger map features:
-- Simulator location can differ from real-device GPS stability, especially immediately after granting permission.
-- `getCurrentPositionAsync` may be slow or fail indoors; the current UX reports an error but does not add retry backoff or last-known-location fallback.
-- Marker density is still unclustered. The full dataset is acceptable for this pass, but dense neighborhoods will need observation on lower-end devices.
-- Search/filter changes currently refit the map only on the first load or when the user explicitly taps the fit control. That is coherent, but should be validated as the intended behavior.
-- The selected footer currently shows distance when user location exists, otherwise `cityState`; subtitle content is not shown in the footer anymore, so detail discovery depends on tapping through.
-- Real-map QA should still be done on iPhone/Android rather than relying on web-only behavior.
-
-Recommended release-prep checks before the next feature pass:
-- Run an on-device pass once on iPhone and once on Android with fresh permissions.
-- Verify at least one long-name restaurant and one dense downtown cluster manually.
-- Re-run data validation against the web source file before release candidates:
-
-```bash
-npm run check:data -- src/data/seed/locations.json "/Users/anthonylarosa/CODEX/Super Goode/data/locations.json"
-```
-
 ## Current Risks
 
 - Remote JSON inputs remain untrusted and should continue to be validated before use.
 - Restaurant identity still depends on source fields, so future source corrections can affect favorites and deep links.
 - WebView review content can still be blocked or blank even when the URL itself is valid.
 - Small spacing regressions can still surface on the smallest phones with large text settings.
+- A launch with no remote env configured will correctly show local seed mode; that should not be mistaken for a cache bug.
 
-## Next QA Pass
+## Release Prep Note
 
-Before the next feature pass, run the validator against both files:
-
-```bash
-npm run check:data -- src/data/seed/locations.json "/Users/anthonylarosa/CODEX/Super Goode/data/locations.json"
-```
-
-Then add a UI smoke pass focused on:
-- search edge cases
-- external link behavior
-- favorites persistence
-- missing-link fallbacks
-- review viewer close and fallback behavior
-- coordinate rendering
+- Re-run data validation against the web source file before release candidates.
+- Keep the cache mode, bundled fallback mode, and seed-sync workflow separate in future release notes.
+- Keep review URL normalization and remote snapshot cache behavior in the pre-release smoke checklist.
