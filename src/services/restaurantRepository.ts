@@ -1,6 +1,10 @@
 import { locationsFeedUrl } from '@/src/data/config';
 import { LocalLocationsDataSource } from '@/src/data/sources/localLocationsSource';
 import { RemoteLocationsDataSource } from '@/src/data/sources/remoteLocationsSource';
+import {
+  loadCachedRemoteSnapshot,
+  saveCachedRemoteSnapshot,
+} from '@/src/services/restaurantSnapshotStorage';
 import type { Restaurant } from '@/src/types/restaurant';
 import type { RestaurantRecord } from '@/src/types/restaurant';
 import { normalizeRestaurant, sortRestaurants, validateRestaurantFeed } from '@/src/utils/restaurants';
@@ -15,6 +19,17 @@ export type RestaurantFeedStatus =
       url: string;
       droppedRecordCount: number;
       message: string;
+      cachedAt: string;
+      remoteFailureReason: null;
+    }
+  | {
+      mode: 'cached-remote';
+      remoteConfigured: true;
+      url: string;
+      droppedRecordCount: number;
+      message: string;
+      cachedAt: string;
+      remoteFailureReason: string;
     }
   | {
       mode: 'local-seed';
@@ -22,13 +37,17 @@ export type RestaurantFeedStatus =
       url: null;
       droppedRecordCount: 0;
       message: string;
+      cachedAt: null;
+      remoteFailureReason: null;
     }
   | {
       mode: 'local-fallback';
       remoteConfigured: true;
       url: string;
-      droppedRecordCount: number;
+      droppedRecordCount: 0;
       message: string;
+      cachedAt: null;
+      remoteFailureReason: string;
     };
 
 export type RestaurantFeedResult = {
@@ -40,18 +59,12 @@ function buildRestaurants(records: RestaurantRecord[]) {
   return sortRestaurants(records.map(normalizeRestaurant));
 }
 
-async function loadLocalSeed(status: RestaurantFeedStatus): Promise<RestaurantFeedResult> {
-  const locations = await new LocalLocationsDataSource().getLocations();
-
-  return {
-    restaurants: buildRestaurants(locations),
-    status,
-  };
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : 'Unable to load restaurants.';
 }
 
-async function loadRemoteFeed(url: string): Promise<RestaurantFeedResult> {
-  const rawLocations = await new RemoteLocationsDataSource(url, REMOTE_TIMEOUT_MS).getLocations();
-  const validation = validateRestaurantFeed(rawLocations);
+function acceptRestaurantFeed(data: unknown) {
+  const validation = validateRestaurantFeed(data);
 
   if (validation.totalCount === 0) {
     throw new Error('Locations feed did not return a usable array.');
@@ -69,16 +82,64 @@ async function loadRemoteFeed(url: string): Promise<RestaurantFeedResult> {
     );
   }
 
-  const droppedRecordCount = validation.invalidCount;
+  return {
+    records: validation.records,
+    droppedRecordCount: validation.invalidCount,
+  };
+}
+
+async function loadLocalSeed(status: RestaurantFeedStatus): Promise<RestaurantFeedResult> {
+  const locations = await new LocalLocationsDataSource().getLocations();
 
   return {
-    restaurants: buildRestaurants(validation.records),
+    restaurants: buildRestaurants(locations),
+    status,
+  };
+}
+
+async function loadRemoteFeed(url: string): Promise<RestaurantFeedResult> {
+  const rawLocations = await new RemoteLocationsDataSource(url, REMOTE_TIMEOUT_MS).getLocations();
+  const acceptedFeed = acceptRestaurantFeed(rawLocations);
+  const savedAt = new Date().toISOString();
+
+  await saveCachedRemoteSnapshot({
+    url,
+    savedAt,
+    droppedRecordCount: acceptedFeed.droppedRecordCount,
+    records: acceptedFeed.records,
+  });
+
+  return {
+    restaurants: buildRestaurants(acceptedFeed.records),
     status: {
       mode: 'remote',
       remoteConfigured: true,
       url,
-      droppedRecordCount,
-      message: 'Remote JSON feed active.',
+      droppedRecordCount: acceptedFeed.droppedRecordCount,
+      message: 'Live remote feed active.',
+      cachedAt: savedAt,
+      remoteFailureReason: null,
+    },
+  };
+}
+
+async function loadCachedSnapshot(url: string, remoteFailureReason: string): Promise<RestaurantFeedResult | null> {
+  const snapshot = await loadCachedRemoteSnapshot();
+
+  if (!snapshot) {
+    return null;
+  }
+
+  return {
+    restaurants: buildRestaurants(snapshot.records),
+    status: {
+      mode: 'cached-remote',
+      remoteConfigured: true,
+      url,
+      droppedRecordCount: snapshot.droppedRecordCount,
+      message: 'Cached remote snapshot active.',
+      cachedAt: snapshot.savedAt,
+      remoteFailureReason,
     },
   };
 }
@@ -91,18 +152,29 @@ async function loadRestaurantFeed(): Promise<RestaurantFeedResult> {
       url: null,
       droppedRecordCount: 0,
       message: 'Local seeded JSON active.',
+      cachedAt: null,
+      remoteFailureReason: null,
     });
   }
 
   try {
     return await loadRemoteFeed(locationsFeedUrl);
   } catch (error) {
+    const remoteFailureReason = getErrorMessage(error);
+    const cachedSnapshotResult = await loadCachedSnapshot(locationsFeedUrl, remoteFailureReason);
+
+    if (cachedSnapshotResult) {
+      return cachedSnapshotResult;
+    }
+
     return loadLocalSeed({
       mode: 'local-fallback',
       remoteConfigured: true,
       url: locationsFeedUrl,
       droppedRecordCount: 0,
-      message: 'Local seeded JSON fallback active.',
+      message: 'Bundled local seed fallback active.',
+      cachedAt: null,
+      remoteFailureReason,
     });
   }
 }
