@@ -127,7 +127,7 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
   }
 
   const name = getRequiredString(value.name);
-  const subtitle = getRequiredString(value.subtitle);
+  const subtitle = getString(value.subtitle);
   const address = getRequiredString(value.address);
   const city = getRequiredString(value.city);
   const state = getRequiredString(value.state);
@@ -139,7 +139,6 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
 
   if (
     !name ||
-    !subtitle ||
     !address ||
     !city ||
     !state ||
