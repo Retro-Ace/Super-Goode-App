@@ -16,7 +16,7 @@
     },
     "production": {
       "distribution": "store",
-      "autoIncrement": true,
+      "autoIncrement": false,
       "env": {
         "EXPO_PUBLIC_LOCATIONS_FEED_URL": "https://raw.githubusercontent.com/Retro-Ace/Super-Goode-Map/main/locations.json"
       }
