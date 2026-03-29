@@ -19,6 +19,7 @@ const expectedKeys = [
   'state',
   'lat',
   'lng',
+  'googlePlaceUrl',
   'directionsUrl',
   'reviewUrl',
   'sourceType',
@@ -80,6 +81,10 @@ function validateEntry(entry, index, issues) {
     issues.push(`Entry ${index}: "state" must be a string.`);
   }
 
+  if (typeof entry.googlePlaceUrl !== 'string') {
+    issues.push(`Entry ${index}: "googlePlaceUrl" must be a string.`);
+  }
+
   if (typeof entry.lat !== 'number' || !Number.isFinite(entry.lat) || entry.lat < -90 || entry.lat > 90) {
     issues.push(`Entry ${index}: "lat" must be a finite latitude.`);
   }
@@ -88,8 +93,8 @@ function validateEntry(entry, index, issues) {
     issues.push(`Entry ${index}: "lng" must be a finite longitude.`);
   }
 
-  if (typeof entry.directionsUrl !== 'string' || !entry.directionsUrl.trim()) {
-    issues.push(`Entry ${index}: "directionsUrl" must be a non-empty string.`);
+  if (typeof entry.directionsUrl !== 'string') {
+    issues.push(`Entry ${index}: "directionsUrl" must be a string.`);
   }
 
   if (typeof entry.reviewUrl !== 'string' || !entry.reviewUrl.trim()) {

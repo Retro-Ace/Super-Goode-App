@@ -43,6 +43,8 @@ function compactSearchText(value: string) {
 export function normalizeRestaurant(record: RestaurantRecord): Restaurant {
   const cityState = `${record.city}, ${record.state}`;
   const fullAddress = `${record.address}, ${cityState}`;
+  const googlePlaceUrl = record.googlePlaceUrl.trim();
+  const directionsUrl = record.directionsUrl.trim();
   const reviewUrl = normalizeReviewUrl(record.reviewUrl) ?? record.reviewUrl.trim();
   const searchableSource = [
     record.name,
@@ -60,6 +62,8 @@ export function normalizeRestaurant(record: RestaurantRecord): Restaurant {
     id: createRestaurantId(record),
     cityState,
     fullAddress,
+    googlePlaceUrl,
+    directionsUrl,
     reviewUrl,
     searchableText: `${normalizedSearchableText} ${compactedSearchableText}`.trim(),
   };
@@ -131,7 +135,8 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
   const address = getRequiredString(value.address);
   const city = getRequiredString(value.city);
   const state = getRequiredString(value.state);
-  const directionsUrl = getRequiredString(value.directionsUrl);
+  const googlePlaceUrl = getString(value.googlePlaceUrl);
+  const directionsUrl = getString(value.directionsUrl);
   const reviewUrl = getRequiredString(value.reviewUrl);
   const score = getFiniteNumber(value.score);
   const lat = getFiniteNumber(value.lat);
@@ -142,7 +147,6 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
     !address ||
     !city ||
     !state ||
-    !directionsUrl ||
     !reviewUrl ||
     score === null ||
     lat === null ||
@@ -164,6 +168,7 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
     state,
     lat,
     lng,
+    googlePlaceUrl,
     directionsUrl,
     reviewUrl,
     sourceType: getRequiredString(value.sourceType) ?? 'unknown',

@@ -7,7 +7,7 @@ import { elevation, palette, radii, spacing, typography } from '@/src/constants/
 import { useOpenReviewViewer } from '@/src/hooks/useOpenReviewViewer';
 import { useFavorites } from '@/src/providers/FavoritesProvider';
 import type { Restaurant } from '@/src/types/restaurant';
-import { openExternalUrl } from '@/src/utils/links';
+import { openRestaurantDirections } from '@/src/utils/links';
 
 export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   const openReviewViewer = useOpenReviewViewer();
@@ -51,7 +51,7 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
       </View>
 
       <View style={styles.footer}>
-        <ActionButton compact label="Directions" onPress={() => openExternalUrl(restaurant.directionsUrl)} />
+        <ActionButton compact label="Directions" onPress={() => openRestaurantDirections(restaurant)} />
         <View style={styles.reviewAction}>
           <ActionButton
             compact

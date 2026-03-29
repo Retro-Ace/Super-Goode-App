@@ -10,6 +10,7 @@ export type RestaurantLocation = {
   state: string;
   lat: number;
   lng: number;
+  googlePlaceUrl: string;
   directionsUrl: string;
   reviewUrl: string;
   sourceType: RestaurantSourceType;

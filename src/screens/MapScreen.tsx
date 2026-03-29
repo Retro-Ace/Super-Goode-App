@@ -20,7 +20,7 @@ import { useForegroundLocation } from '@/src/hooks/useForegroundLocation';
 import { useOpenReviewViewer } from '@/src/hooks/useOpenReviewViewer';
 import { useRestaurants } from '@/src/hooks/useRestaurants';
 import type { Restaurant } from '@/src/types/restaurant';
-import { openExternalUrl } from '@/src/utils/links';
+import { openRestaurantDirections } from '@/src/utils/links';
 import {
   buildRegionFromCoordinate,
   buildRegionFromRestaurants,
@@ -296,7 +296,7 @@ export default function MapScreen() {
                         <ActionButton
                           compact
                           label="Directions"
-                          onPress={() => openExternalUrl(selectedRestaurant.directionsUrl)}
+                          onPress={() => openRestaurantDirections(selectedRestaurant)}
                           variant="secondary"
                         />
                       </View>
