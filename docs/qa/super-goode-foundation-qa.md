@@ -1,6 +1,6 @@
 # Super Goode Foundation QA
 
-Date: 2026-03-28
+Date: 2026-03-29
 
 ## Current App State
 
@@ -12,6 +12,16 @@ Date: 2026-03-28
 - Remote feed wiring uses `EXPO_PUBLIC_LOCATIONS_FEED_URL` and now supports a cached remote snapshot before bundled seed fallback.
 - Review URLs are normalized in-app before playback.
 
+## Build 3 Release State
+
+- Marketing version remains `1.0.0`.
+- iOS build number is `3`.
+- Final avatar icon assets are the active icon setup.
+- EAS production iOS build `521b227d-6a87-4c4b-8711-42bc4b0cea81` finished successfully.
+- The IPA is available from the finished build artifact URL.
+- Submission to App Store Connect / TestFlight has not been started yet.
+- `eas.json` production autoIncrement is `false` so this release stays pinned to build 3.
+
 ## Data Contract
 
 Current source-of-truth files:
@@ -19,9 +29,9 @@ Current source-of-truth files:
 - `/Users/anthonylarosa/CODEX/Super Goode App/src/data/seed/locations.json`
 
 Verified snapshot for this pass:
-- 220 locations in the app seed
+- 229 locations in the app seed
 - The app seed is aligned with the current verified shared dataset snapshot used by the app
-- Key set is stable and currently limited to 13 fields
+- Key set is stable and currently limited to 14 fields
 - Score range is 7.2 to 9.3
 - Only one entry is marked `confidence: low`
 - 35 entries carry non-empty notes
@@ -36,6 +46,7 @@ Required fields in the current dataset:
 - `state`: string
 - `lat`: number
 - `lng`: number
+- `googlePlaceUrl`: string
 - `directionsUrl`: string
 - `reviewUrl`: string
 - `sourceType`: string
@@ -45,6 +56,7 @@ Required fields in the current dataset:
 Behavioral notes for the app:
 - Keep `score` numeric and render it with one decimal place; do not coerce it to an integer badge.
 - Treat `lat` and `lng` as the only map coordinates; do not infer geocodes from address text.
+- Treat `googlePlaceUrl` as required link metadata; do not invent it from address text or keep a stale placeholder.
 - Render `notes` only when non-empty.
 - Treat `sourceType` and `confidence` as provenance metadata, not user-facing content.
 - Preserve `reviewUrl` and `directionsUrl` as external links and fail closed if a future record omits them.

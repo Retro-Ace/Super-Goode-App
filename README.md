@@ -89,7 +89,7 @@ Current behavior:
 - If the live feed is unavailable or invalid and a cached remote snapshot exists, the app uses that snapshot next.
 - If neither live remote data nor a cached remote snapshot is available, the app falls back to the bundled local seed.
 - Review URLs are normalized in-app before the review viewer or external fallback uses them.
-- The app continues to use the existing Super Goode fields: `name`, `score`, `subtitle`, `address`, `city`, `state`, `lat`, `lng`, `directionsUrl`, `reviewUrl`, `sourceType`, `confidence`, `notes`.
+- The app continues to use the existing Super Goode fields: `name`, `score`, `subtitle`, `address`, `city`, `state`, `lat`, `lng`, `googlePlaceUrl`, `directionsUrl`, `reviewUrl`, `sourceType`, `confidence`, `notes`.
 
 ## Sync and Validation
 

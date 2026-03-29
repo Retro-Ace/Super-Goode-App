@@ -1,5 +1,5 @@
 SUPER GOODE APP CURRENT BREAKDOWN
-Updated: 2026-03-28
+Updated: 2026-03-29
 
 SCOPE
 This breakdown is APP ONLY.
@@ -162,6 +162,7 @@ Current dataset shape used by the app:
 - state
 - lat
 - lng
+- googlePlaceUrl
 - directionsUrl
 - reviewUrl
 - sourceType
@@ -169,7 +170,7 @@ Current dataset shape used by the app:
 - notes
 
 Current verified data snapshot:
-- 220 restaurants
+- 229 restaurants
 - 35 entries with non-empty notes
 - 1 low-confidence entry
 - Daruma Restaurant is present in the current app seed
@@ -261,16 +262,19 @@ Current build setup:
 
 Known release configuration:
 - app.json sets the iOS bundle identifier to com.retroace.supergoode
-- app.json sets iOS build number 2
+- app.json sets iOS build number 3
 - app.json includes the EAS project ID
 - app.json configures the location permission text for foreground use
 - app.json configures Android adaptive icons
 - app.json does not currently declare an explicit Android package name
+- the final avatar icon assets are the active icon setup for this release
 
 EAS status:
 - development builds use an internal development client
 - preview builds use the remote feed URL and internal distribution
-- production builds use the remote feed URL and store distribution with autoIncrement enabled
+- production builds use the remote feed URL and store distribution with autoIncrement disabled so this release stays pinned to build 3
+- the current iOS build 521b227d-6a87-4c4b-8711-42bc4b0cea81 finished successfully and produced an IPA artifact
+- submission to App Store Connect / TestFlight has not started yet
 - submit.production exists, but no additional submission automation is documented in repo files
 
 Practical release notes:
@@ -294,7 +298,7 @@ Recent verified app-state notes:
 - the root cause was a blank subtitle being treated as invalid by the app parser
 - the parser now accepts blank subtitles
 - the app seed was resynced to the current verified shared dataset snapshot
-- the current verified app dataset now loads 220 restaurants
+- the current verified app dataset now loads 229 restaurants
 
 Cache verification note:
 - earlier screenshots showing Local seeded JSON active came from a launch with no remote environment configured
