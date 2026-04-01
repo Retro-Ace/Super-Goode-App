@@ -23,8 +23,8 @@ import type { Restaurant } from '@/src/types/restaurant';
 import { openRestaurantDirections } from '@/src/utils/links';
 import {
   buildRegionFromCoordinate,
-  buildRegionFromRestaurants,
   calculateDistanceMiles,
+  DEFAULT_MAP_REGION,
   getRestaurantCoordinate,
   hasRestaurantCoordinate,
 } from '@/src/utils/map';
@@ -35,7 +35,6 @@ export default function MapScreen() {
   const insets = useSafeAreaInsets();
   const mapRef = useRef<MapView | null>(null);
   const currentRegionRef = useRef<Region | null>(null);
-  const hasFittedInitialRegion = useRef(false);
   const openReviewViewer = useOpenReviewViewer();
   const { restaurants, isLoading, error } = useRestaurants();
   const { canAskAgain, isLocating, locationError, permissionStatus, requestUserLocation, userLocation } =
@@ -47,9 +46,7 @@ export default function MapScreen() {
   const filteredRestaurants = filterRestaurants(restaurants, { query, minimumScore });
   const mappedRestaurants = filteredRestaurants.filter(hasRestaurantCoordinate);
   const fallbackRestaurants = restaurants.filter(hasRestaurantCoordinate);
-  const initialRegion = buildRegionFromRestaurants(
-    mappedRestaurants.length > 0 ? mappedRestaurants : fallbackRestaurants
-  );
+  const initialRegion = DEFAULT_MAP_REGION;
   const selectedRestaurant =
     mappedRestaurants.find((restaurant) => restaurant.id === selectedRestaurantId) ?? null;
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
@@ -68,37 +65,6 @@ export default function MapScreen() {
       setSelectedRestaurantId(null);
     }
   }, [mappedRestaurants, selectedRestaurantId]);
-
-  useEffect(() => {
-    if (hasFittedInitialRegion.current || mappedRestaurants.length === 0 || !mapRef.current) {
-      return;
-    }
-
-    const coordinates = mappedRestaurants
-      .map(getRestaurantCoordinate)
-      .filter((coordinate): coordinate is NonNullable<ReturnType<typeof getRestaurantCoordinate>> => coordinate !== null);
-
-    if (coordinates.length === 0) {
-      return;
-    }
-
-    hasFittedInitialRegion.current = true;
-
-    if (coordinates.length === 1) {
-      mapRef.current.animateToRegion(buildRegionFromCoordinate(coordinates[0]), 400);
-      return;
-    }
-
-    mapRef.current.fitToCoordinates(coordinates, {
-      animated: true,
-      edgePadding: {
-        top: 132,
-        right: 36,
-        bottom: 170,
-        left: 36,
-      },
-    });
-  }, [mappedRestaurants]);
 
   useEffect(() => {
     if (!selectedRestaurantId || !mapRef.current) {
