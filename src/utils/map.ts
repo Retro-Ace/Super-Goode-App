@@ -11,10 +11,10 @@ export type MapRegion = MapCoordinate & {
 };
 
 export const DEFAULT_MAP_REGION: MapRegion = {
-  latitude: 41.96,
-  longitude: -87.92,
-  latitudeDelta: 0.42,
-  longitudeDelta: 0.6,
+  latitude: 41.88,
+  longitude: -88.08,
+  latitudeDelta: 1.32,
+  longitudeDelta: 1.28,
 };
 
 export function isValidCoordinate(latitude: number, longitude: number) {
