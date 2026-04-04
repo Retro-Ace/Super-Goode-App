@@ -21,7 +21,7 @@ export const unstable_settings = {
 
 SplashScreen.preventAutoHideAsync();
 
-const MIN_BOOT_SCREEN_MS = 1200;
+const MIN_BOOT_SCREEN_MS = 1800;
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
