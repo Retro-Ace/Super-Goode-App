@@ -245,10 +245,6 @@ export default function MapScreen() {
                         </View>
                         <View style={styles.selectedHeaderActions}>
                           <ScorePill score={selectedRestaurant.score} />
-                          <FavoriteHeartButton
-                            restaurantId={selectedRestaurant.id}
-                            style={styles.selectedFavoriteButton}
-                          />
                         </View>
                       </View>
                       <View style={styles.selectedInfoBlock}>
@@ -259,18 +255,24 @@ export default function MapScreen() {
                           {getSelectedMeta(selectedRestaurant)}
                         </Text>
                       </View>
-                      <View style={styles.selectedActions}>
-                        <ActionButton
-                          compact
-                          label="Review Video"
-                          onPress={() => openReviewViewer(selectedRestaurant)}
-                          variant="primary"
-                        />
-                        <ActionButton
-                          compact
-                          label="Directions"
-                          onPress={() => openRestaurantDirections(selectedRestaurant)}
-                          variant="secondary"
+                      <View style={styles.selectedFooter}>
+                        <View style={styles.selectedActions}>
+                          <ActionButton
+                            compact
+                            label="Review Video"
+                            onPress={() => openReviewViewer(selectedRestaurant)}
+                            variant="primary"
+                          />
+                          <ActionButton
+                            compact
+                            label="Directions"
+                            onPress={() => openRestaurantDirections(selectedRestaurant)}
+                            variant="secondary"
+                          />
+                        </View>
+                        <FavoriteHeartButton
+                          restaurantId={selectedRestaurant.id}
+                          style={styles.selectedFavoriteButton}
                         />
                       </View>
                     </View>
@@ -442,14 +444,24 @@ const styles = StyleSheet.create({
     gap: spacing.xxs,
   },
   selectedHeaderActions: {
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    gap: spacing.xxs,
+    alignItems: 'flex-end',
   },
   selectedFavoriteButton: {
+    alignSelf: 'flex-end',
     height: 30,
-    marginTop: 1,
     width: 30,
+  },
+  selectedFooter: {
+    alignItems: 'flex-end',
+    flexDirection: 'row',
+    gap: spacing.xxs,
+    marginTop: 2,
+  },
+  selectedActions: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: spacing.xxs,
+    minWidth: 0,
   },
   selectedCopy: {
     flex: 1,
@@ -479,12 +491,6 @@ const styles = StyleSheet.create({
     color: '#99A8C6',
     fontSize: 10,
     lineHeight: 12,
-  },
-  selectedActions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.xxs,
-    marginTop: 2,
   },
   legendCard: {
     alignSelf: 'flex-start',
