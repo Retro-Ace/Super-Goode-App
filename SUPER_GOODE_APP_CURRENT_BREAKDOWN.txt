@@ -1,5 +1,5 @@
 SUPER GOODE APP CURRENT BREAKDOWN
-Updated: 2026-03-29
+Updated: 2026-04-03
 
 SCOPE
 This breakdown is APP ONLY.
@@ -181,6 +181,11 @@ Review URL handling:
 - review URLs are normalized in-app before playback or fallback
 - the stored seed mirrors the web source data, while runtime normalization keeps playback links consistent
 
+Directions handling:
+- directions priority is googlePlaceUrl
+- if googlePlaceUrl is blank, the app falls through to directionsUrl
+- if neither stored link is usable, the app generates a fallback Google Maps directions URL from restaurant data
+
 5. REPO AND FILE STRUCTURE SUMMARY
 
 app/
@@ -244,8 +249,21 @@ Notable polish features:
 - consistent card language across the app
 
 Brand and asset direction:
-- branding art lives in assets/images/branding
-- the app icon and splash art are already present
+- branding art now lives in assets/images/branding as:
+  - super-goode-map-logo.png
+  - super-goode-wordmark.png
+  - super-goode-headshot.jpg
+- the shared BrandArt component builds the current rounded headshot + logo lockup from those source assets
+- old flattened branding composites super-goode-full.png and super-goode-long.png were removed from the active asset set
+- the app icon source master now lives at assets/images/app-icon/source-square-icon.jpg
+- the current Expo icon outputs are:
+  - assets/images/icon.png
+  - assets/images/splash-icon.png
+  - assets/images/favicon.png
+  - assets/images/android-icon-foreground.png
+  - assets/images/android-icon-background.png
+  - assets/images/android-icon-monochrome.png
+- obsolete icon alternates were removed during the latest asset cleanup
 - screenshot assets live in assets/screenshots
 - Space Mono is the installed brand font
 
@@ -268,14 +286,15 @@ Known release configuration:
 - app.json configures the location permission text for foreground use
 - app.json configures Android adaptive icons
 - app.json does not currently declare an explicit Android package name
-- the final avatar icon assets are the active icon setup for this release
+- the current Expo icon outputs are regenerated from the new square icon source artwork
+- the refreshed branding/headshot assets are the active in-app brand setup for this release
 
 EAS status:
 - development builds use an internal development client
 - preview builds use the remote feed URL and internal distribution
 - production builds use the remote feed URL and store distribution with autoIncrement disabled so this release stays pinned to build 3
-- the current iOS build 521b227d-6a87-4c4b-8711-42bc4b0cea81 finished successfully and produced an IPA artifact
-- submission to App Store Connect / TestFlight has not started yet
+- the repo is currently prepared for the build 3 release cut with the refreshed branding and icon assets in place
+- live App Store Connect / TestFlight processing state should be checked directly in EAS and App Store Connect before publishing release notes
 - submit.production exists, but no additional submission automation is documented in repo files
 
 Practical release notes:
@@ -295,6 +314,8 @@ It now functions as a real mobile product with:
 - current screenshot assets for presentation
 
 Recent verified app-state notes:
+- the app branding now renders through the shared BrandArt lockup instead of the removed flattened brand PNGs
+- the app icon set now comes from the new square source artwork and current Expo root icon files
 - Daruma Restaurant was the last missing row to surface in the app
 - the root cause was a blank subtitle being treated as invalid by the app parser
 - the parser now accepts blank subtitles

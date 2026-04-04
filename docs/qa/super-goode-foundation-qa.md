@@ -1,6 +1,6 @@
 # Super Goode Foundation QA
 
-Date: 2026-03-29
+Date: 2026-04-03
 
 ## Current App State
 
@@ -16,10 +16,9 @@ Date: 2026-03-29
 
 - Marketing version remains `1.0.0`.
 - iOS build number is `3`.
-- Final avatar icon assets are the active icon setup.
-- EAS production iOS build `521b227d-6a87-4c4b-8711-42bc4b0cea81` finished successfully.
-- The IPA is available from the finished build artifact URL.
-- Submission to App Store Connect / TestFlight has not been started yet.
+- Current in-app branding renders through `BrandArt` using `super-goode-map-logo.png`, `super-goode-wordmark.png`, and `super-goode-headshot.jpg`.
+- Current Expo icon outputs resolve from `icon.png`, `splash-icon.png`, `favicon.png`, `android-icon-foreground.png`, `android-icon-background.png`, and `android-icon-monochrome.png`.
+- Old flattened branding composites and obsolete icon alternates were removed from the active repo asset set.
 - `eas.json` production autoIncrement is `false` so this release stays pinned to build 3.
 
 ## Data Contract
@@ -90,8 +89,9 @@ Mode notes:
 
 - The app seed is currently aligned with the canonical shared dataset snapshot used by the app.
 - All current entries have valid coordinates; the one intentional blank `googlePlaceUrl` row still falls through the directions helper correctly.
+- Branding assets now resolve through the shared `BrandArt` lockup and the current Expo icon paths resolve to the refreshed asset set.
 - There are no duplicate normalized restaurant names in the current dataset.
-- The dataset stays in the Chicago-area band, so map initial bounds can stay local without global fallbacks.
+- The dataset is still Chicagoland-heavy, but the app now keeps a deliberate local startup map region instead of fitting the full dataset on launch.
 - Map, Reviews, Favorites, Profile, and review viewer flows all consume the same shared record shape.
 - Cached remote snapshot behavior has been verified end to end.
 
