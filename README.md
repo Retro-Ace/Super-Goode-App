@@ -27,22 +27,26 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 
 ## Screenshots
 
-Current app screenshots captured from the simulator.
+Current simulator captures from the latest app UI.
 
-<table>
-  <tr>
-    <td><img src="assets/screenshots/map-screen.png" alt="Map tab" width="240" /></td>
-    <td><img src="assets/screenshots/reviews-screen.png" alt="Reviews tab" width="240" /></td>
-    <td><img src="assets/screenshots/favorites-screen.png" alt="Favorites tab" width="240" /></td>
-  </tr>
-  <tr>
-    <td><img src="assets/screenshots/profile-screen.png" alt="Profile tab" width="240" /></td>
-    <td><img src="assets/screenshots/review-viewer.png" alt="In-app review viewer" width="240" /></td>
-    <td><img src="assets/screenshots/map-popup-screen.png" alt="Map popup" width="240" /></td>
-  </tr>
-</table>
+### Map Experience
 
-<img src="assets/screenshots/map-selected-screen.png" alt="Selected map state" width="360" />
+<p>
+  <img src="screenshots/map-screen.png" alt="Map tab" width="240" />
+  <img src="screenshots/map-popup.png" alt="Selected restaurant popup on the Map tab" width="240" />
+</p>
+
+### Review Feed
+
+<img src="screenshots/reviews-screen.png" alt="Reviews tab" width="240" />
+
+### Saved Spots
+
+<img src="screenshots/favorites-screen.png" alt="Favorites tab" width="240" />
+
+### Profile
+
+<img src="screenshots/profile-screen.png" alt="Profile tab" width="240" />
 
 ## Branding and App Icons
 
@@ -62,7 +66,7 @@ The shared `BrandArt` component renders the rounded headshot + logo lockup acros
 
 Current icon pipeline:
 
-- source master: `assets/images/app-icon/source-square-icon.jpg`
+- source master: `assets/images/app-icon/source-app-store-icon.png`
 - Expo/iOS entrypoint: `assets/images/icon.png`
 - splash asset: `assets/images/splash-icon.png`
 - web favicon: `assets/images/favicon.png`
@@ -136,8 +140,9 @@ npm run check:data -- src/data/seed/locations.json "/Users/anthonylarosa/CODEX/S
 
 ```text
 app/            Expo Router routes
-assets/         app icons, splash assets, branding images, screenshots
+assets/         app icons, splash assets, and branding images
 docs/           QA notes and breakdown files
+screenshots/    README screenshots captured from the simulator
 scripts/        seed sync, validation, and review-url helpers
 src/components/ reusable UI
 src/constants/  app theme values

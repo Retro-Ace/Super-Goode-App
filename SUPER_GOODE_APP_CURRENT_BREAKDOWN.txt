@@ -255,7 +255,7 @@ Brand and asset direction:
   - super-goode-headshot.jpg
 - the shared BrandArt component builds the current rounded headshot + logo lockup from those source assets
 - old flattened branding composites super-goode-full.png and super-goode-long.png were removed from the active asset set
-- the app icon source master now lives at assets/images/app-icon/source-square-icon.jpg
+- the app icon source master now lives at assets/images/app-icon/source-app-store-icon.png
 - the current Expo icon outputs are:
   - assets/images/icon.png
   - assets/images/splash-icon.png
@@ -264,7 +264,7 @@ Brand and asset direction:
   - assets/images/android-icon-background.png
   - assets/images/android-icon-monochrome.png
 - obsolete icon alternates were removed during the latest asset cleanup
-- screenshot assets live in assets/screenshots
+- screenshot assets live in screenshots
 - Space Mono is the installed brand font
 
 Overall feel:
