@@ -429,13 +429,13 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(132, 154, 206, 0.28)',
     borderRadius: radii.lg,
     borderWidth: 1,
-    gap: spacing.sm,
+    gap: spacing.xs,
     padding: spacing.md,
   },
   selectedHeader: {
     alignItems: 'flex-start',
     flexDirection: 'row',
-    gap: spacing.md,
+    gap: spacing.sm,
   },
   selectedHeaderActions: {
     alignItems: 'flex-end',
@@ -443,7 +443,7 @@ const styles = StyleSheet.create({
   },
   selectedCopy: {
     flex: 1,
-    gap: 4,
+    gap: 2,
   },
   selectedTitle: {
     color: palette.text,
@@ -454,10 +454,10 @@ const styles = StyleSheet.create({
   selectedSubtitle: {
     color: palette.textMuted,
     fontSize: 13,
-    lineHeight: 18,
+    lineHeight: 16,
   },
   selectedInfoBlock: {
-    gap: 4,
+    gap: 2,
   },
   selectedAddress: {
     color: '#D7E0F3',
