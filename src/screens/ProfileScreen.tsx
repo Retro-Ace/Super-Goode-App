@@ -1,8 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { BrandArt, TAB_WORDMARK_BRAND_ART } from '@/src/components/common/BrandArt';
+import { BrandArt } from '@/src/components/common/BrandArt';
 import { Screen } from '@/src/components/common/Screen';
-import { SectionHeader } from '@/src/components/common/SectionHeader';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
 import { locationsFeedUrl } from '@/src/data/config';
 import { useFavorites } from '@/src/providers/FavoritesProvider';
@@ -12,18 +11,16 @@ function ProfileCard({
   eyebrow,
   title,
   body,
-  tone = 'default',
 }: {
   eyebrow: string;
   title: string;
   body: string;
-  tone?: 'default' | 'highlight';
 }) {
   return (
-    <View style={[styles.card, tone === 'highlight' ? styles.cardHighlight : undefined, elevation.card]}>
+    <View style={[styles.card, elevation.card]}>
       <Text style={styles.cardEyebrow}>{eyebrow}</Text>
       <Text style={styles.cardTitle}>{title}</Text>
-      <Text style={[styles.cardBody, tone === 'highlight' ? styles.cardBodyHighlight : undefined]}>{body}</Text>
+      <Text style={styles.cardBody}>{body}</Text>
     </View>
   );
 }
@@ -32,26 +29,21 @@ export default function ProfileScreen() {
   const { favoriteIds } = useFavorites();
   const { restaurants, feedStatus } = useRestaurants();
   const cityCount = new Set(restaurants.map((restaurant) => restaurant.cityState)).size;
-  const feedModeBody = feedStatus?.message ?? (locationsFeedUrl ? 'Remote JSON feed configured.' : 'Local seeded JSON active.');
   const cachedSnapshotStamp =
     feedStatus?.cachedAt && Number.isFinite(Date.parse(feedStatus.cachedAt))
       ? new Date(feedStatus.cachedAt).toLocaleString()
       : null;
-  const feedWiringBody = !locationsFeedUrl
-    ? 'Set EXPO_PUBLIC_LOCATIONS_FEED_URL later to switch the repository from local seed to live feed.'
-    : feedStatus?.mode === 'remote'
-      ? feedStatus.droppedRecordCount > 0
-        ? `EXPO_PUBLIC_LOCATIONS_FEED_URL is active and the app cached the latest valid remote snapshot after skipping ${feedStatus.droppedRecordCount} invalid remote record${feedStatus.droppedRecordCount === 1 ? '' : 's'}.`
-        : 'EXPO_PUBLIC_LOCATIONS_FEED_URL is active and the app is currently reading the live feed while refreshing the on-device snapshot cache.'
-      : feedStatus?.mode === 'cached-remote'
-        ? `${feedStatus.remoteFailureReason} Using the last valid cached remote snapshot${cachedSnapshotStamp ? ` from ${cachedSnapshotStamp}` : ''}.`
-        : 'EXPO_PUBLIC_LOCATIONS_FEED_URL is configured, but the app is currently using the bundled local seed because the live feed and cached snapshot were unavailable.';
+  const feedReference = getFeedReference({
+    cachedSnapshotStamp,
+    feedStatus,
+    locationsFeedConfigured: Boolean(locationsFeedUrl),
+  });
 
   return (
     <Screen includeBottomInset>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
-          <BrandArt {...TAB_WORDMARK_BRAND_ART} />
+          <BrandArt align="center" brand="wordmark" height={132} variant="full" width={336} />
           <View style={styles.heroStats}>
             <View style={styles.statCard}>
               <Text style={styles.statValue}>{restaurants.length}</Text>
@@ -68,30 +60,6 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        <SectionHeader
-          compact
-          eyebrow="Settings runway"
-          title="Data and account status"
-        />
-
-        <ProfileCard
-          body={feedModeBody}
-          eyebrow="Feed mode"
-          tone="highlight"
-          title="Data Mode"
-        />
-        <ProfileCard
-          body={feedWiringBody}
-          eyebrow="Feed wiring"
-          title="Remote Feed Ready"
-        />
-        {feedStatus?.mode === 'cached-remote' && cachedSnapshotStamp ? (
-          <ProfileCard
-            body={`Last valid remote snapshot saved on ${cachedSnapshotStamp}.`}
-            eyebrow="Snapshot cache"
-            title="Cached Feed Timestamp"
-          />
-        ) : null}
         <ProfileCard
           body={`${restaurants.length} restaurants across ${cityCount} city/state groups.`}
           eyebrow="Coverage"
@@ -102,36 +70,85 @@ export default function ProfileScreen() {
           eyebrow="Local saves"
           title="Saved Spots"
         />
-        <ProfileCard
-          body="Profile auth, push alerts, and sync preferences still need to be implemented."
-          eyebrow="Next phase"
-          title="Next Settings Work"
-        />
+
+        <View style={styles.referenceSection}>
+          <Text style={styles.referenceLabel}>App data source</Text>
+          <View style={[styles.referenceCard, elevation.card]}>
+            <Text style={styles.referenceTitle}>{feedReference.title}</Text>
+            <Text style={styles.referenceBody}>{feedReference.body}</Text>
+            {feedReference.note ? <Text style={styles.referenceNote}>{feedReference.note}</Text> : null}
+          </View>
+        </View>
       </ScrollView>
     </Screen>
   );
 }
 
+function getFeedReference({
+  cachedSnapshotStamp,
+  feedStatus,
+  locationsFeedConfigured,
+}: {
+  cachedSnapshotStamp: string | null;
+  feedStatus: ReturnType<typeof useRestaurants>['feedStatus'];
+  locationsFeedConfigured: boolean;
+}) {
+  if (!feedStatus || feedStatus.mode === 'local-seed') {
+    return {
+      title: 'Bundled app data',
+      body: locationsFeedConfigured ? 'Using the bundled app dataset right now.' : 'Using the bundled app dataset.',
+      note: null as string | null,
+    };
+  }
+
+  if (feedStatus.mode === 'remote') {
+    return {
+      title: 'Live feed active',
+      body: 'Using the latest live Super Goode feed right now.',
+      note:
+        feedStatus.droppedRecordCount > 0
+          ? `${feedStatus.droppedRecordCount} invalid row${feedStatus.droppedRecordCount === 1 ? '' : 's'} skipped while loading.`
+          : 'A valid snapshot is also saved on this device.',
+    };
+  }
+
+  if (feedStatus.mode === 'cached-remote') {
+    return {
+      title: 'Cached snapshot active',
+      body: cachedSnapshotStamp
+        ? `Live feed unavailable. Using the last saved snapshot from ${cachedSnapshotStamp}.`
+        : 'Live feed unavailable. Using the last saved snapshot on this device.',
+      note: null as string | null,
+    };
+  }
+
+  return {
+    title: 'Bundled app data',
+    body: 'Live feed unavailable. Using the bundled app dataset.',
+    note: null as string | null,
+  };
+}
+
 const styles = StyleSheet.create({
   content: {
-    gap: spacing.xs,
+    gap: spacing.sm,
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.xxs,
+    paddingTop: spacing.sm,
     paddingBottom: spacing.xxl,
   },
   hero: {
     backgroundColor: palette.backgroundCard,
     borderColor: palette.border,
-    borderRadius: radii.md,
+    borderRadius: radii.lg,
     borderWidth: 1,
-    gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    gap: spacing.md,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
   },
   heroStats: {
     flexDirection: 'row',
-    gap: spacing.xxs,
-    marginTop: 2,
+    gap: spacing.xs,
+    marginTop: spacing.xxs,
   },
   statCard: {
     backgroundColor: palette.backgroundSoft,
@@ -139,8 +156,8 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     borderWidth: 1,
     flex: 1,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: spacing.xxs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   statCardHighlight: {
     backgroundColor: palette.highlight,
@@ -149,7 +166,7 @@ const styles = StyleSheet.create({
   statValue: {
     color: palette.text,
     fontFamily: typography.brand,
-    fontSize: 18,
+    fontSize: 20,
   },
   statValueHighlight: {
     color: palette.background,
@@ -166,13 +183,10 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: palette.backgroundCard,
     borderColor: palette.border,
-    borderRadius: radii.lg,
+    borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.sm,
-    padding: spacing.lg,
-  },
-  cardHighlight: {
-    borderColor: palette.borderStrong,
+    gap: spacing.xs,
+    padding: spacing.md,
   },
   cardEyebrow: {
     color: palette.highlightSoft,
@@ -183,7 +197,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     color: palette.text,
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '700',
   },
   cardBody: {
@@ -191,7 +205,41 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
   },
-  cardBodyHighlight: {
-    color: palette.highlight,
+  referenceSection: {
+    gap: spacing.xs,
+    marginTop: spacing.xs,
+    paddingBottom: spacing.sm,
+  },
+  referenceLabel: {
+    color: palette.textDim,
+    fontFamily: typography.brand,
+    fontSize: 11,
+    letterSpacing: 0.7,
+    paddingHorizontal: spacing.xs,
+    textTransform: 'uppercase',
+  },
+  referenceCard: {
+    backgroundColor: 'rgba(23, 16, 47, 0.72)',
+    borderColor: palette.border,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    gap: spacing.xxs,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  referenceTitle: {
+    color: palette.text,
+    fontSize: 15,
+    fontWeight: '700',
+  },
+  referenceBody: {
+    color: palette.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  referenceNote: {
+    color: palette.highlightSoft,
+    fontSize: 12,
+    lineHeight: 17,
   },
 });
