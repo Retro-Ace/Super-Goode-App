@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, Easing, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, Easing, Image, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { BrandArt } from '@/src/components/common/BrandArt';
+import { brandArtSources } from '@/src/components/common/BrandArt';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
 
 export function AppStartupScreen() {
@@ -56,7 +56,16 @@ export function AppStartupScreen() {
                   transform: [{ scale: scaleAnim }],
                 },
               ]}>
-              <BrandArt align="center" brand="map" height={124} variant="full" width={320} />
+              <View style={styles.avatarHalo}>
+                <View style={styles.avatarFrame}>
+                  <Image source={brandArtSources.headshot} style={styles.avatarImage} />
+                </View>
+              </View>
+              <Image
+                resizeMode="contain"
+                source={brandArtSources.mapLogo}
+                style={styles.logo}
+              />
             </Animated.View>
 
             <Text style={styles.title}>Opening Super Goode</Text>
@@ -99,22 +108,56 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(242, 201, 76, 0.28)',
     borderRadius: 30,
     borderWidth: 1,
-    gap: spacing.sm,
-    maxWidth: 360,
+    gap: spacing.md,
+    maxWidth: 380,
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.xl,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.lg,
     width: '100%',
   },
   brandLockup: {
     alignItems: 'center',
-    marginBottom: spacing.xs,
+    gap: spacing.xs,
+    marginBottom: spacing.sm,
     width: '100%',
+  },
+  avatarHalo: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(142, 86, 255, 0.22)',
+    borderColor: 'rgba(247, 213, 98, 0.28)',
+    borderRadius: 90,
+    borderWidth: 1,
+    height: 180,
+    justifyContent: 'center',
+    shadowColor: '#8E56FF',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.34,
+    shadowRadius: 16,
+    width: 180,
+  },
+  avatarFrame: {
+    backgroundColor: palette.backgroundCard,
+    borderColor: 'rgba(255, 255, 255, 0.34)',
+    borderRadius: 82,
+    borderWidth: 2,
+    height: 164,
+    overflow: 'hidden',
+    width: 164,
+  },
+  avatarImage: {
+    height: '100%',
+    width: '100%',
+  },
+  logo: {
+    height: 112,
+    marginTop: -spacing.xs,
+    width: 320,
   },
   title: {
     color: palette.text,
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '800',
-    lineHeight: 28,
+    lineHeight: 30,
     textAlign: 'center',
   },
   copy: {
@@ -127,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 26,
-    paddingTop: spacing.xs,
+    paddingTop: spacing.sm,
     width: '100%',
   },
   spinnerRow: {
