@@ -1,18 +1,15 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { ActionButton } from '@/src/components/common/ActionButton';
+import { FavoriteHeartButton } from '@/src/components/common/FavoriteHeartButton';
 import { ScorePill } from '@/src/components/common/ScorePill';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
 import { useOpenReviewViewer } from '@/src/hooks/useOpenReviewViewer';
-import { useFavorites } from '@/src/providers/FavoritesProvider';
 import type { Restaurant } from '@/src/types/restaurant';
 import { openRestaurantDirections } from '@/src/utils/links';
 
 export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
   const openReviewViewer = useOpenReviewViewer();
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const favorite = isFavorite(restaurant.id);
 
   return (
     <View style={[styles.card, elevation.card]}>
@@ -31,16 +28,7 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
         </View>
         <View style={styles.headerActions}>
           <ScorePill score={restaurant.score} />
-          <Pressable
-            accessibilityRole="button"
-            onPress={() => toggleFavorite(restaurant.id)}
-            style={({ pressed }) => [styles.favoriteButton, pressed ? styles.pressed : undefined]}>
-            <Ionicons
-              color={favorite ? palette.highlight : palette.textMuted}
-              name={favorite ? 'heart' : 'heart-outline'}
-              size={20}
-            />
-          </Pressable>
+          <FavoriteHeartButton restaurantId={restaurant.id} />
         </View>
       </View>
 
@@ -117,16 +105,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 15,
   },
-  favoriteButton: {
-    alignItems: 'center',
-    backgroundColor: palette.backgroundSoft,
-    borderColor: palette.border,
-    borderRadius: radii.pill,
-    borderWidth: 1,
-    height: 34,
-    justifyContent: 'center',
-    width: 34,
-  },
   body: {
     gap: 0,
   },
@@ -144,8 +122,5 @@ const styles = StyleSheet.create({
   reviewAction: {
     flex: 1,
     minWidth: 120,
-  },
-  pressed: {
-    opacity: 0.84,
   },
 });

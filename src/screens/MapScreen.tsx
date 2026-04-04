@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActionButton } from '@/src/components/common/ActionButton';
 import { BrandArt } from '@/src/components/common/BrandArt';
 import { EmptyState } from '@/src/components/common/EmptyState';
+import { FavoriteHeartButton } from '@/src/components/common/FavoriteHeartButton';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { ScorePill } from '@/src/components/common/ScorePill';
 import { Screen } from '@/src/components/common/Screen';
@@ -242,7 +243,10 @@ export default function MapScreen() {
                             {selectedRestaurant.subtitle}
                           </Text>
                         </View>
-                        <ScorePill score={selectedRestaurant.score} />
+                        <View style={styles.selectedHeaderActions}>
+                          <ScorePill score={selectedRestaurant.score} />
+                          <FavoriteHeartButton restaurantId={selectedRestaurant.id} />
+                        </View>
                       </View>
                       <View style={styles.selectedInfoBlock}>
                         <Text numberOfLines={2} style={styles.selectedAddress}>
@@ -432,6 +436,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flexDirection: 'row',
     gap: spacing.md,
+  },
+  selectedHeaderActions: {
+    alignItems: 'flex-end',
+    gap: 6,
   },
   selectedCopy: {
     flex: 1,
