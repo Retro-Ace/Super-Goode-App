@@ -245,7 +245,10 @@ export default function MapScreen() {
                         </View>
                         <View style={styles.selectedHeaderActions}>
                           <ScorePill score={selectedRestaurant.score} />
-                          <FavoriteHeartButton restaurantId={selectedRestaurant.id} />
+                          <FavoriteHeartButton
+                            restaurantId={selectedRestaurant.id}
+                            style={styles.selectedFavoriteButton}
+                          />
                         </View>
                       </View>
                       <View style={styles.selectedInfoBlock}>
@@ -429,51 +432,59 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(132, 154, 206, 0.28)',
     borderRadius: radii.lg,
     borderWidth: 1,
-    gap: 6,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
+    gap: spacing.xxs,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
   },
   selectedHeader: {
     alignItems: 'flex-start',
     flexDirection: 'row',
-    gap: spacing.xs,
+    gap: spacing.xxs,
   },
   selectedHeaderActions: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexDirection: 'row',
-    gap: spacing.xs,
+    gap: spacing.xxs,
+  },
+  selectedFavoriteButton: {
+    height: 30,
+    marginTop: 1,
+    width: 30,
   },
   selectedCopy: {
     flex: 1,
-    gap: 2,
+    gap: 0,
   },
   selectedTitle: {
     color: palette.text,
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '800',
-    lineHeight: 20,
+    lineHeight: 18,
   },
   selectedSubtitle: {
     color: palette.textMuted,
-    fontSize: 12,
-    lineHeight: 15,
+    fontSize: 11,
+    lineHeight: 13,
   },
   selectedInfoBlock: {
-    gap: 1,
+    gap: 0,
+    marginTop: -1,
   },
   selectedAddress: {
     color: '#D7E0F3',
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: 11,
+    lineHeight: 14,
   },
   selectedMeta: {
     color: '#99A8C6',
-    fontSize: 11,
+    fontSize: 10,
+    lineHeight: 12,
   },
   selectedActions: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.xs,
+    gap: spacing.xxs,
+    marginTop: 2,
   },
   legendCard: {
     alignSelf: 'flex-start',
