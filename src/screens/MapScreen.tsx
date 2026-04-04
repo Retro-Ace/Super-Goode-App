@@ -429,17 +429,18 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(132, 154, 206, 0.28)',
     borderRadius: radii.lg,
     borderWidth: 1,
-    gap: spacing.xs,
-    padding: spacing.md,
+    gap: 6,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
   },
   selectedHeader: {
     alignItems: 'flex-start',
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   selectedHeaderActions: {
     alignItems: 'flex-end',
-    gap: 6,
+    gap: 4,
   },
   selectedCopy: {
     flex: 1,
@@ -447,31 +448,31 @@ const styles = StyleSheet.create({
   },
   selectedTitle: {
     color: palette.text,
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '800',
-    lineHeight: 22,
+    lineHeight: 20,
   },
   selectedSubtitle: {
     color: palette.textMuted,
-    fontSize: 13,
-    lineHeight: 16,
+    fontSize: 12,
+    lineHeight: 15,
   },
   selectedInfoBlock: {
-    gap: 2,
+    gap: 1,
   },
   selectedAddress: {
     color: '#D7E0F3',
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 12,
+    lineHeight: 16,
   },
   selectedMeta: {
     color: '#99A8C6',
-    fontSize: 12,
+    fontSize: 11,
   },
   selectedActions: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   legendCard: {
     alignSelf: 'flex-start',
