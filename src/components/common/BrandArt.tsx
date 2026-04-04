@@ -3,7 +3,7 @@ import type { ImageStyle, StyleProp, ViewStyle } from 'react-native';
 
 import { palette, spacing } from '@/src/constants/theme';
 
-const brandArtSources = {
+export const brandArtSources = {
   headshot: require('../../../assets/images/branding/super-goode-headshot.jpg'),
   mapLogo: require('../../../assets/images/branding/super-goode-map-logo.png'),
   wordmark: require('../../../assets/images/branding/super-goode-wordmark.png'),

@@ -1,6 +1,6 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { BrandArt } from '@/src/components/common/BrandArt';
+import { brandArtSources } from '@/src/components/common/BrandArt';
 import { Screen } from '@/src/components/common/Screen';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
 import { locationsFeedUrl } from '@/src/data/config';
@@ -43,15 +43,18 @@ export default function ProfileScreen() {
     <Screen includeBottomInset>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
-          <BrandArt
-            align="center"
-            brand="wordmark"
-            height={150}
-            lockupGap={spacing.xs}
-            logoOffsetX={-spacing.xs}
-            variant="full"
-            width={356}
-          />
+          <View style={styles.heroBrand}>
+            <View style={styles.heroAvatarHalo}>
+              <View style={styles.heroAvatarFrame}>
+                <Image source={brandArtSources.headshot} style={styles.heroAvatarImage} />
+              </View>
+            </View>
+            <Image
+              resizeMode="contain"
+              source={brandArtSources.wordmark}
+              style={styles.heroWordmark}
+            />
+          </View>
           <View style={styles.heroStats}>
             <View style={styles.statCard}>
               <Text style={styles.statValue}>{restaurants.length}</Text>
@@ -149,15 +152,52 @@ const styles = StyleSheet.create({
     borderColor: palette.border,
     borderRadius: radii.lg,
     borderWidth: 1,
-    gap: spacing.sm,
+    gap: spacing.md,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
     paddingBottom: spacing.sm,
   },
+  heroBrand: {
+    alignItems: 'center',
+    gap: spacing.xs,
+    justifyContent: 'center',
+    paddingTop: spacing.xs,
+  },
+  heroAvatarHalo: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(142, 86, 255, 0.22)',
+    borderColor: 'rgba(247, 213, 98, 0.28)',
+    borderRadius: 68,
+    borderWidth: 1,
+    height: 136,
+    justifyContent: 'center',
+    shadowColor: '#8E56FF',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.32,
+    shadowRadius: 14,
+    width: 136,
+  },
+  heroAvatarFrame: {
+    backgroundColor: palette.backgroundCard,
+    borderColor: 'rgba(255, 255, 255, 0.34)',
+    borderRadius: 62,
+    borderWidth: 2,
+    height: 124,
+    overflow: 'hidden',
+    width: 124,
+  },
+  heroAvatarImage: {
+    height: '100%',
+    width: '100%',
+  },
+  heroWordmark: {
+    height: 92,
+    marginTop: -spacing.xs,
+    width: 260,
+  },
   heroStats: {
     flexDirection: 'row',
     gap: spacing.xs,
-    marginTop: spacing.xxs,
   },
   statCard: {
     backgroundColor: palette.backgroundSoft,
