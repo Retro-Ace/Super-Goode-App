@@ -33,7 +33,7 @@ export default function ReviewsScreen() {
       <View style={styles.screen}>
         <View style={styles.fixedHeader}>
           <View style={styles.brandBanner}>
-            <BrandArt align="center" height={116} imageStyle={styles.brandBannerImage} variant="long" width={350} />
+            <BrandArt align="center" height={118} variant="long" width={360} />
           </View>
 
           <View style={styles.controlsCard}>
@@ -144,10 +144,6 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
     marginHorizontal: -spacing.xs,
     paddingVertical: 0,
-  },
-  brandBannerImage: {
-    marginBottom: -spacing.md,
-    marginTop: -spacing.xs,
   },
   controlsCard: {
     backgroundColor: palette.backgroundCard,
