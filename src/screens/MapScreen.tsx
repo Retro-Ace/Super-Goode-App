@@ -177,6 +177,7 @@ export default function MapScreen() {
                 <View style={[styles.brandBar, elevation.card]}>
                   <View style={styles.brandCopy}>
                     <BrandArt
+                      avatarOffsetX={spacing.xs}
                       brand="map"
                       height={82}
                       variant="long"

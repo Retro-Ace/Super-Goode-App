@@ -11,11 +11,22 @@ type FavoritesContextValue = {
 
 const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 
-export function FavoritesProvider({ children }: { children: React.ReactNode }) {
-  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
-  const [isReady, setIsReady] = useState(false);
+export function FavoritesProvider({
+  children,
+  initialFavoriteIds,
+}: {
+  children: React.ReactNode;
+  initialFavoriteIds?: string[];
+}) {
+  const hydratedFromBootstrap = initialFavoriteIds !== undefined;
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(initialFavoriteIds ?? []);
+  const [isReady, setIsReady] = useState(hydratedFromBootstrap);
 
   useEffect(() => {
+    if (hydratedFromBootstrap) {
+      return;
+    }
+
     loadFavoriteIds()
       .then((ids) => {
         setFavoriteIds(ids);
@@ -23,7 +34,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       .finally(() => {
         setIsReady(true);
       });
-  }, []);
+  }, [hydratedFromBootstrap]);
 
   useEffect(() => {
     if (!isReady) {

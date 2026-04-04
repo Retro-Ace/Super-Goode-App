@@ -18,8 +18,17 @@ type BrandArtProps = {
   width: number;
   height: number;
   align?: 'left' | 'center';
+  avatarOffsetX?: number;
   style?: StyleProp<ViewStyle>;
   imageStyle?: StyleProp<ImageStyle>;
+};
+
+export const TAB_WORDMARK_BRAND_ART = {
+  align: 'center' as const,
+  brand: 'wordmark' as const,
+  height: 110,
+  variant: 'full' as const,
+  width: 308,
 };
 
 export function BrandArt({
@@ -28,6 +37,7 @@ export function BrandArt({
   width,
   height,
   align = 'left',
+  avatarOffsetX = 0,
   style,
   imageStyle,
 }: BrandArtProps) {
@@ -55,6 +65,7 @@ export function BrandArt({
             styles.avatarHalo,
             isFull ? styles.avatarHaloFull : styles.avatarHaloLong,
             { borderRadius: haloSize / 2, height: haloSize, width: haloSize },
+            avatarOffsetX ? { transform: [{ translateX: avatarOffsetX }] } : undefined,
           ]}>
           <View
             style={[

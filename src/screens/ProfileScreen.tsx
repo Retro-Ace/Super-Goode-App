@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { BrandArt } from '@/src/components/common/BrandArt';
+import { BrandArt, TAB_WORDMARK_BRAND_ART } from '@/src/components/common/BrandArt';
 import { Screen } from '@/src/components/common/Screen';
 import { SectionHeader } from '@/src/components/common/SectionHeader';
 import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
@@ -51,7 +51,7 @@ export default function ProfileScreen() {
     <Screen includeBottomInset>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
-          <BrandArt align="center" brand="wordmark" height={94} variant="full" width={280} />
+          <BrandArt {...TAB_WORDMARK_BRAND_ART} />
           <View style={styles.heroStats}>
             <View style={styles.statCard}>
               <Text style={styles.statValue}>{restaurants.length}</Text>
@@ -124,9 +124,9 @@ const styles = StyleSheet.create({
     borderColor: palette.border,
     borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.xxs,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   heroStats: {
     flexDirection: 'row',
