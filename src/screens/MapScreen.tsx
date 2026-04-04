@@ -439,8 +439,9 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
   selectedHeaderActions: {
-    alignItems: 'flex-end',
-    gap: 4,
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.xs,
   },
   selectedCopy: {
     flex: 1,
