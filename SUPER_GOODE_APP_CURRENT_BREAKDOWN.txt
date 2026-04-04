@@ -170,10 +170,11 @@ Current dataset shape used by the app:
 - notes
 
 Current verified data snapshot:
-- 229 restaurants
-- 35 entries with non-empty notes
-- 1 low-confidence entry
-- Daruma Restaurant is present in the current app seed
+- 431 restaurants
+- googlePlaceUrl is present for 430 of 431 rows
+- Dorrie's Kitchen is the intentional blank googlePlaceUrl exception
+- 1 entry with non-empty notes
+- 0 low-confidence entries
 - the app seed reflects the latest verified shared dataset snapshot used by the app
 
 Review URL handling:
@@ -298,7 +299,7 @@ Recent verified app-state notes:
 - the root cause was a blank subtitle being treated as invalid by the app parser
 - the parser now accepts blank subtitles
 - the app seed was resynced to the current verified shared dataset snapshot
-- the current verified app dataset now loads 229 restaurants
+- the current verified app dataset now loads 431 restaurants
 
 Cache verification note:
 - earlier screenshots showing Local seeded JSON active came from a launch with no remote environment configured

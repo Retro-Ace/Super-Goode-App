@@ -29,13 +29,14 @@ Current source-of-truth files:
 - `/Users/anthonylarosa/CODEX/Super Goode App/src/data/seed/locations.json`
 
 Verified snapshot for this pass:
-- 229 locations in the app seed
-- The app seed is aligned with the current verified shared dataset snapshot used by the app
+- 431 locations in the app seed
+- The app seed is aligned with the current canonical shared dataset snapshot used by the app
 - Key set is stable and currently limited to 14 fields
-- Score range is 7.2 to 9.3
-- Only one entry is marked `confidence: low`
-- 35 entries carry non-empty notes
-- Daruma Restaurant is present
+- Score range is 6.0 to 9.3
+- `googlePlaceUrl` is present for 430 of 431 entries
+- `Dorrie's Kitchen` is the intentional blank `googlePlaceUrl` exception
+- No entries are marked `confidence: low`
+- 1 entry carries non-empty notes
 
 Required fields in the current dataset:
 - `name`: string
@@ -56,10 +57,10 @@ Required fields in the current dataset:
 Behavioral notes for the app:
 - Keep `score` numeric and render it with one decimal place; do not coerce it to an integer badge.
 - Treat `lat` and `lng` as the only map coordinates; do not infer geocodes from address text.
-- Treat `googlePlaceUrl` as required link metadata; do not invent it from address text or keep a stale placeholder.
+- Treat `googlePlaceUrl` as preferred link metadata when present; allow the intentional blank exception and fall through to `directionsUrl` or generated fallback.
 - Render `notes` only when non-empty.
 - Treat `sourceType` and `confidence` as provenance metadata, not user-facing content.
-- Preserve `reviewUrl` and `directionsUrl` as external links and fail closed if a future record omits them.
+- Preserve `reviewUrl` as an external link, and keep directions behavior aligned to `googlePlaceUrl -> directionsUrl -> generated fallback`.
 - Accept blank `subtitle` values at runtime; Daruma proved the app should not reject a valid restaurant just because its subtitle is empty.
 - Normalize review URLs in the app runtime rather than assuming the stored seed is always pre-cleaned.
 
@@ -87,8 +88,8 @@ Mode notes:
 
 ## What Is Solid
 
-- The app seed is currently aligned with the verified shared dataset snapshot used by the app.
-- All current entries have valid coordinates and link strings.
+- The app seed is currently aligned with the canonical shared dataset snapshot used by the app.
+- All current entries have valid coordinates; the one intentional blank `googlePlaceUrl` row still falls through the directions helper correctly.
 - There are no duplicate normalized restaurant names in the current dataset.
 - The dataset stays in the Chicago-area band, so map initial bounds can stay local without global fallbacks.
 - Map, Reviews, Favorites, Profile, and review viewer flows all consume the same shared record shape.
