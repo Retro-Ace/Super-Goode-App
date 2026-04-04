@@ -33,7 +33,7 @@ export default function ReviewsScreen() {
       <View style={styles.screen}>
         <View style={styles.fixedHeader}>
           <View style={styles.brandBanner}>
-            <BrandArt align="center" height={118} variant="long" width={360} />
+            <BrandArt align="center" avatar="none" brand="wordmark" height={96} variant="long" width={352} />
           </View>
 
           <View style={styles.controlsCard}>

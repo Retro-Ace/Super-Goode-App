@@ -54,7 +54,7 @@ export default function FavoritesScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             <View style={[styles.hero, elevation.card]}>
-              <BrandArt align="center" height={126} variant="full" width={214} />
+              <BrandArt align="center" brand="wordmark" height={92} variant="full" width={274} />
               <View style={styles.summaryRow}>
                 <View style={styles.summaryCard}>
                   <Text style={styles.summaryValue}>{favoriteIds.length}</Text>

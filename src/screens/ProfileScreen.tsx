@@ -51,7 +51,7 @@ export default function ProfileScreen() {
     <Screen includeBottomInset>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
-          <BrandArt align="center" height={110} variant="full" width={186} />
+          <BrandArt align="center" brand="wordmark" height={94} variant="full" width={280} />
           <View style={styles.heroStats}>
             <View style={styles.statCard}>
               <Text style={styles.statValue}>{restaurants.length}</Text>

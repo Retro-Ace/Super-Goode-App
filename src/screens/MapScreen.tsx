@@ -177,9 +177,11 @@ export default function MapScreen() {
                 <View style={[styles.brandBar, elevation.card]}>
                   <View style={styles.brandCopy}>
                     <BrandArt
-                      height={76}
+                      avatar="right"
+                      brand="map"
+                      height={82}
                       variant="long"
-                      width={246}
+                      width={278}
                     />
                   </View>
                   <View style={styles.brandStats}>
@@ -339,7 +341,7 @@ const styles = StyleSheet.create({
   },
   brandCopy: {
     flex: 1,
-    paddingRight: spacing.xs,
+    paddingRight: spacing.xxs,
   },
   brandStats: {
     alignSelf: 'center',
