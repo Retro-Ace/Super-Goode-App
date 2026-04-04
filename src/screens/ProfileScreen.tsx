@@ -43,7 +43,15 @@ export default function ProfileScreen() {
     <Screen includeBottomInset>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.hero}>
-          <BrandArt align="center" brand="wordmark" height={132} variant="full" width={336} />
+          <BrandArt
+            align="center"
+            brand="wordmark"
+            height={150}
+            lockupGap={spacing.xs}
+            logoOffsetX={-spacing.xs}
+            variant="full"
+            width={356}
+          />
           <View style={styles.heroStats}>
             <View style={styles.statCard}>
               <Text style={styles.statValue}>{restaurants.length}</Text>
@@ -141,9 +149,10 @@ const styles = StyleSheet.create({
     borderColor: palette.border,
     borderRadius: radii.lg,
     borderWidth: 1,
-    gap: spacing.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
   },
   heroStats: {
     flexDirection: 'row',

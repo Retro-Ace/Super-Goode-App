@@ -19,6 +19,8 @@ type BrandArtProps = {
   height: number;
   align?: 'left' | 'center';
   avatarOffsetX?: number;
+  lockupGap?: number;
+  logoOffsetX?: number;
   style?: StyleProp<ViewStyle>;
   imageStyle?: StyleProp<ImageStyle>;
 };
@@ -38,6 +40,8 @@ export function BrandArt({
   height,
   align = 'left',
   avatarOffsetX = 0,
+  lockupGap,
+  logoOffsetX = 0,
   style,
   imageStyle,
 }: BrandArtProps) {
@@ -46,7 +50,7 @@ export function BrandArt({
   const isMapLogo = resolvedBrand === 'map';
   const avatarSize = Math.min(height * (isFull ? 0.76 : 0.74), width * (isFull ? 0.26 : 0.22));
   const haloSize = avatarSize + (isFull ? 10 : 8);
-  const gap = isFull ? spacing.sm : spacing.xs;
+  const gap = lockupGap ?? (isFull ? spacing.sm : spacing.xs);
   const logoWidth = Math.max(width - haloSize - gap, isMapLogo ? 132 : 148);
   const logoHeight = Math.min(height * (isFull ? 0.58 : 0.62), isMapLogo ? 66 : 72);
   const logoSource = resolvedBrand === 'map' ? brandArtSources.mapLogo : brandArtSources.wordmark;
@@ -83,6 +87,7 @@ export function BrandArt({
             isMapLogo ? styles.logoMap : styles.logoWordmark,
             isFull ? styles.logoFull : styles.logoLong,
             { height: logoHeight, width: logoWidth },
+            logoOffsetX ? { marginLeft: logoOffsetX } : undefined,
             imageStyle,
           ]}
         />
