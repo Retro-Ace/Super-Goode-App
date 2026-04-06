@@ -33,6 +33,15 @@ export const TAB_WORDMARK_BRAND_ART = {
   width: 308,
 };
 
+export const HERO_WORDMARK_BRAND_ART = {
+  align: 'center' as const,
+  brand: 'wordmark' as const,
+  height: 124,
+  lockupGap: spacing.sm,
+  variant: 'full' as const,
+  width: 342,
+};
+
 export function BrandArt({
   variant,
   brand,

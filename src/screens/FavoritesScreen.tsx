@@ -1,7 +1,7 @@
 import { useDeferredValue, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
-import { BrandArt, TAB_WORDMARK_BRAND_ART } from '@/src/components/common/BrandArt';
+import { BrandArt, HERO_WORDMARK_BRAND_ART } from '@/src/components/common/BrandArt';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { Screen } from '@/src/components/common/Screen';
@@ -9,7 +9,7 @@ import { SectionHeader } from '@/src/components/common/SectionHeader';
 import { RestaurantCard } from '@/src/components/restaurant/RestaurantCard';
 import { ScoreFilter } from '@/src/components/restaurant/ScoreFilter';
 import { SearchBar } from '@/src/components/restaurant/SearchBar';
-import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import { palette, spacing, typography } from '@/src/constants/theme';
 import { useFavorites } from '@/src/providers/FavoritesProvider';
 import { useRestaurants } from '@/src/hooks/useRestaurants';
 import { filterRestaurants } from '@/src/utils/restaurants';
@@ -24,6 +24,10 @@ export default function FavoritesScreen() {
   const favoriteRestaurants = restaurants.filter((restaurant) => favoriteIds.includes(restaurant.id));
   const filteredFavorites = filterRestaurants(favoriteRestaurants, { query: deferredQuery, minimumScore });
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
+  const savedCountLabel =
+    filtersDirty && filteredFavorites.length !== favoriteIds.length
+      ? `${filteredFavorites.length} of ${favoriteIds.length} saved spots`
+      : `${favoriteIds.length} saved spot${favoriteIds.length === 1 ? '' : 's'}`;
 
   return (
     <Screen includeBottomInset>
@@ -53,27 +57,17 @@ export default function FavoritesScreen() {
         }
         ListHeaderComponent={
           <View style={styles.header}>
-            <View style={[styles.hero, elevation.card]}>
-              <BrandArt {...TAB_WORDMARK_BRAND_ART} />
-              <View style={styles.summaryRow}>
-                <View style={styles.summaryCard}>
-                  <Text style={styles.summaryValue}>{favoriteIds.length}</Text>
-                  <Text style={styles.summaryLabel}>Saved spots</Text>
-                </View>
-                <View style={styles.summaryCard}>
-                  <Text style={styles.summaryValue}>{filteredFavorites.length}</Text>
-                  <Text style={styles.summaryLabel}>In view</Text>
-                </View>
-              </View>
+            <View style={styles.hero}>
+              <BrandArt {...HERO_WORDMARK_BRAND_ART} />
             </View>
             <View style={styles.controls}>
               <SearchBar compact onChangeText={setQuery} value={query} />
               <ScoreFilter compact onChange={setMinimumScore} selectedScore={minimumScore} />
+              <Text style={styles.savedCountText}>{savedCountLabel}</Text>
             </View>
             <SectionHeader
               actionLabel={favoriteIds.length > 0 && filtersDirty ? 'Reset' : undefined}
               compact
-              eyebrow="Saved board"
               onActionPress={
                 favoriteIds.length > 0 && filtersDirty
                   ? () => {
@@ -101,41 +95,21 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxl,
   },
   header: {
-    gap: spacing.xs,
+    gap: spacing.sm,
   },
   hero: {
-    backgroundColor: palette.backgroundCard,
-    borderColor: palette.border,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    alignItems: 'center',
+    marginHorizontal: -spacing.xs,
+    paddingTop: spacing.xxs,
   },
   controls: {
     gap: spacing.xs,
   },
-  summaryRow: {
-    flexDirection: 'row',
-    gap: spacing.xs,
-  },
-  summaryCard: {
-    backgroundColor: palette.backgroundSoft,
-    borderColor: palette.border,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    flex: 1,
-    padding: spacing.sm,
-  },
-  summaryValue: {
-    color: palette.text,
-    fontFamily: typography.brand,
-    fontSize: 20,
-  },
-  summaryLabel: {
+  savedCountText: {
     color: palette.textDim,
     fontSize: 12,
-    marginTop: spacing.xxs,
-    textTransform: 'uppercase',
+    fontFamily: typography.brand,
+    letterSpacing: 0.2,
+    paddingHorizontal: spacing.xxs,
   },
 });

@@ -3,7 +3,7 @@ import { useDeferredValue, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { BrandArt, TAB_WORDMARK_BRAND_ART } from '@/src/components/common/BrandArt';
+import { BrandArt, HERO_WORDMARK_BRAND_ART } from '@/src/components/common/BrandArt';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { Screen } from '@/src/components/common/Screen';
@@ -33,7 +33,7 @@ export default function ReviewsScreen() {
       <View style={styles.screen}>
         <View style={styles.fixedHeader}>
           <View style={styles.brandBanner}>
-            <BrandArt {...TAB_WORDMARK_BRAND_ART} />
+            <BrandArt {...HERO_WORDMARK_BRAND_ART} />
           </View>
 
           <View style={styles.controlsCard}>
@@ -61,7 +61,6 @@ export default function ReviewsScreen() {
             <SectionHeader
               actionLabel={filtersDirty ? 'Reset' : undefined}
               compact
-              eyebrow="Review feed"
               onActionPress={
                 filtersDirty
                   ? () => {
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
   },
   brandBanner: {
     alignItems: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
     marginHorizontal: -spacing.xs,
     paddingTop: spacing.xxs,
     paddingVertical: 0,
