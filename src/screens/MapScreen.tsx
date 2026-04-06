@@ -375,7 +375,6 @@ const styles = StyleSheet.create({
   },
   brandLogoImage: {
     height: 44,
-    marginLeft: 2,
     width: 132,
   },
   brandTrailing: {
@@ -412,9 +411,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   brandStats: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 6,
+    alignItems: 'stretch',
+    gap: 4,
+    width: 58,
   },
   badgePill: {
     alignItems: 'center',
@@ -428,13 +427,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   countBadgePill: {
-    minWidth: 52,
+    minWidth: 58,
     paddingLeft: 8,
     paddingRight: 10,
   },
   statusBadgePill: {
-    minWidth: 52,
-    paddingHorizontal: 9,
+    minWidth: 58,
+    paddingHorizontal: 10,
   },
   badgeIconWrap: {
     alignItems: 'center',
