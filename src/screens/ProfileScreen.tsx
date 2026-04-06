@@ -148,20 +148,14 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xxl,
   },
   hero: {
-    backgroundColor: palette.backgroundCard,
-    borderColor: palette.border,
-    borderRadius: radii.lg,
-    borderWidth: 1,
     gap: spacing.md,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.sm,
+    paddingTop: spacing.sm,
   },
   heroBrand: {
     alignItems: 'center',
-    gap: spacing.xs,
+    gap: spacing.xxs,
     justifyContent: 'center',
-    paddingTop: spacing.xs,
+    paddingTop: spacing.xxs,
   },
   heroAvatarHalo: {
     alignItems: 'center',
@@ -192,7 +186,7 @@ const styles = StyleSheet.create({
   },
   heroWordmark: {
     height: 92,
-    marginTop: -spacing.xs,
+    marginTop: -spacing.sm,
     width: 260,
   },
   heroStats: {

@@ -1,11 +1,10 @@
 import { useDeferredValue, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { BrandArt, HERO_WORDMARK_BRAND_ART } from '@/src/components/common/BrandArt';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { LoadingState } from '@/src/components/common/LoadingState';
 import { Screen } from '@/src/components/common/Screen';
-import { SectionHeader } from '@/src/components/common/SectionHeader';
 import { RestaurantCard } from '@/src/components/restaurant/RestaurantCard';
 import { ScoreFilter } from '@/src/components/restaurant/ScoreFilter';
 import { SearchBar } from '@/src/components/restaurant/SearchBar';
@@ -24,11 +23,6 @@ export default function FavoritesScreen() {
   const favoriteRestaurants = restaurants.filter((restaurant) => favoriteIds.includes(restaurant.id));
   const filteredFavorites = filterRestaurants(favoriteRestaurants, { query: deferredQuery, minimumScore });
   const filtersDirty = query.trim().length > 0 || minimumScore !== null;
-  const savedCountLabel =
-    filtersDirty && filteredFavorites.length !== favoriteIds.length
-      ? `${filteredFavorites.length} of ${favoriteIds.length} saved spots`
-      : `${favoriteIds.length} saved spot${favoriteIds.length === 1 ? '' : 's'}`;
-
   return (
     <Screen includeBottomInset>
       <FlatList
@@ -63,21 +57,25 @@ export default function FavoritesScreen() {
             <View style={styles.controls}>
               <SearchBar compact onChangeText={setQuery} value={query} />
               <ScoreFilter compact onChange={setMinimumScore} selectedScore={minimumScore} />
-              <Text style={styles.savedCountText}>{savedCountLabel}</Text>
             </View>
-            <SectionHeader
-              actionLabel={favoriteIds.length > 0 && filtersDirty ? 'Reset' : undefined}
-              compact
-              onActionPress={
-                favoriteIds.length > 0 && filtersDirty
-                  ? () => {
+            <View style={styles.sectionRow}>
+              <Text style={styles.sectionTitle}>Your best bets</Text>
+              <View style={styles.sectionMeta}>
+                <Text style={styles.savedCountText}>
+                  {favoriteIds.length} saved
+                </Text>
+                {favoriteIds.length > 0 && filtersDirty ? (
+                  <Pressable
+                    onPress={() => {
                       setQuery('');
                       setMinimumScore(null);
-                    }
-                  : undefined
-              }
-              title="Your best bets"
-            />
+                    }}
+                    style={({ pressed }) => [styles.resetAction, pressed && styles.resetActionPressed]}>
+                    <Text style={styles.resetActionText}>Reset</Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            </View>
           </View>
         }
         renderItem={({ item }) => <RestaurantCard restaurant={item} />}
@@ -105,11 +103,42 @@ const styles = StyleSheet.create({
   controls: {
     gap: spacing.xs,
   },
+  sectionRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    minHeight: 22,
+  },
+  sectionTitle: {
+    color: palette.text,
+    flex: 1,
+    fontSize: 20,
+    fontWeight: '800',
+    letterSpacing: -0.6,
+  },
+  sectionMeta: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginLeft: spacing.sm,
+  },
   savedCountText: {
     color: palette.textDim,
     fontSize: 12,
     fontFamily: typography.brand,
     letterSpacing: 0.2,
-    paddingHorizontal: spacing.xxs,
+    textTransform: 'uppercase',
+  },
+  resetAction: {
+    paddingVertical: 0,
+  },
+  resetActionPressed: {
+    opacity: 0.72,
+  },
+  resetActionText: {
+    color: palette.highlight,
+    fontFamily: typography.brand,
+    fontSize: 11,
+    textTransform: 'uppercase',
   },
 });
