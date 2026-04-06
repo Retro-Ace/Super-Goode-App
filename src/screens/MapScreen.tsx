@@ -1,13 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import type MapView from 'react-native-maps';
 import type { Region } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ActionButton } from '@/src/components/common/ActionButton';
-import { BrandArt } from '@/src/components/common/BrandArt';
+import { brandArtSources } from '@/src/components/common/BrandArt';
 import { EmptyState } from '@/src/components/common/EmptyState';
 import { FavoriteHeartButton } from '@/src/components/common/FavoriteHeartButton';
 import { LoadingState } from '@/src/components/common/LoadingState';
@@ -176,25 +176,36 @@ export default function MapScreen() {
             <View pointerEvents="box-none" style={styles.overlay}>
               <View style={styles.topStack}>
                 <View style={[styles.brandBar, elevation.card]}>
-                  <View style={styles.brandCopy}>
-                    <BrandArt
-                      avatarOffsetX={spacing.xs}
-                      brand="map"
-                      height={82}
-                      variant="long"
-                      width={278}
+                  <View style={styles.brandLeading}>
+                    <View style={styles.headerAvatarHalo}>
+                      <View style={styles.headerAvatarFrame}>
+                        <Image source={brandArtSources.headshot} style={styles.headerAvatarImage} />
+                      </View>
+                    </View>
+                  </View>
+                  <View pointerEvents="none" style={styles.brandLogoWrap}>
+                    <Image
+                      resizeMode="contain"
+                      source={brandArtSources.mapLogo}
+                      style={styles.brandLogoImage}
                     />
                   </View>
-                  <View style={styles.brandStats}>
-                    <View style={styles.badgePill}>
-                      <Ionicons color={palette.highlight} name="location" size={12} />
-                      <Text style={styles.badgeText}>{mappedRestaurants.length}</Text>
-                    </View>
-                    <View style={styles.badgePill}>
-                      <Ionicons color={palette.white} name="navigate" size={12} />
-                      <Text style={styles.badgeText}>
-                        {isLocating ? '...' : locationReadyLabel}
-                      </Text>
+                  <View style={styles.brandTrailing}>
+                    <View style={styles.brandStats}>
+                      <View style={[styles.badgePill, styles.countBadgePill]}>
+                        <View style={styles.badgeIconWrap}>
+                          <Ionicons color={palette.highlight} name="location" size={11} />
+                        </View>
+                        <Text style={[styles.badgeText, styles.countBadgeText]}>{mappedRestaurants.length}</Text>
+                      </View>
+                      <View style={[styles.badgePill, styles.statusBadgePill]}>
+                        <View style={styles.badgeIconWrap}>
+                          <Ionicons color={palette.white} name="navigate" size={11} />
+                        </View>
+                        <Text style={styles.badgeText}>
+                          {isLocating ? '...' : locationReadyLabel}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -343,19 +354,67 @@ const styles = StyleSheet.create({
     borderRadius: radii.lg,
     borderWidth: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    minHeight: 74,
     paddingLeft: spacing.xs,
     paddingRight: spacing.sm,
     paddingVertical: spacing.xs,
+    position: 'relative',
   },
-  brandCopy: {
+  brandLeading: {
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    width: 104,
+    zIndex: 1,
+  },
+  brandLogoWrap: {
     flex: 1,
-    paddingRight: spacing.xxs,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 0,
+    paddingHorizontal: spacing.xs,
+  },
+  brandLogoImage: {
+    height: 44,
+    marginLeft: 2,
+    width: 132,
+  },
+  brandTrailing: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    width: 104,
+    zIndex: 1,
+  },
+  headerAvatarHalo: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(142, 86, 255, 0.22)',
+    borderColor: 'rgba(247, 213, 98, 0.28)',
+    borderRadius: 30,
+    borderWidth: 1,
+    height: 60,
+    justifyContent: 'center',
+    shadowColor: '#8E56FF',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.32,
+    shadowRadius: 12,
+    width: 60,
+  },
+  headerAvatarFrame: {
+    backgroundColor: palette.backgroundCard,
+    borderColor: 'rgba(255, 255, 255, 0.34)',
+    borderRadius: 27,
+    borderWidth: 2,
+    height: 54,
+    overflow: 'hidden',
+    width: 54,
+  },
+  headerAvatarImage: {
+    height: '100%',
+    width: '100%',
   },
   brandStats: {
-    alignSelf: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
-    gap: spacing.xs,
+    gap: 6,
   },
   badgePill: {
     alignItems: 'center',
@@ -364,15 +423,35 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: 5,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+    height: 28,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+  },
+  countBadgePill: {
+    minWidth: 52,
+    paddingLeft: 8,
+    paddingRight: 10,
+  },
+  statusBadgePill: {
+    minWidth: 52,
+    paddingHorizontal: 9,
+  },
+  badgeIconWrap: {
+    alignItems: 'center',
+    height: 12,
+    justifyContent: 'center',
+    marginRight: 4,
+    width: 12,
   },
   badgeText: {
     color: palette.text,
     fontFamily: typography.brand,
     fontSize: 11,
+    lineHeight: 11,
     textTransform: 'uppercase',
+  },
+  countBadgeText: {
+    marginTop: 0.5,
   },
   controlsBar: {
     backgroundColor: 'rgba(17, 10, 32, 0.78)',
