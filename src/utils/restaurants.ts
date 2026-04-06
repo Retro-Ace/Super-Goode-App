@@ -42,7 +42,8 @@ function compactSearchText(value: string) {
 
 export function normalizeRestaurant(record: RestaurantRecord): Restaurant {
   const cityState = `${record.city}, ${record.state}`;
-  const fullAddress = `${record.address}, ${cityState}`;
+  const trimmedAddress = record.address.trim();
+  const fullAddress = trimmedAddress ? `${trimmedAddress}, ${cityState}` : cityState;
   const googlePlaceUrl = record.googlePlaceUrl.trim();
   const directionsUrl = record.directionsUrl.trim();
   const reviewUrl = normalizeReviewUrl(record.reviewUrl) ?? record.reviewUrl.trim();
@@ -132,7 +133,7 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
 
   const name = getRequiredString(value.name);
   const subtitle = getString(value.subtitle);
-  const address = getRequiredString(value.address);
+  const address = getString(value.address);
   const city = getRequiredString(value.city);
   const state = getRequiredString(value.state);
   const googlePlaceUrl = getString(value.googlePlaceUrl);
@@ -144,7 +145,6 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
 
   if (
     !name ||
-    !address ||
     !city ||
     !state ||
     !reviewUrl ||
