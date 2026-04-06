@@ -7,9 +7,11 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 ## Current Status
 
 - Beta-ready mobile companion app for iPhone and Android
+- Current release cut: iOS build 4
 - Four public tabs: Map, Reviews, Favorites, and Profile
 - No restaurant detail page or detail route
 - Bundled app seed currently mirrors 431 restaurants from the canonical web dataset
+- Live feed validation currently passes 431 / 431 rows after the blank-address parser fix
 - Live remote feed support through `EXPO_PUBLIC_LOCATIONS_FEED_URL`
 - Runtime data priority: live remote feed, then cached remote snapshot, then bundled local seed fallback
 - Shared in-app branding now renders through `BrandArt` using the rounded headshot and current logo assets
@@ -114,6 +116,7 @@ Current behavior:
 
 - `npm run sync:seed` is a developer workflow that copies the web dataset into the app seed snapshot.
 - The bundled app seed currently contains 431 restaurants and is intended to stay in parity with the canonical web dataset.
+- The current live feed validates 431 / 431 rows, so the old "invalid rows skipped" warning is gone.
 - The runtime cache is separate from the repo seed: a successful remote load is saved on device as a cached remote snapshot.
 - If `EXPO_PUBLIC_LOCATIONS_FEED_URL` is set, the repository reads the live remote JSON feed first.
 - If the live feed is unavailable or invalid and a cached remote snapshot exists, the app uses that snapshot next.

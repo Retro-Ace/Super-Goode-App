@@ -1,6 +1,6 @@
 # Super Goode Foundation QA
 
-Date: 2026-04-03
+Date: 2026-04-06
 
 ## Current App State
 
@@ -8,18 +8,23 @@ Date: 2026-04-03
 - Main tabs are Map, Reviews, Favorites, and Profile.
 - There is no restaurant detail route or restaurant detail page.
 - Restaurant cards surface review, directions, and favorite actions directly.
+- The Map header now stacks the location-count pill above the On / Enable / Off pill.
+- The selected Map popup is tighter and keeps the favorite heart placement compact around the score and action cluster.
+- The Reviews header is cleaner, the Favorites header is simplified, Profile is reworked, and the startup screen now uses the polished brand lockup.
 - In-app review viewing is available, with external fallback for blocked or unavailable reviews.
 - Remote feed wiring uses `EXPO_PUBLIC_LOCATIONS_FEED_URL` and now supports a cached remote snapshot before bundled seed fallback.
+- The live feed now validates 431 / 431 rows after the blank-address parser fix, so the old 4-invalid-rows warning is gone.
 - Review URLs are normalized in-app before playback.
 
-## Build 3 Release State
+## Build 4 Release State
 
 - Marketing version remains `1.0.0`.
-- iOS build number is `3`.
+- iOS build number is `4`.
 - Current in-app branding renders through `BrandArt` using `super-goode-map-logo.png`, `super-goode-wordmark.png`, and `super-goode-headshot.jpg`.
 - Current Expo icon outputs resolve from `icon.png`, `splash-icon.png`, `favicon.png`, `android-icon-foreground.png`, `android-icon-background.png`, and `android-icon-monochrome.png`.
 - Old flattened branding composites and obsolete icon alternates were removed from the active repo asset set.
-- `eas.json` production autoIncrement is `false` so this release stays pinned to build 3.
+- `eas.json` production autoIncrement is `false` so this release stays pinned to build 4.
+- Build 5 is the next release increment after this cut.
 
 ## Data Contract
 
@@ -36,6 +41,7 @@ Verified snapshot for this pass:
 - `Dorrie's Kitchen` is the intentional blank `googlePlaceUrl` exception
 - No entries are marked `confidence: low`
 - 1 entry carries non-empty notes
+- Live remote feed validation passes 431 / 431 rows with no invalid rows skipped after the blank-address parser fix.
 
 Required fields in the current dataset:
 - `name`: string
@@ -89,6 +95,7 @@ Mode notes:
 
 - The app seed is currently aligned with the canonical shared dataset snapshot used by the app.
 - All current entries have valid coordinates; the one intentional blank `googlePlaceUrl` row still falls through the directions helper correctly.
+- The live feed now validates 431 / 431 rows after the blank-address parser fix, so the app no longer skips 4 rows while loading.
 - Branding assets now resolve through the shared `BrandArt` lockup and the current Expo icon paths resolve to the refreshed asset set.
 - There are no duplicate normalized restaurant names in the current dataset.
 - The dataset is still Chicagoland-heavy, but the app now keeps a deliberate local startup map region instead of fitting the full dataset on launch.
@@ -154,4 +161,5 @@ Map-specific smoke checklist:
 
 - Re-run data validation against the web source file before release candidates.
 - Keep the cache mode, bundled fallback mode, and seed-sync workflow separate in future release notes.
+- Treat build 4 as the current release cut and build 5 as the next bump when the next release cycle starts.
 - Keep review URL normalization and remote snapshot cache behavior in the pre-release smoke checklist.

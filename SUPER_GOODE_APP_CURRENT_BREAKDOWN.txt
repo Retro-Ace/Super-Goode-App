@@ -1,5 +1,5 @@
 SUPER GOODE APP CURRENT BREAKDOWN
-Updated: 2026-04-03
+Updated: 2026-04-06
 
 SCOPE
 This breakdown is APP ONLY.
@@ -38,6 +38,8 @@ Map tab:
 - supports score filters
 - requests foreground location permission and can center on the user's position
 - shows a selected restaurant popup card when a pin is chosen
+- the top-right header stacks the location-count pill above the On / Enable / Off pill
+- the selected popup is tighter and keeps the favorite heart placement compact around the score/action cluster
 - provides actions for Review Video and Directions
 - includes fit-to-restaurants and locate controls
 - has a score-tier legend when nothing is selected
@@ -45,7 +47,7 @@ Map tab:
 Reviews tab:
 - shows a ranked feed of restaurant cards
 - supports search and score filters
-- includes a branded header and summary counters
+- includes a cleaned-up branded header and summary counters
 - each card can open Directions or Watch Review
 - query filtering is immediate while the displayed query value is deferred for smoother list behavior
 
@@ -54,13 +56,19 @@ Favorites tab:
 - restores favorites on launch
 - filters saved items by search and score
 - shows saved spot counts and current filtered counts
+- the header is simplified compared with earlier builds and keeps the controls row compact
 - uses the same restaurant cards as the reviews feed
 
 Profile tab:
 - shows current data-mode status
 - shows whether the app is reading the local seed, live remote feed, cached remote snapshot, or bundled fallback
 - shows coverage and local save counts
+- uses the cleaner reworked status layout from the latest UI pass
 - keeps the app's settings runway clearly separate from current functionality
+
+Startup / boot:
+- shows a polished brand-forward boot screen while the seed and favorites load
+- uses the current rounded headshot and logo lockup with a delayed loading spinner
 
 Review viewer:
 - opens from restaurant cards, the Map popup, and the modal review route
@@ -175,6 +183,7 @@ Current verified data snapshot:
 - Dorrie's Kitchen is the intentional blank googlePlaceUrl exception
 - 1 entry with non-empty notes
 - 0 low-confidence entries
+- live remote feed validation now passes 431 / 431 rows with no invalid rows skipped after the blank-address parser fix
 - the app seed reflects the latest verified shared dataset snapshot used by the app
 
 Review URL handling:
@@ -281,7 +290,7 @@ Current build setup:
 
 Known release configuration:
 - app.json sets the iOS bundle identifier to com.retroace.supergoode
-- app.json sets iOS build number 3
+- app.json sets iOS build number 4
 - app.json includes the EAS project ID
 - app.json configures the location permission text for foreground use
 - app.json configures Android adaptive icons
@@ -292,8 +301,9 @@ Known release configuration:
 EAS status:
 - development builds use an internal development client
 - preview builds use the remote feed URL and internal distribution
-- production builds use the remote feed URL and store distribution with autoIncrement disabled so this release stays pinned to build 3
-- the repo is currently prepared for the build 3 release cut with the refreshed branding and icon assets in place
+- production builds use the remote feed URL and store distribution with autoIncrement disabled so this release stays pinned to build 4
+- the repo is currently prepared for the build 4 release cut with the refreshed branding and icon assets in place
+- build 5 is the next release target after this cut
 - live App Store Connect / TestFlight processing state should be checked directly in EAS and App Store Connect before publishing release notes
 - submit.production exists, but no additional submission automation is documented in repo files
 
@@ -319,6 +329,7 @@ Recent verified app-state notes:
 - Daruma Restaurant was the last missing row to surface in the app
 - the root cause was a blank subtitle being treated as invalid by the app parser
 - the parser now accepts blank subtitles
+- the blank-address parser fix now keeps the live feed at 431 / 431 validated rows
 - the app seed was resynced to the current verified shared dataset snapshot
 - the current verified app dataset now loads 431 restaurants
 
