@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-import { palette, radii, spacing } from '@/src/constants/theme';
+import { palette, radii, spacing, typography } from '@/src/constants/theme';
 
 type LoadingStateProps = {
   title: string;
@@ -29,15 +29,15 @@ const styles = StyleSheet.create({
   },
   title: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 20,
-    fontWeight: '800',
     textAlign: 'center',
   },
   copy: {
     color: palette.textDim,
+    fontFamily: typography.body,
     fontSize: 14,
     lineHeight: 21,
     textAlign: 'center',
   },
 });
-

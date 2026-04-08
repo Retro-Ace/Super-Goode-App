@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: palette.text,
     flex: 1,
+    fontFamily: typography.display,
     fontSize: 20,
-    fontWeight: '800',
     letterSpacing: -0.6,
   },
   sectionMeta: {
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   savedCountText: {
     color: palette.textDim,
     fontSize: 12,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     letterSpacing: 0.2,
     textTransform: 'uppercase',
   },
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   resetActionText: {
     color: palette.highlight,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 11,
     textTransform: 'uppercase',
   },

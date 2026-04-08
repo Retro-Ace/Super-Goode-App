@@ -171,12 +171,13 @@ const styles = StyleSheet.create({
   },
   webTitle: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 20,
-    fontWeight: '800',
     textAlign: 'center',
   },
   webCopy: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 14,
     lineHeight: 21,
     textAlign: 'center',

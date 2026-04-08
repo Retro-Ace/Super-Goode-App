@@ -43,15 +43,15 @@ const styles = StyleSheet.create({
   },
   title: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 21,
-    fontWeight: '800',
     textAlign: 'center',
   },
   copy: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 14,
     lineHeight: 21,
     textAlign: 'center',
   },
 });
-

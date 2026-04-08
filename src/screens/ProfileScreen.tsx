@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   statValue: {
     color: palette.text,
-    fontFamily: typography.brand,
+    fontFamily: typography.bodyBold,
     fontSize: 20,
   },
   statValueHighlight: {
@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     color: palette.textDim,
+    fontFamily: typography.label,
     fontSize: 12,
     marginTop: spacing.xxs,
     textTransform: 'uppercase',
@@ -233,18 +234,19 @@ const styles = StyleSheet.create({
   },
   cardEyebrow: {
     color: palette.highlightSoft,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 12,
     letterSpacing: 1.1,
     textTransform: 'uppercase',
   },
   cardTitle: {
     color: palette.text,
+    fontFamily: typography.bodyBold,
     fontSize: 17,
-    fontWeight: '700',
   },
   cardBody: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 14,
     lineHeight: 21,
   },
@@ -255,7 +257,7 @@ const styles = StyleSheet.create({
   },
   referenceLabel: {
     color: palette.textDim,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 11,
     letterSpacing: 0.7,
     paddingHorizontal: spacing.xs,
@@ -272,16 +274,18 @@ const styles = StyleSheet.create({
   },
   referenceTitle: {
     color: palette.text,
+    fontFamily: typography.bodyBold,
     fontSize: 15,
-    fontWeight: '700',
   },
   referenceBody: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 13,
     lineHeight: 18,
   },
   referenceNote: {
     color: palette.highlightSoft,
+    fontFamily: typography.bodyMedium,
     fontSize: 12,
     lineHeight: 17,
   },

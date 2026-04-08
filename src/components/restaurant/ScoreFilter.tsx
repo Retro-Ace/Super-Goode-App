@@ -68,9 +68,8 @@ const styles = StyleSheet.create({
   },
   label: {
     color: palette.textMuted,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 13,
-    fontWeight: '700',
     letterSpacing: 0.2,
     textTransform: 'uppercase',
   },

@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: palette.text,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 11,
     lineHeight: 11,
     textTransform: 'uppercase',
@@ -462,6 +462,7 @@ const styles = StyleSheet.create({
   },
   inlineError: {
     color: palette.highlightSoft,
+    fontFamily: typography.body,
     fontSize: 11,
     lineHeight: 15,
     paddingHorizontal: spacing.xs,
@@ -475,6 +476,7 @@ const styles = StyleSheet.create({
   zeroResultsText: {
     color: palette.textDim,
     flex: 1,
+    fontFamily: typography.body,
     fontSize: 11,
     lineHeight: 15,
   },
@@ -547,12 +549,13 @@ const styles = StyleSheet.create({
   },
   selectedTitle: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 16,
-    fontWeight: '800',
     lineHeight: 18,
   },
   selectedSubtitle: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 11,
     lineHeight: 13,
   },
@@ -562,11 +565,13 @@ const styles = StyleSheet.create({
   },
   selectedAddress: {
     color: '#D7E0F3',
+    fontFamily: typography.bodyMedium,
     fontSize: 11,
     lineHeight: 14,
   },
   selectedMeta: {
     color: '#99A8C6',
+    fontFamily: typography.body,
     fontSize: 10,
     lineHeight: 12,
   },
@@ -583,8 +588,8 @@ const styles = StyleSheet.create({
   },
   legendTitle: {
     color: palette.white,
+    fontFamily: typography.bodyBold,
     fontSize: 12,
-    fontWeight: '800',
     lineHeight: 14,
   },
   legendList: {
@@ -611,8 +616,8 @@ const styles = StyleSheet.create({
   },
   legendLabel: {
     color: palette.textMuted,
+    fontFamily: typography.bodyMedium,
     fontSize: 11,
-    fontWeight: '600',
     lineHeight: 14,
   },
   stateWrap: {

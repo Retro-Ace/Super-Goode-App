@@ -190,13 +190,13 @@ const styles = StyleSheet.create({
   },
   headerButtonText: {
     color: palette.text,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 12,
     textTransform: 'uppercase',
   },
   headerButtonAccentText: {
     color: palette.highlight,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 12,
     textTransform: 'uppercase',
   },
@@ -205,18 +205,19 @@ const styles = StyleSheet.create({
   },
   eyebrow: {
     color: palette.highlightSoft,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 12,
     textTransform: 'uppercase',
   },
   title: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 26,
-    fontWeight: '800',
     lineHeight: 30,
   },
   subtitle: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 15,
     lineHeight: 21,
   },
@@ -234,12 +235,13 @@ const styles = StyleSheet.create({
   },
   fallbackTitle: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 22,
-    fontWeight: '800',
     lineHeight: 28,
   },
   fallbackBody: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 15,
     lineHeight: 22,
   },
@@ -270,7 +272,7 @@ const styles = StyleSheet.create({
   },
   loadingOverlayText: {
     color: palette.text,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 12,
     textTransform: 'uppercase',
   },

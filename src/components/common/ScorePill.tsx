@@ -25,8 +25,7 @@ const styles = StyleSheet.create({
   },
   value: {
     color: '#201605',
-    fontFamily: typography.brand,
+    fontFamily: typography.bodyBold,
     fontSize: 20,
-    fontWeight: '700',
   },
 });

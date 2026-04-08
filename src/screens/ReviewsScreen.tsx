@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   utilityLabel: {
     color: palette.textMuted,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 10,
     textTransform: 'uppercase',
   },
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
   },
   utilityValue: {
     color: palette.text,
-    fontFamily: typography.brand,
+    fontFamily: typography.bodyBold,
     fontSize: 14,
   },
   utilityValueHighlight: {
@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
   },
   summaryText: {
     color: palette.textDim,
+    fontFamily: typography.body,
     fontSize: 12,
   },
   errorCard: {
@@ -212,12 +213,13 @@ const styles = StyleSheet.create({
   },
   errorEyebrow: {
     color: palette.highlightSoft,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 12,
     textTransform: 'uppercase',
   },
   errorText: {
     color: palette.text,
+    fontFamily: typography.body,
     lineHeight: 20,
   },
   listArea: {

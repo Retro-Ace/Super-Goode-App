@@ -156,13 +156,14 @@ const styles = StyleSheet.create({
   },
   title: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 24,
-    fontWeight: '800',
     lineHeight: 30,
     textAlign: 'center',
   },
   copy: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 14,
     lineHeight: 21,
     textAlign: 'center',
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   },
   spinnerLabel: {
     color: palette.highlightSoft,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 11,
     letterSpacing: 0.5,
     textTransform: 'uppercase',

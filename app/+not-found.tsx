@@ -2,7 +2,7 @@ import { Link, Stack, usePathname, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { palette, spacing } from '@/src/constants/theme';
+import { palette, spacing, typography } from '@/src/constants/theme';
 
 export default function NotFoundScreen() {
   const pathname = usePathname();
@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 20,
-    fontWeight: '700',
   },
   link: {
     color: palette.highlight,
+    fontFamily: typography.bodyBold,
     fontSize: 15,
-    fontWeight: '700',
   },
 });

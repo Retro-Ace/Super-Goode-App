@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
-import { elevation, palette, radii, spacing } from '@/src/constants/theme';
+import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
 
 type SearchBarProps = {
   value: string;
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   input: {
     color: palette.text,
     flex: 1,
+    fontFamily: typography.body,
     fontSize: 16,
     paddingVertical: spacing.sm,
   },

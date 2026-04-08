@@ -95,13 +95,14 @@ const styles = StyleSheet.create({
   },
   title: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 18,
-    fontWeight: '800',
     letterSpacing: -0.3,
     lineHeight: 20,
   },
   subtitle: {
     color: palette.textMuted,
+    fontFamily: typography.body,
     fontSize: 12,
     lineHeight: 15,
   },
@@ -110,8 +111,8 @@ const styles = StyleSheet.create({
   },
   address: {
     color: palette.text,
+    fontFamily: typography.bodyMedium,
     fontSize: 12,
-    fontWeight: '600',
     lineHeight: 15,
   },
   footer: {

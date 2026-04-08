@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 24,
-    fontWeight: '800',
     letterSpacing: -0.7,
   },
   titleCompact: {
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   },
   copy: {
     color: palette.textDim,
+    fontFamily: typography.body,
     fontSize: 14,
     lineHeight: 20,
   },
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   },
   actionLabel: {
     color: palette.highlight,
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 12,
     textTransform: 'uppercase',
   },

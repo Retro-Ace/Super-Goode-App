@@ -70,9 +70,8 @@ const styles = StyleSheet.create({
     transform: [{ translateY: 1 }],
   },
   label: {
-    fontFamily: typography.brand,
+    fontFamily: typography.label,
     fontSize: 13,
-    fontWeight: '700',
     letterSpacing: 0.4,
     textTransform: 'uppercase',
   },

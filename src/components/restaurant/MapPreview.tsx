@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: palette.text,
+    fontFamily: typography.display,
     fontSize: 20,
-    fontWeight: '800',
     letterSpacing: -0.5,
   },
   mapFrame: {
@@ -135,12 +135,13 @@ const styles = StyleSheet.create({
   },
   mapBadgeValue: {
     color: palette.highlight,
-    fontFamily: typography.brand,
+    fontFamily: typography.bodyBold,
     fontSize: 22,
     lineHeight: 22,
   },
   mapBadgeLabel: {
     color: palette.textMuted,
+    fontFamily: typography.label,
     fontSize: 11,
     marginTop: spacing.xxs,
     textTransform: 'uppercase',
@@ -227,13 +228,13 @@ const styles = StyleSheet.create({
   },
   legendText: {
     color: palette.text,
+    fontFamily: typography.bodyMedium,
     flex: 1,
     fontSize: 13,
-    fontWeight: '600',
   },
   legendScore: {
     color: palette.highlight,
-    fontFamily: typography.brand,
+    fontFamily: typography.bodyBold,
     fontSize: 13,
   },
 });

@@ -43,8 +43,13 @@ export const radii = {
 } as const;
 
 export const typography = {
-  brand: 'SpaceMono',
-  body: 'System',
+  brand: 'Inter-SemiBold',
+  label: 'Inter-SemiBold',
+  body: 'Inter-Regular',
+  bodyMedium: 'Inter-Medium',
+  bodySemiBold: 'Inter-SemiBold',
+  bodyBold: 'Inter-Bold',
+  display: 'Inter-ExtraBold',
 } as const;
 
 export const elevation = {
@@ -88,19 +93,19 @@ export const navigationTheme: Theme = {
   },
   fonts: {
     regular: {
-      fontFamily: 'System',
+      fontFamily: typography.body,
       fontWeight: '400',
     },
     medium: {
-      fontFamily: 'System',
+      fontFamily: typography.bodyMedium,
       fontWeight: '500',
     },
     bold: {
-      fontFamily: 'System',
+      fontFamily: typography.bodyBold,
       fontWeight: '700',
     },
     heavy: {
-      fontFamily: 'System',
+      fontFamily: typography.display,
       fontWeight: '800',
     },
   },
