@@ -3,12 +3,17 @@ import { ActivityIndicator, Animated, Easing, Image, StyleSheet, Text, View } fr
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { brandArtSources } from '@/src/components/common/BrandArt';
-import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import { palette, spacing, typography } from '@/src/constants/theme';
 
-export function AppStartupScreen() {
+type AppStartupScreenProps = {
+  onReady?: () => void;
+};
+
+export function AppStartupScreen({ onReady }: AppStartupScreenProps) {
   const [showSpinner, setShowSpinner] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.96)).current;
+  const didReportReady = useRef(false);
 
   useEffect(() => {
     const animation = Animated.parallel([
@@ -38,6 +43,15 @@ export function AppStartupScreen() {
     };
   }, [fadeAnim, scaleAnim]);
 
+  const handleLayout = () => {
+    if (didReportReady.current) {
+      return;
+    }
+
+    didReportReady.current = true;
+    onReady?.();
+  };
+
   return (
     <View style={styles.root}>
       <View pointerEvents="none" style={[styles.ambientShape, styles.ambientShapeTop]} />
@@ -45,40 +59,40 @@ export function AppStartupScreen() {
       <View pointerEvents="none" style={[styles.ambientGlow, styles.ambientGlowPrimary]} />
       <View pointerEvents="none" style={[styles.ambientGlow, styles.ambientGlowHighlight]} />
 
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView onLayout={handleLayout} style={styles.safeArea}>
         <View style={styles.content}>
-          <View style={[styles.heroCard, elevation.floating]}>
-            <Animated.View
-              style={[
-                styles.brandLockup,
-                {
-                  opacity: fadeAnim,
-                  transform: [{ scale: scaleAnim }],
-                },
-              ]}>
-              <View style={styles.avatarHalo}>
-                <View style={styles.avatarFrame}>
-                  <Image source={brandArtSources.headshot} style={styles.avatarImage} />
-                </View>
-              </View>
+          <Animated.View
+            style={[
+              styles.brandLockup,
+              {
+                opacity: fadeAnim,
+                transform: [{ scale: scaleAnim }],
+              },
+            ]}>
+            <View style={styles.avatarFrame}>
+              <Image source={brandArtSources.headshot} style={styles.avatarImage} />
+            </View>
+            <View style={styles.logoWrap}>
               <Image
                 resizeMode="contain"
                 source={brandArtSources.mapLogo}
                 style={styles.logo}
               />
-            </Animated.View>
+            </View>
+          </Animated.View>
 
+          <View style={styles.copyBlock}>
             <Text style={styles.title}>Opening Super Goode</Text>
             <Text style={styles.copy}>Finding the best spots near you</Text>
+          </View>
 
-            <View style={styles.spinnerSlot}>
-              {showSpinner ? (
-                <View style={styles.spinnerRow}>
-                  <ActivityIndicator color={palette.highlight} size="small" />
-                  <Text style={styles.spinnerLabel}>Loading the latest reviews</Text>
-                </View>
-              ) : null}
-            </View>
+          <View style={styles.spinnerSlot}>
+            {showSpinner ? (
+              <View style={styles.spinnerRow}>
+                <ActivityIndicator color={palette.highlight} size="small" />
+                <Text style={styles.spinnerLabel}>Loading the latest reviews</Text>
+              </View>
+            ) : null}
           </View>
         </View>
       </SafeAreaView>
@@ -99,59 +113,46 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.xl,
     paddingVertical: spacing.xxl,
-  },
-  heroCard: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(23, 16, 47, 0.94)',
-    borderColor: 'rgba(242, 201, 76, 0.28)',
-    borderRadius: 30,
-    borderWidth: 1,
-    gap: spacing.md,
-    maxWidth: 380,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
-    paddingBottom: spacing.lg,
-    width: '100%',
   },
   brandLockup: {
     alignItems: 'center',
-    gap: spacing.xs,
-    marginBottom: spacing.sm,
+    gap: spacing.sm,
+    maxWidth: 380,
     width: '100%',
   },
-  avatarHalo: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(142, 86, 255, 0.22)',
-    borderColor: 'rgba(247, 213, 98, 0.28)',
-    borderRadius: 90,
-    borderWidth: 1,
-    height: 180,
-    justifyContent: 'center',
-    shadowColor: '#8E56FF',
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.34,
-    shadowRadius: 16,
-    width: 180,
-  },
   avatarFrame: {
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: palette.backgroundCard,
     borderColor: 'rgba(255, 255, 255, 0.34)',
-    borderRadius: 82,
+    borderRadius: 90,
     borderWidth: 2,
-    height: 164,
+    height: 180,
     overflow: 'hidden',
-    width: 164,
+    shadowColor: '#8E56FF',
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.26,
+    shadowRadius: 18,
+    width: 180,
   },
   avatarImage: {
     height: '100%',
     width: '100%',
   },
+  logoWrap: {
+    alignItems: 'center',
+    width: '100%',
+  },
   logo: {
-    height: 112,
-    marginTop: -spacing.xs,
-    width: 320,
+    height: 132,
+    width: '100%',
+  },
+  copyBlock: {
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginTop: spacing.lg,
   },
   title: {
     color: palette.text,
@@ -169,20 +170,14 @@ const styles = StyleSheet.create({
   spinnerSlot: {
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 26,
-    paddingTop: spacing.sm,
+    minHeight: 24,
+    paddingTop: spacing.lg,
     width: '100%',
   },
   spinnerRow: {
     alignItems: 'center',
-    backgroundColor: 'rgba(242, 201, 76, 0.08)',
-    borderColor: 'rgba(242, 201, 76, 0.16)',
-    borderRadius: radii.pill,
-    borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.xs,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
   },
   spinnerLabel: {
     color: palette.highlightSoft,
@@ -198,18 +193,18 @@ const styles = StyleSheet.create({
   },
   ambientShapeTop: {
     borderBottomRightRadius: 220,
-    height: 260,
-    left: -110,
-    top: -24,
-    width: 260,
+    height: 220,
+    left: -130,
+    top: -40,
+    width: 220,
   },
   ambientShapeBottom: {
     backgroundColor: '#1B1238',
     borderTopLeftRadius: 250,
-    bottom: -94,
-    height: 280,
-    right: -120,
-    width: 280,
+    bottom: -120,
+    height: 240,
+    right: -110,
+    width: 240,
   },
   ambientGlow: {
     borderRadius: 999,
@@ -217,16 +212,16 @@ const styles = StyleSheet.create({
   },
   ambientGlowPrimary: {
     backgroundColor: 'rgba(160, 109, 255, 0.14)',
-    height: 320,
-    left: -60,
-    top: 180,
-    width: 320,
+    height: 280,
+    left: -80,
+    top: 200,
+    width: 280,
   },
   ambientGlowHighlight: {
     backgroundColor: 'rgba(242, 201, 76, 0.08)',
-    bottom: 180,
-    height: 220,
-    right: -40,
-    width: 220,
+    bottom: 200,
+    height: 180,
+    right: -50,
+    width: 180,
   },
 });

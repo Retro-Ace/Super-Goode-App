@@ -3,7 +3,7 @@ import { useFonts } from 'expo-font';
 import { ErrorBoundary, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -21,7 +21,7 @@ export const unstable_settings = {
 
 SplashScreen.preventAutoHideAsync();
 
-const MIN_BOOT_SCREEN_MS = 2800;
+const MIN_BOOT_SCREEN_MS = 3600;
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -29,18 +29,13 @@ export default function RootLayout() {
   });
   const [bootReady, setBootReady] = useState(false);
   const [initialFavoriteIds, setInitialFavoriteIds] = useState<string[] | undefined>(undefined);
+  const [startupScreenMounted, setStartupScreenMounted] = useState(false);
 
   useEffect(() => {
     if (error) {
       throw error;
     }
   }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
 
   useEffect(() => {
     if (!loaded) {
@@ -81,6 +76,19 @@ export default function RootLayout() {
     };
   }, [loaded]);
 
+  const handleStartupScreenReady = useCallback(() => {
+    if (startupScreenMounted) {
+      return;
+    }
+
+    setStartupScreenMounted(true);
+    requestAnimationFrame(() => {
+      SplashScreen.hideAsync().catch(() => {
+        // Keep launch resilient even if the native splash is already hidden.
+      });
+    });
+  }, [startupScreenMounted]);
+
   if (!loaded) {
     return null;
   }
@@ -89,7 +97,7 @@ export default function RootLayout() {
     return (
       <SafeAreaProvider>
         <StatusBar style="light" />
-        <AppStartupScreen />
+        <AppStartupScreen onReady={handleStartupScreenReady} />
       </SafeAreaProvider>
     );
   }
