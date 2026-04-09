@@ -24,6 +24,41 @@ export const palette = {
   white: '#FFFFFF',
 } as const;
 
+export const scoreTierPalette = {
+  gold: {
+    pillBackground: '#F2C94C',
+    pillBorder: '#F7DF93',
+    pillText: '#0A0F1A',
+    marker: '#F2C94C',
+  },
+  purple: {
+    pillBackground: '#B678FF',
+    pillBorder: '#D5B0FF',
+    pillText: '#FFFFFF',
+    marker: '#B678FF',
+  },
+  gray: {
+    pillBackground: '#A8B1C3',
+    pillBorder: '#CAD1DD',
+    pillText: '#0A0F1A',
+    marker: '#8F9BB3',
+  },
+} as const;
+
+export type ScoreTier = keyof typeof scoreTierPalette;
+
+export function getScoreTier(score: number): ScoreTier {
+  if (score >= 9) {
+    return 'gold';
+  }
+
+  if (score >= 8) {
+    return 'purple';
+  }
+
+  return 'gray';
+}
+
 export const spacing = {
   xxs: 4,
   xs: 6,

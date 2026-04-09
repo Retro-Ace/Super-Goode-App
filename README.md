@@ -7,14 +7,16 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 ## Current Status
 
 - Beta-ready mobile companion app for iPhone and Android
-- Current release cut: iOS build 4
+- Current release cut: iOS build 5
 - Four public tabs: Map, Reviews, Favorites, and Profile
 - No restaurant detail page or detail route
-- Bundled app seed currently mirrors 431 restaurants from the canonical web dataset
-- Live feed validation currently passes 431 / 431 rows after the blank-address parser fix
+- Bundled app seed currently mirrors 432 restaurants from the canonical web dataset
+- 431 of the current 432 rows have map coordinates; the current NYC HALAL EATS record is list-only until the source data is geocoded
+- Live feed validation currently accepts 432 / 432 rows from the current web dataset
 - Live remote feed support through `EXPO_PUBLIC_LOCATIONS_FEED_URL`
 - Runtime data priority: live remote feed, then cached remote snapshot, then bundled local seed fallback
 - Shared in-app branding now renders through `BrandArt` using the rounded headshot and current logo assets
+- Shared score pills now mirror the web-map score tiers: 9.0+ gold, 8.0 to 8.9 purple, and 7.0 to 7.9 gray
 - Review URLs are normalized in-app before playback
 - Favorites persist locally on the device
 
@@ -114,9 +116,10 @@ The web repo remains the canonical source of truth for restaurant data.
 
 Current behavior:
 
-- `npm run sync:seed` is a developer workflow that copies the web dataset into the app seed snapshot.
-- The bundled app seed currently contains 431 restaurants and is intended to stay in parity with the canonical web dataset.
-- The current live feed validates 431 / 431 rows, so the old "invalid rows skipped" warning is gone.
+- `npm run sync:seed` is a developer workflow that syncs the web dataset into the app seed snapshot and strips web-only fields such as `requestType`.
+- The bundled app seed currently contains 432 restaurants and stays normalized to the canonical web dataset shape used by the app.
+- 431 current rows are mappable; the current NYC HALAL EATS source row has null coordinates and remains available in list tabs while the Map tab skips it.
+- The current live feed validates 432 / 432 rows against the app's accepted record shape.
 - The runtime cache is separate from the repo seed: a successful remote load is saved on device as a cached remote snapshot.
 - If `EXPO_PUBLIC_LOCATIONS_FEED_URL` is set, the repository reads the live remote JSON feed first.
 - If the live feed is unavailable or invalid and a cached remote snapshot exists, the app uses that snapshot next.

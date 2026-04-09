@@ -1,6 +1,6 @@
 # Super Goode Foundation QA
 
-Date: 2026-04-06
+Date: 2026-04-09
 
 ## Current App State
 
@@ -11,20 +11,22 @@ Date: 2026-04-06
 - The Map header now stacks the location-count pill above the On / Enable / Off pill.
 - The selected Map popup is tighter and keeps the favorite heart placement compact around the score and action cluster.
 - The Reviews header is cleaner, the Favorites header is simplified, Profile is reworked, and the startup screen now uses the polished brand lockup.
+- Shared score pills now match the web-map tiers: gold for 9.0+, purple for 8.0 to 8.9, and gray for 7.0 to 7.9.
+- Map, Reviews, and Favorites share the same ActionButton typography treatment for directions/review actions.
 - In-app review viewing is available, with external fallback for blocked or unavailable reviews.
 - Remote feed wiring uses `EXPO_PUBLIC_LOCATIONS_FEED_URL` and now supports a cached remote snapshot before bundled seed fallback.
-- The live feed now validates 431 / 431 rows after the blank-address parser fix, so the old 4-invalid-rows warning is gone.
+- The live feed now accepts 432 / 432 rows from the current web dataset.
 - Review URLs are normalized in-app before playback.
 
-## Build 4 Release State
+## Build 5 Release State
 
 - Marketing version remains `1.0.0`.
-- iOS build number is `4`.
+- iOS build number is `5`.
 - Current in-app branding renders through `BrandArt` using `super-goode-map-logo.png`, `super-goode-wordmark.png`, and `super-goode-headshot.jpg`.
 - Current Expo icon outputs resolve from `icon.png`, `splash-icon.png`, `favicon.png`, `android-icon-foreground.png`, `android-icon-background.png`, and `android-icon-monochrome.png`.
 - Old flattened branding composites and obsolete icon alternates were removed from the active repo asset set.
-- `eas.json` production autoIncrement is `false` so this release stays pinned to build 4.
-- Build 5 is the next release increment after this cut.
+- `eas.json` production autoIncrement is `false` so this release stays pinned to build 5.
+- Build 6 is the next release increment after this cut.
 
 ## Data Contract
 
@@ -33,15 +35,17 @@ Current source-of-truth files:
 - `/Users/anthonylarosa/CODEX/Super Goode App/src/data/seed/locations.json`
 
 Verified snapshot for this pass:
-- 431 locations in the app seed
+- 432 locations in the app seed
 - The app seed is aligned with the current canonical shared dataset snapshot used by the app
 - Key set is stable and currently limited to 14 fields
 - Score range is 6.0 to 9.3
-- `googlePlaceUrl` is present for 430 of 431 entries
+- `googlePlaceUrl` is present for 431 of 432 entries
 - `Dorrie's Kitchen` is the intentional blank `googlePlaceUrl` exception
+- 431 entries currently have usable coordinates
+- `NYC HALAL EATS` is the current list-only / no-coordinate source row
 - No entries are marked `confidence: low`
 - 1 entry carries non-empty notes
-- Live remote feed validation passes 431 / 431 rows with no invalid rows skipped after the blank-address parser fix.
+- Live remote feed validation accepts 432 / 432 rows.
 
 Required fields in the current dataset:
 - `name`: string
@@ -94,9 +98,10 @@ Mode notes:
 ## What Is Solid
 
 - The app seed is currently aligned with the canonical shared dataset snapshot used by the app.
-- All current entries have valid coordinates; the one intentional blank `googlePlaceUrl` row still falls through the directions helper correctly.
-- The live feed now validates 431 / 431 rows after the blank-address parser fix, so the app no longer skips 4 rows while loading.
+- 431 current entries have valid coordinates, and the one intentional blank `googlePlaceUrl` row still falls through the directions helper correctly.
+- The live feed now accepts the full current 432-row dataset, while the single unmapped row is filtered out only by the Map tab.
 - Branding assets now resolve through the shared `BrandArt` lockup and the current Expo icon paths resolve to the refreshed asset set.
+- Score pills and score-bubble colors now mirror the web-map tier palette.
 - There are no duplicate normalized restaurant names in the current dataset.
 - The dataset is still Chicagoland-heavy, but the app now keeps a deliberate local startup map region instead of fitting the full dataset on launch.
 - Map, Reviews, Favorites, Profile, and review viewer flows all consume the same shared record shape.
@@ -144,6 +149,7 @@ Map-specific smoke checklist:
 - Deny with “don’t ask again”: confirm the UI shifts to the “off/settings” style state and does not loop permission prompts.
 - Search while map is visible: confirm pins update and the selected footer clears if the selected spot falls out of the filtered set.
 - Score filtering: confirm pin count changes and map fit still works after changing the score floor.
+- Unmapped row coverage: confirm the current no-coordinate entry still appears in Reviews/Favorites and remains absent from the Map tab.
 - Dense Chicago area taps: confirm tapping one pin does not leave the wrong restaurant in the footer after another pin is selected.
 - Long restaurant names: confirm the selected footer truncates gracefully and does not overlap the score pill or action buttons.
 - Keyboard open/close: confirm the top overlay remains usable and does not permanently cover the map after dismissing the keyboard.
@@ -161,5 +167,5 @@ Map-specific smoke checklist:
 
 - Re-run data validation against the web source file before release candidates.
 - Keep the cache mode, bundled fallback mode, and seed-sync workflow separate in future release notes.
-- Treat build 4 as the current release cut and build 5 as the next bump when the next release cycle starts.
+- Treat build 5 as the current release cut and build 6 as the next bump when the next release cycle starts.
 - Keep review URL normalization and remote snapshot cache behavior in the pre-release smoke checklist.

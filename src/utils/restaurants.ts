@@ -106,6 +106,29 @@ function getFiniteNumber(value: unknown) {
   return null;
 }
 
+function getCoordinateValue(value: unknown) {
+  if (value === null || value === undefined) {
+    return {
+      value: null,
+      isValid: true,
+    };
+  }
+
+  if (typeof value === 'string' && value.trim().length === 0) {
+    return {
+      value: null,
+      isValid: true,
+    };
+  }
+
+  const parsed = getFiniteNumber(value);
+
+  return {
+    value: parsed,
+    isValid: parsed !== null,
+  };
+}
+
 function extractFeedEntries(data: unknown) {
   if (Array.isArray(data)) {
     return data;
@@ -140,8 +163,10 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
   const directionsUrl = getString(value.directionsUrl);
   const reviewUrl = getRequiredString(value.reviewUrl);
   const score = getFiniteNumber(value.score);
-  const lat = getFiniteNumber(value.lat);
-  const lng = getFiniteNumber(value.lng);
+  const latResult = getCoordinateValue(value.lat);
+  const lngResult = getCoordinateValue(value.lng);
+  const lat = latResult.value;
+  const lng = lngResult.value;
 
   if (
     !name ||
@@ -149,13 +174,25 @@ function parseRestaurantRecord(value: unknown): RestaurantRecord | null {
     !state ||
     !reviewUrl ||
     score === null ||
-    lat === null ||
-    lng === null
+    !latResult.isValid ||
+    !lngResult.isValid
   ) {
     return null;
   }
 
-  if (score < 0 || score > 10 || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+  const hasLat = lat !== null;
+  const hasLng = lng !== null;
+
+  if (hasLat !== hasLng) {
+    return null;
+  }
+
+  if (
+    score < 0 ||
+    score > 10 ||
+    (lat !== null && (lat < -90 || lat > 90)) ||
+    (lng !== null && (lng < -180 || lng > 180))
+  ) {
     return null;
   }
 

@@ -8,8 +8,8 @@ export type RestaurantLocation = {
   address: string;
   city: string;
   state: string;
-  lat: number;
-  lng: number;
+  lat: number | null;
+  lng: number | null;
   googlePlaceUrl: string;
   directionsUrl: string;
   reviewUrl: string;

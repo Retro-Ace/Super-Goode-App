@@ -39,6 +39,104 @@ function normalizeName(name) {
   return String(name).trim().toLowerCase().replace(/\s+/g, ' ');
 }
 
+function getTrimmedString(value) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function getRequiredString(value) {
+  const normalized = getTrimmedString(value);
+  return normalized.length > 0 ? normalized : null;
+}
+
+function getFiniteNumber(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string' && value.trim()) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  return null;
+}
+
+function getCoordinateValue(value) {
+  if (value === null || value === undefined) {
+    return {
+      value: null,
+      isValid: true,
+    };
+  }
+
+  if (typeof value === 'string' && value.trim().length === 0) {
+    return {
+      value: null,
+      isValid: true,
+    };
+  }
+
+  const parsed = getFiniteNumber(value);
+
+  return {
+    value: parsed,
+    isValid: parsed !== null,
+  };
+}
+
+function normalizeEntry(value) {
+  if (!isPlainObject(value)) {
+    return null;
+  }
+
+  const name = getRequiredString(value.name);
+  const city = getRequiredString(value.city);
+  const state = getRequiredString(value.state);
+  const reviewUrl = getRequiredString(value.reviewUrl);
+  const score = getFiniteNumber(value.score);
+  const latResult = getCoordinateValue(value.lat);
+  const lngResult = getCoordinateValue(value.lng);
+  const lat = latResult.value;
+  const lng = lngResult.value;
+
+  if (!name || !city || !state || !reviewUrl || score === null || !latResult.isValid || !lngResult.isValid) {
+    return null;
+  }
+
+  const hasLat = lat !== null;
+  const hasLng = lng !== null;
+
+  if (hasLat !== hasLng) {
+    return null;
+  }
+
+  if (
+    score < 0 ||
+    score > 10 ||
+    (lat !== null && (lat < -90 || lat > 90)) ||
+    (lng !== null && (lng < -180 || lng > 180))
+  ) {
+    return null;
+  }
+
+  return {
+    name,
+    score,
+    subtitle: getTrimmedString(value.subtitle),
+    address: getTrimmedString(value.address),
+    city,
+    state,
+    lat,
+    lng,
+    googlePlaceUrl: getTrimmedString(value.googlePlaceUrl),
+    directionsUrl: getTrimmedString(value.directionsUrl),
+    reviewUrl,
+    sourceType: getRequiredString(value.sourceType) ?? 'unknown',
+    confidence: getRequiredString(value.confidence) ?? 'medium',
+    notes: getTrimmedString(value.notes),
+  };
+}
+
 function validateEntry(entry, index, issues) {
   if (!isPlainObject(entry)) {
     issues.push(`Entry ${index}: expected an object.`);
@@ -85,12 +183,31 @@ function validateEntry(entry, index, issues) {
     issues.push(`Entry ${index}: "googlePlaceUrl" must be a string.`);
   }
 
-  if (typeof entry.lat !== 'number' || !Number.isFinite(entry.lat) || entry.lat < -90 || entry.lat > 90) {
-    issues.push(`Entry ${index}: "lat" must be a finite latitude.`);
+  const lat = entry.lat;
+  const lng = entry.lng;
+  const hasLat = typeof lat === 'number' && Number.isFinite(lat);
+  const hasLng = typeof lng === 'number' && Number.isFinite(lng);
+  const missingLat = lat === null;
+  const missingLng = lng === null;
+
+  if (!(hasLat || missingLat)) {
+    issues.push(`Entry ${index}: "lat" must be a finite latitude or null.`);
   }
 
-  if (typeof entry.lng !== 'number' || !Number.isFinite(entry.lng) || entry.lng < -180 || entry.lng > 180) {
-    issues.push(`Entry ${index}: "lng" must be a finite longitude.`);
+  if (!(hasLng || missingLng)) {
+    issues.push(`Entry ${index}: "lng" must be a finite longitude or null.`);
+  }
+
+  if ((missingLat && !missingLng) || (!missingLat && missingLng)) {
+    issues.push(`Entry ${index}: "lat" and "lng" must both be finite numbers or both be null.`);
+  }
+
+  if (hasLat && (lat < -90 || lat > 90)) {
+    issues.push(`Entry ${index}: "lat" must be within -90 to 90.`);
+  }
+
+  if (hasLng && (lng < -180 || lng > 180)) {
+    issues.push(`Entry ${index}: "lng" must be within -180 to 180.`);
   }
 
   if (typeof entry.directionsUrl !== 'string') {
@@ -121,9 +238,14 @@ function summarize(data) {
   const duplicateNames = data
     .map((entry) => normalizeName(entry.name))
     .filter((name, index, all) => all.indexOf(name) !== index);
+  const mappedCount = data.filter((entry) => entry.lat !== null && entry.lng !== null).length;
+  const googlePlaceCount = data.filter((entry) => typeof entry.googlePlaceUrl === 'string' && entry.googlePlaceUrl.trim()).length;
 
   return {
     count: data.length,
+    mappedCount,
+    unmappedCount: data.length - mappedCount,
+    googlePlaceCount,
     scoreMin: Math.min(...scores),
     scoreMax: Math.max(...scores),
     notesCount,
@@ -134,6 +256,16 @@ function summarize(data) {
 
 function deepEqual(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function normalizeEntriesForCompare(data) {
+  if (!Array.isArray(data)) {
+    return null;
+  }
+
+  return data
+    .map(normalizeEntry)
+    .filter((entry) => entry !== null);
 }
 
 const issues = [];
@@ -170,17 +302,18 @@ if (Array.isArray(targetData)) {
 
 if (compareFile) {
   const compareData = readJson(compareFile);
-  const compatible = Array.isArray(targetData) && Array.isArray(compareData);
+  const normalizedTarget = normalizeEntriesForCompare(targetData);
+  const normalizedCompare = normalizeEntriesForCompare(compareData);
 
-  if (!compatible) {
-    issues.push(`Comparison requires both files to contain JSON arrays.`);
-  } else if (deepEqual(targetData, compareData)) {
-    console.log(`Compare: identical to ${path.relative(cwd, compareFile)}`);
+  if (!normalizedTarget || !normalizedCompare) {
+    issues.push('Comparison requires both files to contain JSON arrays.');
+  } else if (deepEqual(normalizedTarget, normalizedCompare)) {
+    console.log(`Compare: normalized content matches ${path.relative(cwd, compareFile)}`);
   } else {
-    issues.push(`Compare file ${compareFile} does not match ${targetFile}.`);
-    console.log(`Compare: differs from ${path.relative(cwd, compareFile)}`);
-    console.log(`Target count: ${targetData.length}`);
-    console.log(`Compare count: ${compareData.length}`);
+    issues.push(`Compare file ${compareFile} does not match ${targetFile} after normalization.`);
+    console.log(`Compare: normalized content differs from ${path.relative(cwd, compareFile)}`);
+    console.log(`Target count: ${normalizedTarget.length}`);
+    console.log(`Compare count: ${normalizedCompare.length}`);
   }
 }
 

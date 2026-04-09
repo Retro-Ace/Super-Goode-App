@@ -16,7 +16,14 @@ import { Screen } from '@/src/components/common/Screen';
 import { RestaurantMap } from '@/src/components/restaurant/RestaurantMap';
 import { ScoreFilter } from '@/src/components/restaurant/ScoreFilter';
 import { SearchBar } from '@/src/components/restaurant/SearchBar';
-import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import {
+  elevation,
+  palette,
+  radii,
+  scoreTierPalette,
+  spacing,
+  typography,
+} from '@/src/constants/theme';
 import { useForegroundLocation } from '@/src/hooks/useForegroundLocation';
 import { useOpenReviewViewer } from '@/src/hooks/useOpenReviewViewer';
 import { useRestaurants } from '@/src/hooks/useRestaurants';
@@ -606,13 +613,13 @@ const styles = StyleSheet.create({
     width: 11,
   },
   legendDotGold: {
-    backgroundColor: palette.highlight,
+    backgroundColor: scoreTierPalette.gold.pillBackground,
   },
   legendDotPurple: {
-    backgroundColor: palette.accent,
+    backgroundColor: scoreTierPalette.purple.pillBackground,
   },
   legendDotBlueGray: {
-    backgroundColor: '#A9B4C8',
+    backgroundColor: scoreTierPalette.gray.pillBackground,
   },
   legendLabel: {
     color: palette.textMuted,

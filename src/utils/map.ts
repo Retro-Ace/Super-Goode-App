@@ -17,7 +17,11 @@ export const DEFAULT_MAP_REGION: MapRegion = {
   longitudeDelta: 1.28,
 };
 
-export function isValidCoordinate(latitude: number, longitude: number) {
+export function isValidCoordinate(latitude: number | null | undefined, longitude: number | null | undefined) {
+  if (typeof latitude !== 'number' || typeof longitude !== 'number') {
+    return false;
+  }
+
   return (
     Number.isFinite(latitude) &&
     Number.isFinite(longitude) &&
@@ -33,9 +37,15 @@ export function getRestaurantCoordinate(restaurant: Restaurant): MapCoordinate |
     return null;
   }
 
+  const { lat, lng } = restaurant;
+
+  if (lat === null || lng === null) {
+    return null;
+  }
+
   return {
-    latitude: restaurant.lat,
-    longitude: restaurant.lng,
+    latitude: lat,
+    longitude: lng,
   };
 }
 

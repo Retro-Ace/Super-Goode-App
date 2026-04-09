@@ -2,7 +2,15 @@ import type MapView from 'react-native-maps';
 import { forwardRef, useRef } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 
-import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import {
+  elevation,
+  getScoreTier,
+  palette,
+  radii,
+  scoreTierPalette,
+  spacing,
+  typography,
+} from '@/src/constants/theme';
 import type { Restaurant } from '@/src/types/restaurant';
 import {
   getRestaurantCoordinate,
@@ -21,15 +29,7 @@ type RestaurantMapProps = {
 };
 
 function getMarkerColor(score: number) {
-  if (score >= 9) {
-    return palette.highlight;
-  }
-
-  if (score >= 8) {
-    return palette.accent;
-  }
-
-  return '#A9B4C8';
+  return scoreTierPalette[getScoreTier(score)].marker;
 }
 
 export const RestaurantMap = forwardRef<MapView, RestaurantMapProps>(function RestaurantMap(

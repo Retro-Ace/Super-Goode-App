@@ -1,7 +1,16 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { elevation, palette, radii, spacing, typography } from '@/src/constants/theme';
+import {
+  elevation,
+  getScoreTier,
+  palette,
+  radii,
+  scoreTierPalette,
+  spacing,
+  typography,
+} from '@/src/constants/theme';
 import type { Restaurant } from '@/src/types/restaurant';
+import { hasRestaurantCoordinate } from '@/src/utils/map';
 import { formatScore } from '@/src/utils/restaurants';
 
 type MapPreviewProps = {
@@ -10,14 +19,15 @@ type MapPreviewProps = {
 };
 
 export function MapPreview({ restaurants, onSelectRestaurant }: MapPreviewProps) {
-  const plottedRestaurants = restaurants.slice(0, 80);
-  const latitudes = plottedRestaurants.map((restaurant) => restaurant.lat);
-  const longitudes = plottedRestaurants.map((restaurant) => restaurant.lng);
+  const mappableRestaurants = restaurants.filter(hasRestaurantCoordinate);
+  const plottedRestaurants = mappableRestaurants.slice(0, 80);
+  const latitudes = plottedRestaurants.map((restaurant) => restaurant.lat).filter((value): value is number => value !== null);
+  const longitudes = plottedRestaurants.map((restaurant) => restaurant.lng).filter((value): value is number => value !== null);
 
-  const minLat = Math.min(...latitudes);
-  const maxLat = Math.max(...latitudes);
-  const minLng = Math.min(...longitudes);
-  const maxLng = Math.max(...longitudes);
+  const minLat = latitudes.length > 0 ? Math.min(...latitudes) : 0;
+  const maxLat = latitudes.length > 0 ? Math.max(...latitudes) : 0;
+  const minLng = longitudes.length > 0 ? Math.min(...longitudes) : 0;
+  const maxLng = longitudes.length > 0 ? Math.max(...longitudes) : 0;
   const leadingRestaurants = restaurants.slice(0, 3);
 
   return (
@@ -38,11 +48,14 @@ export function MapPreview({ restaurants, onSelectRestaurant }: MapPreviewProps)
           <Text style={styles.mapBadgeLabel}>Spots in view</Text>
         </View>
         {plottedRestaurants.map((restaurant) => {
+          if (restaurant.lat === null || restaurant.lng === null) {
+            return null;
+          }
+
           const top = maxLat === minLat ? 50 : 14 + ((maxLat - restaurant.lat) / (maxLat - minLat)) * 72;
           const left = maxLng === minLng ? 50 : 8 + ((restaurant.lng - minLng) / (maxLng - minLng)) * 84;
           const size = restaurant.score >= 9 ? 14 : restaurant.score >= 8.5 ? 11 : 8;
-          const dotTone =
-            restaurant.score >= 9 ? styles.dotHigh : restaurant.score >= 8.5 ? styles.dotMid : styles.dotBase;
+          const dotTone = scoreTierPalette[getScoreTier(restaurant.score)].marker;
 
           return (
             <Pressable
@@ -50,7 +63,7 @@ export function MapPreview({ restaurants, onSelectRestaurant }: MapPreviewProps)
               onPress={() => onSelectRestaurant(restaurant.id)}
               style={[
                 styles.dot,
-                dotTone,
+                { backgroundColor: dotTone },
                 {
                   height: size,
                   left: `${left}%`,
@@ -186,15 +199,6 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     borderWidth: 2,
     position: 'absolute',
-  },
-  dotBase: {
-    backgroundColor: palette.textDim,
-  },
-  dotMid: {
-    backgroundColor: palette.accentStrong,
-  },
-  dotHigh: {
-    backgroundColor: palette.highlight,
   },
   legend: {
     backgroundColor: 'rgba(8, 5, 18, 0.82)',

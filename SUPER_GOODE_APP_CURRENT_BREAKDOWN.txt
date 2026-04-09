@@ -1,5 +1,5 @@
 SUPER GOODE APP CURRENT BREAKDOWN
-Updated: 2026-04-06
+Updated: 2026-04-09
 
 SCOPE
 This breakdown is APP ONLY.
@@ -49,6 +49,7 @@ Reviews tab:
 - supports search and score filters
 - includes a cleaned-up branded header and summary counters
 - each card can open Directions or Watch Review
+- uses the same action-button text treatment as the Map popup actions
 - query filtering is immediate while the displayed query value is deferred for smoother list behavior
 
 Favorites tab:
@@ -118,7 +119,7 @@ Folder responsibilities:
 - src/providers/ contains app-level context providers
 
 Notable architecture patterns:
-- the root layout loads the Space Mono font, keeps the splash screen hidden until ready, and wraps the app in the theme provider and favorites provider
+- the root layout loads bundled Inter weights, keeps the splash screen hidden until ready, and wraps the app in the theme provider and favorites provider
 - the app uses a shared theme palette with dark surfaces, purple accents, and gold highlights
 - screen wrappers add the dark glowing background treatment consistently
 - restaurant data is normalized once in the utility layer and then reused across tabs
@@ -137,7 +138,7 @@ Local app seed:
 - the seed is meant to stay aligned with the source-of-truth dataset
 
 Developer sync workflow:
-- scripts/sync-locations-seed.mjs copies the web data into the app seed after confirming the source JSON parses
+- scripts/sync-locations-seed.mjs normalizes the web dataset into the app seed shape and strips web-only metadata such as requestType
 - this is a repo workflow, not the runtime cache
 
 Runtime priority:
@@ -178,12 +179,14 @@ Current dataset shape used by the app:
 - notes
 
 Current verified data snapshot:
-- 431 restaurants
-- googlePlaceUrl is present for 430 of 431 rows
+- 432 restaurants in the bundled seed
+- 431 restaurants currently have coordinates and can render on the Map tab
+- the current NYC HALAL EATS row is list-only because the source dataset currently has null coordinates
+- googlePlaceUrl is present for 431 of 432 rows
 - Dorrie's Kitchen is the intentional blank googlePlaceUrl exception
 - 1 entry with non-empty notes
 - 0 low-confidence entries
-- live remote feed validation now passes 431 / 431 rows with no invalid rows skipped after the blank-address parser fix
+- live remote feed validation now accepts 432 / 432 rows
 - the app seed reflects the latest verified shared dataset snapshot used by the app
 
 Review URL handling:
@@ -246,7 +249,10 @@ Current visual style:
 - gold highlights
 - bright purple accents
 - strong card surfaces and glows
-- bold branded score pills
+- bold branded score pills that match the web-map tier colors:
+  - 9.0 and up = gold
+  - 8.0 to 8.9 = purple
+  - 7.0 to 7.9 = gray
 - retro-modern, high-contrast presentation
 
 Notable polish features:
@@ -274,7 +280,7 @@ Brand and asset direction:
   - assets/images/android-icon-monochrome.png
 - obsolete icon alternates were removed during the latest asset cleanup
 - screenshot assets live in screenshots
-- Space Mono is the installed brand font
+- Inter is the installed brand font, matching the current web map typography direction
 
 Overall feel:
 - the app feels like a polished mobile companion product rather than a scaffold
@@ -290,7 +296,7 @@ Current build setup:
 
 Known release configuration:
 - app.json sets the iOS bundle identifier to com.retroace.supergoode
-- app.json sets iOS build number 4
+- app.json sets iOS build number 5
 - app.json includes the EAS project ID
 - app.json configures the location permission text for foreground use
 - app.json configures Android adaptive icons
@@ -301,9 +307,9 @@ Known release configuration:
 EAS status:
 - development builds use an internal development client
 - preview builds use the remote feed URL and internal distribution
-- production builds use the remote feed URL and store distribution with autoIncrement disabled so this release stays pinned to build 4
-- the repo is currently prepared for the build 4 release cut with the refreshed branding and icon assets in place
-- build 5 is the next release target after this cut
+- production builds use the remote feed URL and store distribution with autoIncrement disabled so the current release stays pinned to build 5
+- the repo is currently prepared for the build 5 release cut with the refreshed branding, typography, and icon assets in place
+- build 6 is the next release target after this cut
 - live App Store Connect / TestFlight processing state should be checked directly in EAS and App Store Connect before publishing release notes
 - submit.production exists, but no additional submission automation is documented in repo files
 
@@ -329,9 +335,9 @@ Recent verified app-state notes:
 - Daruma Restaurant was the last missing row to surface in the app
 - the root cause was a blank subtitle being treated as invalid by the app parser
 - the parser now accepts blank subtitles
-- the blank-address parser fix now keeps the live feed at 431 / 431 validated rows
+- the latest seed sync brings the bundled app dataset to 432 total rows with 431 currently mappable rows
 - the app seed was resynced to the current verified shared dataset snapshot
-- the current verified app dataset now loads 431 restaurants
+- the current verified app dataset now loads 432 restaurants
 
 Cache verification note:
 - earlier screenshots showing Local seeded JSON active came from a launch with no remote environment configured
