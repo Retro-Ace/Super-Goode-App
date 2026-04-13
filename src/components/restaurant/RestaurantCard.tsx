@@ -39,13 +39,18 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
       </View>
 
       <View style={styles.footer}>
-        <ActionButton compact label="Directions" onPress={() => openRestaurantDirections(restaurant)} />
+        <ActionButton
+          compact
+          label="Directions"
+          onPress={() => openRestaurantDirections(restaurant)}
+          variant="secondary"
+        />
         <View style={styles.reviewAction}>
           <ActionButton
             compact
             label="Watch Review"
             onPress={() => openReviewViewer(restaurant)}
-            variant="ghost"
+            variant="primary"
           />
         </View>
       </View>
