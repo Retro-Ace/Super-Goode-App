@@ -28,7 +28,6 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
         </View>
         <View style={styles.headerActions}>
           <ScorePill score={restaurant.score} />
-          <FavoriteHeartButton restaurantId={restaurant.id} />
         </View>
       </View>
 
@@ -54,6 +53,8 @@ export function RestaurantCard({ restaurant }: { restaurant: Restaurant }) {
           />
         </View>
       </View>
+
+      <FavoriteHeartButton restaurantId={restaurant.id} style={styles.favoriteButton} />
     </View>
   );
 }
@@ -90,7 +91,6 @@ const styles = StyleSheet.create({
   },
   headerActions: {
     alignItems: 'flex-end',
-    gap: 3,
     position: 'absolute',
     right: 0,
     top: 0,
@@ -130,9 +130,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 4,
     marginTop: -2,
+    paddingRight: 38,
   },
   reviewAction: {
-    flex: 1,
-    minWidth: 120,
+    flexGrow: 1,
+    flexShrink: 1,
+    maxWidth: 168,
+    minWidth: 110,
+  },
+  favoriteButton: {
+    bottom: 8,
+    position: 'absolute',
+    right: spacing.sm,
   },
 });
