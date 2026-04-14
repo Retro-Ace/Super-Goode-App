@@ -216,8 +216,8 @@ const styles = StyleSheet.create({
     lineHeight: 30,
   },
   subtitle: {
-    color: palette.textMuted,
-    fontFamily: typography.body,
+    color: '#C7B3FF',
+    fontFamily: typography.bodyBold,
     fontSize: 15,
     lineHeight: 21,
   },

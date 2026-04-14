@@ -561,10 +561,10 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   selectedSubtitle: {
-    color: palette.textMuted,
-    fontFamily: typography.body,
-    fontSize: 11,
-    lineHeight: 13,
+    color: '#C7B3FF',
+    fontFamily: typography.bodyBold,
+    fontSize: 11.5,
+    lineHeight: 14,
   },
   selectedInfoBlock: {
     gap: 0,

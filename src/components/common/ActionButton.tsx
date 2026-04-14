@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
   },
   compactButton: {
-    minHeight: 34,
+    minHeight: 36,
     paddingHorizontal: spacing.sm,
   },
   primaryButton: {
@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
     borderColor: palette.accentStrong,
   },
   secondaryButton: {
-    backgroundColor: palette.backgroundSoft,
-    borderColor: palette.border,
+    backgroundColor: '#121D35',
+    borderColor: 'rgba(61, 73, 111, 0.92)',
   },
   ghostButton: {
     backgroundColor: 'rgba(255,255,255,0.02)',
@@ -70,9 +70,10 @@ const styles = StyleSheet.create({
     transform: [{ translateY: 1 }],
   },
   label: {
-    fontFamily: typography.label,
-    fontSize: 13,
-    letterSpacing: 0.4,
+    fontFamily: typography.bodyBold,
+    fontSize: 12,
+    letterSpacing: 0,
+    lineHeight: 14,
     textTransform: 'uppercase',
   },
   primaryLabel: {

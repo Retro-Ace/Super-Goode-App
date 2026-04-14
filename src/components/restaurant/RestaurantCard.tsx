@@ -106,10 +106,10 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   subtitle: {
-    color: palette.textMuted,
-    fontFamily: typography.body,
-    fontSize: 12,
-    lineHeight: 15,
+    color: '#C7B3FF',
+    fontFamily: typography.bodyBold,
+    fontSize: 11.5,
+    lineHeight: 14,
   },
   body: {
     gap: 0,
