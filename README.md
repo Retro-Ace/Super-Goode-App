@@ -7,7 +7,7 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 ## Current Status
 
 - Beta-ready mobile companion app for iPhone and Android
-- Current release cut: iOS build 5
+- Current release cut: iOS build 5, uploaded to App Store Connect/TestFlight
 - Four public tabs: Map, Reviews, Favorites, and Profile
 - No restaurant detail page or detail route
 - Bundled app seed currently mirrors 432 restaurants from the canonical web dataset
@@ -17,6 +17,8 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 - Runtime data priority: live remote feed, then cached remote snapshot, then bundled local seed fallback
 - Shared in-app branding now renders through `BrandArt` using the rounded headshot and current logo assets
 - Shared score pills now mirror the web-map score tiers: 9.0+ gold, 8.0 to 8.9 purple, and 7.0 to 7.9 gray
+- Startup screen now uses the polished brand-forward boot flow with the old startup card/bobble removed
+- Restaurant cards keep the tighter score top-right, heart lower-right, and shared action-button treatment across Map, Reviews, and Favorites
 - Review URLs are normalized in-app before playback
 - Favorites persist locally on the device
 
@@ -26,7 +28,9 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 - Reviews tab with branded header, search, score filters, and in-app review viewer
 - Favorites tab backed by persistent local storage
 - Profile tab with honest feed-mode and cache-state visibility
+- Polished startup screen and splash handling that now feels brand-first instead of icon-first
 - Directions links and external review fallback actions
+- Tightened shared card layout with current score-tier colors and aligned action-button styling
 - Shared restaurant data model aligned with the Super Goode web source of truth
 
 ## Screenshots

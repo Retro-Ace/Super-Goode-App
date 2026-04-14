@@ -1,6 +1,6 @@
 # Super Goode Foundation QA
 
-Date: 2026-04-09
+Date: 2026-04-14
 
 ## Current App State
 
@@ -10,9 +10,9 @@ Date: 2026-04-09
 - Restaurant cards surface review, directions, and favorite actions directly.
 - The Map header now stacks the location-count pill above the On / Enable / Off pill.
 - The selected Map popup is tighter and keeps the favorite heart placement compact around the score and action cluster.
-- The Reviews header is cleaner, the Favorites header is simplified, Profile is reworked, and the startup screen now uses the polished brand lockup.
+- The Reviews header is cleaner, the Favorites header is simplified, Profile is reworked, and the startup screen now uses the polished brand lockup with the old startup card/bobble removed.
 - Shared score pills now match the web-map tiers: gold for 9.0+, purple for 8.0 to 8.9, and gray for 7.0 to 7.9.
-- Map, Reviews, and Favorites share the same ActionButton typography treatment for directions/review actions.
+- Map, Reviews, and Favorites share the same ActionButton treatment for directions/review actions, and the restaurant cards keep the tighter score top-right, heart lower-right treatment.
 - In-app review viewing is available, with external fallback for blocked or unavailable reviews.
 - Remote feed wiring uses `EXPO_PUBLIC_LOCATIONS_FEED_URL` and now supports a cached remote snapshot before bundled seed fallback.
 - The live feed now accepts 432 / 432 rows from the current web dataset.
@@ -26,6 +26,7 @@ Date: 2026-04-09
 - Current Expo icon outputs resolve from `icon.png`, `splash-icon.png`, `favicon.png`, `android-icon-foreground.png`, `android-icon-background.png`, and `android-icon-monochrome.png`.
 - Old flattened branding composites and obsolete icon alternates were removed from the active repo asset set.
 - `eas.json` production autoIncrement is `false` so this release stays pinned to build 5.
+- Build 5 is the current release candidate and was uploaded to App Store Connect / TestFlight.
 - Build 6 is the next release increment after this cut.
 
 ## Data Contract
@@ -70,7 +71,7 @@ Behavioral notes for the app:
 - Render `notes` only when non-empty.
 - Treat `sourceType` and `confidence` as provenance metadata, not user-facing content.
 - Preserve `reviewUrl` as an external link, and keep directions behavior aligned to `googlePlaceUrl -> directionsUrl -> generated fallback`.
-- Accept blank `subtitle` values at runtime; Daruma proved the app should not reject a valid restaurant just because its subtitle is empty.
+- Accept blank `subtitle` and blank `address` values at runtime; the parser intentionally allows those optional blanks in the current dataset.
 - Normalize review URLs in the app runtime rather than assuming the stored seed is always pre-cleaned.
 
 ## Runtime Feed Modes

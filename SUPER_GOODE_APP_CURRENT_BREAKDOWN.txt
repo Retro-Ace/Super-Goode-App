@@ -1,5 +1,5 @@
 SUPER GOODE APP CURRENT BREAKDOWN
-Updated: 2026-04-09
+Updated: 2026-04-14
 
 SCOPE
 This breakdown is APP ONLY.
@@ -49,6 +49,7 @@ Reviews tab:
 - supports search and score filters
 - includes a cleaned-up branded header and summary counters
 - each card can open Directions or Watch Review
+- the card rail is tighter now, with score top-right, heart lower-right, and a slightly narrower WATCH REVIEW action
 - uses the same action-button text treatment as the Map popup actions
 - query filtering is immediate while the displayed query value is deferred for smoother list behavior
 
@@ -58,18 +59,19 @@ Favorites tab:
 - filters saved items by search and score
 - shows saved spot counts and current filtered counts
 - the header is simplified compared with earlier builds and keeps the controls row compact
-- uses the same restaurant cards as the reviews feed
+- uses the same tightened restaurant cards and aligned action-button treatment as the reviews feed
 
 Profile tab:
 - shows current data-mode status
 - shows whether the app is reading the local seed, live remote feed, cached remote snapshot, or bundled fallback
 - shows coverage and local save counts
-- uses the cleaner reworked status layout from the latest UI pass
+- uses the cleaner hero-driven status layout from the latest UI pass
 - keeps the app's settings runway clearly separate from current functionality
 
 Startup / boot:
 - shows a polished brand-forward boot screen while the seed and favorites load
 - uses the current rounded headshot and logo lockup with a delayed loading spinner
+- the old startup card/bobble treatment is gone, and the boot timing is intentionally longer so the splash transition feels like a proper launch
 
 Review viewer:
 - opens from restaurant cards, the Map popup, and the modal review route
@@ -308,6 +310,7 @@ EAS status:
 - development builds use an internal development client
 - preview builds use the remote feed URL and internal distribution
 - production builds use the remote feed URL and store distribution with autoIncrement disabled so the current release stays pinned to build 5
+- build 5 is the current release candidate and was uploaded to App Store Connect / TestFlight
 - the repo is currently prepared for the build 5 release cut with the refreshed branding, typography, and icon assets in place
 - build 6 is the next release target after this cut
 - live App Store Connect / TestFlight processing state should be checked directly in EAS and App Store Connect before publishing release notes
@@ -332,9 +335,7 @@ It now functions as a real mobile product with:
 Recent verified app-state notes:
 - the app branding now renders through the shared BrandArt lockup instead of the removed flattened brand PNGs
 - the app icon set now comes from the new square source artwork and current Expo root icon files
-- Daruma Restaurant was the last missing row to surface in the app
-- the root cause was a blank subtitle being treated as invalid by the app parser
-- the parser now accepts blank subtitles
+- the parser now accepts intentionally blank subtitle and address values, which keeps the full current dataset loading cleanly
 - the latest seed sync brings the bundled app dataset to 432 total rows with 431 currently mappable rows
 - the app seed was resynced to the current verified shared dataset snapshot
 - the current verified app dataset now loads 432 restaurants
