@@ -64,10 +64,10 @@ const styles = StyleSheet.create({
     borderColor: palette.border,
     borderRadius: radii.lg,
     borderWidth: 1,
-    gap: spacing.xs,
+    gap: 4,
     overflow: 'hidden',
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
+    paddingVertical: 6,
     position: 'relative',
   },
   topRail: {
@@ -81,15 +81,19 @@ const styles = StyleSheet.create({
   headerRow: {
     alignItems: 'flex-start',
     flexDirection: 'row',
-    gap: spacing.xs,
+    minHeight: 0,
   },
   headerCopy: {
     flex: 1,
-    gap: 2,
+    gap: 1,
+    paddingRight: 74,
   },
   headerActions: {
     alignItems: 'flex-end',
-    gap: 4,
+    gap: 3,
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
   kicker: {
     color: palette.highlightSoft,
@@ -109,21 +113,23 @@ const styles = StyleSheet.create({
     color: '#C7B3FF',
     fontFamily: typography.bodyBold,
     fontSize: 11.5,
-    lineHeight: 14,
+    lineHeight: 13,
   },
   body: {
     gap: 0,
+    marginTop: -1,
   },
   address: {
     color: palette.text,
     fontFamily: typography.bodyMedium,
     fontSize: 12,
-    lineHeight: 15,
+    lineHeight: 14,
   },
   footer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 4,
+    marginTop: -2,
   },
   reviewAction: {
     flex: 1,
