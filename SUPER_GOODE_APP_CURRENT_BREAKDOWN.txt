@@ -1,5 +1,5 @@
 SUPER GOODE APP CURRENT BREAKDOWN
-Updated: 2026-04-14
+Updated: 2026-04-15
 
 SCOPE
 This breakdown is APP ONLY.
@@ -298,7 +298,7 @@ Current build setup:
 
 Known release configuration:
 - app.json sets the iOS bundle identifier to com.retroace.supergoode
-- app.json sets iOS build number 5
+- app.json sets iOS build number 6
 - app.json includes the EAS project ID
 - app.json configures the location permission text for foreground use
 - app.json configures Android adaptive icons
@@ -309,12 +309,29 @@ Known release configuration:
 EAS status:
 - development builds use an internal development client
 - preview builds use the remote feed URL and internal distribution
-- production builds use the remote feed URL and store distribution with autoIncrement disabled so the current release stays pinned to build 5
-- build 5 is the current release candidate and was uploaded to App Store Connect / TestFlight
-- the repo is currently prepared for the build 5 release cut with the refreshed branding, typography, and icon assets in place
-- build 6 is the next release target after this cut
+- production builds use the remote feed URL and store distribution with autoIncrement disabled so the current release stays pinned to build 6
+- build 6 is the current release build and was submitted to App Store Connect
+- the repo is currently prepared for the build 6 release cut with the refreshed branding, typography, and icon assets in place
+- build 7 is the next release target after this cut
 - live App Store Connect / TestFlight processing state should be checked directly in EAS and App Store Connect before publishing release notes
 - submit.production exists, but no additional submission automation is documented in repo files
+
+App Store Submission (Finalized Flow):
+- EAS production build created for version `1.0.0 (6)`
+- submitted via `npx eas-cli submit`
+- build processed and attached in App Store Connect
+- submission was initially blocked by a missing 13-inch iPad screenshot, a missing copyright field, missing Content Rights Information, and an incomplete App Privacy questionnaire
+- the 13-inch iPad screenshot was captured via the iPad simulator and uploaded to App Store Connect
+- copyright was set to `2026 SuperGoode`
+- Content Rights was set to `App does not contain third-party content without rights`
+- the justification for Content Rights is that the app links externally and does not host content
+- the App Privacy questionnaire was completed and marked as `No data collected`
+- the App Privacy justification is that the app has no login, no analytics, no tracking, and local-only favorites
+- the public privacy policy now lives at `https://retro-ace.github.io/Super-Goode-App/privacy-policy/`
+- the privacy policy moved away from a repo markdown link to a public hosted page that App Store Connect can review directly
+- encryption uses standard iOS HTTPS only, with no custom encryption implemented
+- the app is marked as exempt from export compliance documentation
+- all App Store Connect errors were resolved and the app is ready for review
 
 Practical release notes:
 - local validation is strong enough to verify parity before a release candidate

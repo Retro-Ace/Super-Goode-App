@@ -7,7 +7,7 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 ## Current Status
 
 - Beta-ready mobile companion app for iPhone and Android
-- Current release cut: iOS build 6, uploaded to App Store Connect/TestFlight and processing with Apple
+- Current release cut: iOS build 6, submitted via `npx eas-cli submit` and attached in App Store Connect
 - Four public tabs: Map, Reviews, Favorites, and Profile
 - No restaurant detail page or detail route
 - Bundled app seed currently mirrors 432 restaurants from the canonical web dataset
@@ -85,7 +85,54 @@ Current icon pipeline:
 
 ![Super Goode app icon](assets/images/icon.png)
 
-## App Store and Compliance
+## App Store Submission (Finalized Flow)
+
+### Expo Build + Submission
+
+- EAS production build created for `1.0.0 (6)`
+- Submitted via `npx eas-cli submit`
+- Build processed and attached in App Store Connect
+
+### App Store Connect Required Fixes
+
+- Missing 13-inch iPad screenshot
+- Missing copyright field
+- Missing Content Rights Information
+- Incomplete App Privacy questionnaire
+
+### Final Resolutions
+
+1. iPad Screenshot
+   - Captured via the iPad simulator (12.9 / 13-inch)
+   - Uploaded to App Store Connect
+2. Copyright
+   - Set to `2026 SuperGoode`
+3. Content Rights
+   - Selected `App does not contain third-party content without rights`
+   - Justification: the app links externally and does not host content
+4. App Privacy
+   - Completed the questionnaire
+   - Selected `No data collected`
+   - Justification: no login, no analytics, no tracking, local-only favorites
+
+### Privacy Policy Hosting
+
+- Public URL: `https://retro-ace.github.io/Super-Goode-App/privacy-policy/`
+- Replaced the older GitHub markdown link with a public page that App Store Connect can review directly
+
+### Encryption Declaration
+
+- Uses standard iOS encryption over HTTPS
+- No custom encryption is implemented in the app
+- Marked as exempt from export compliance documentation
+
+### Final Status
+
+- All App Store Connect errors resolved
+- Build successfully uploaded and attached
+- App is ready for review
+
+### Public Links and Sources
 
 - Privacy Policy (public): `https://retro-ace.github.io/Super-Goode-App/privacy-policy/`
 - Support (public): `https://retro-ace.github.io/Super-Goode-App/support/`

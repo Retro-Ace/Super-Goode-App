@@ -1,6 +1,6 @@
 # Super Goode Foundation QA
 
-Date: 2026-04-14
+Date: 2026-04-15
 
 ## Current App State
 
@@ -18,16 +18,34 @@ Date: 2026-04-14
 - The live feed now accepts 432 / 432 rows from the current web dataset.
 - Review URLs are normalized in-app before playback.
 
-## Build 5 Release State
+## Build 6 Submission State
 
 - Marketing version remains `1.0.0`.
-- iOS build number is `5`.
+- iOS build number is `6`.
 - Current in-app branding renders through `BrandArt` using `super-goode-map-logo.png`, `super-goode-wordmark.png`, and `super-goode-headshot.jpg`.
 - Current Expo icon outputs resolve from `icon.png`, `splash-icon.png`, `favicon.png`, `android-icon-foreground.png`, `android-icon-background.png`, and `android-icon-monochrome.png`.
 - Old flattened branding composites and obsolete icon alternates were removed from the active repo asset set.
-- `eas.json` production autoIncrement is `false` so this release stays pinned to build 5.
-- Build 5 is the current release candidate and was uploaded to App Store Connect / TestFlight.
-- Build 6 is the next release increment after this cut.
+- `eas.json` production autoIncrement is `false` so this release stays pinned to build 6.
+- Build 6 is the current release build and was submitted to App Store Connect.
+- Build 7 is the next release increment after this cut.
+
+## App Store Submission (Finalized Flow)
+
+- EAS production build created for version `1.0.0 (6)`.
+- Submitted via `npx eas-cli submit`.
+- Build processed and attached in App Store Connect.
+- Submission was initially blocked by a missing 13-inch iPad screenshot, a missing copyright field, missing Content Rights Information, and an incomplete App Privacy questionnaire.
+- The 13-inch iPad screenshot was captured via the iPad simulator and uploaded to App Store Connect.
+- Copyright was set to `2026 SuperGoode`.
+- Content Rights was set to `App does not contain third-party content without rights`.
+- The justification for Content Rights is that the app links externally and does not host content.
+- The App Privacy questionnaire was completed and marked as `No data collected`.
+- The App Privacy justification is that the app has no login, no analytics, no tracking, and local-only favorites.
+- The public privacy policy now lives at `https://retro-ace.github.io/Super-Goode-App/privacy-policy/`.
+- The privacy policy moved away from a repo markdown link to a public hosted page that App Store Connect can review directly.
+- Encryption uses standard iOS HTTPS only, with no custom encryption implemented.
+- The app is marked as exempt from export compliance documentation.
+- All App Store Connect errors were resolved and the app is ready for review.
 
 ## Data Contract
 
@@ -168,5 +186,6 @@ Map-specific smoke checklist:
 
 - Re-run data validation against the web source file before release candidates.
 - Keep the cache mode, bundled fallback mode, and seed-sync workflow separate in future release notes.
-- Treat build 5 as the current release cut and build 6 as the next bump when the next release cycle starts.
+- Treat build 6 as the current release cut and build 7 as the next bump when the next release cycle starts.
+- Keep the App Store submission checklist handy for the next cycle so the iPad screenshot, copyright, content rights, privacy questionnaire, and encryption declarations stay aligned.
 - Keep review URL normalization and remote snapshot cache behavior in the pre-release smoke checklist.
