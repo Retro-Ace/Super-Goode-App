@@ -7,7 +7,7 @@ Native mobile companion to [Super Goode Map](https://github.com/Retro-Ace/Super-
 ## Current Status
 
 - Beta-ready mobile companion app for iPhone and Android
-- Current release cut: iOS build 5, uploaded to App Store Connect/TestFlight
+- Current release cut: iOS build 6, uploaded to App Store Connect/TestFlight and processing with Apple
 - Four public tabs: Map, Reviews, Favorites, and Profile
 - No restaurant detail page or detail route
 - Bundled app seed currently mirrors 432 restaurants from the canonical web dataset
@@ -84,6 +84,13 @@ Current icon pipeline:
   - `assets/images/android-icon-monochrome.png`
 
 ![Super Goode app icon](assets/images/icon.png)
+
+## App Store and Compliance
+
+- Privacy Policy (public): `https://retro-ace.github.io/Super-Goode-App/privacy-policy/`
+- Support (public): `https://retro-ace.github.io/Super-Goode-App/support/`
+- Privacy policy source: `docs/privacy-policy.md`
+- Privacy policy HTML: `privacy-policy/index.html`
 
 ## Setup
 
