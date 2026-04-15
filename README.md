@@ -90,6 +90,7 @@ Current icon pipeline:
 - Privacy Policy (public): `https://retro-ace.github.io/Super-Goode-App/privacy-policy/`
 - Support (public): `https://retro-ace.github.io/Super-Goode-App/support/`
 - Privacy policy source: `docs/privacy-policy.md`
+- Support source: `docs/support.md`
 - Privacy policy HTML: `privacy-policy/index.html`
 
 ## Setup
